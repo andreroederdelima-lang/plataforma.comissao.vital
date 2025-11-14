@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, Loader2, LogOut, UserCircle } from "lucide-react";
+import { NotificationBadge } from "@/components/NotificationBadge";
 import { Link } from "wouter";
 
 const statusLabels = {
@@ -62,6 +63,7 @@ export default function MinhasIndicacoes() {
                 <UserCircle className="h-5 w-5 text-muted-foreground" />
                 <span className="font-medium">{user.name || user.email}</span>
               </div>
+              <NotificationBadge />
               {user.role === "admin" && (
                 <Link href="/admin">
                   <Button variant="outline" size="sm">

@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { APP_LOGO, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Loader2, LogOut, UserCircle } from "lucide-react";
+import { NotificationBadge } from "@/components/NotificationBadge";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
@@ -81,6 +82,7 @@ export default function Home() {
                 <UserCircle className="h-5 w-5 text-muted-foreground" />
                 <span className="font-medium">{user.name || user.email}</span>
               </div>
+              <NotificationBadge />
               <Link href="/minhas-indicacoes">
                 <Button variant="outline" size="sm">
                   Minhas Indicações
@@ -124,7 +126,7 @@ export default function Home() {
               <CardHeader className="text-center">
                 <CardTitle className="text-3xl">Registrar Nova Indicação</CardTitle>
                 <CardDescription className="text-base">
-                  Preencha os dados da pessoa que você está indicando para o plano Sua Saúde Vital
+                  Preencha os dados da pessoa que você está indicando para o plano de assinatura Sua Saúde Vital
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -163,9 +165,9 @@ export default function Home() {
                     />
                   </div>
 
-                  {/* Tipo de Plano */}
+                  {/* Tipo de Assinatura */}
                   <div className="space-y-3">
-                    <Label className="text-base font-semibold">Tipo de Plano *</Label>
+                    <Label className="text-base font-semibold">Tipo de Assinatura *</Label>
                     <RadioGroup
                       value={tipoPlano}
                       onValueChange={(value) => setTipoPlano(value as "familiar" | "individual")}

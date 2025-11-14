@@ -20,6 +20,7 @@ import {
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, Loader2, LogOut, UserCircle } from "lucide-react";
+import { NotificationBadge } from "@/components/NotificationBadge";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
@@ -122,6 +123,7 @@ export default function Admin() {
               <span className="font-medium">{user.name || user.email}</span>
               <Badge variant="outline" className="ml-1">Admin</Badge>
             </div>
+            <NotificationBadge />
             <Button variant="ghost" size="sm" onClick={() => logout()}>
               <LogOut className="h-4 w-4" />
             </Button>
@@ -212,7 +214,7 @@ export default function Admin() {
                         <TableHead>Parceiro</TableHead>
                         <TableHead>Nome Indicado</TableHead>
                         <TableHead>WhatsApp</TableHead>
-                        <TableHead>Plano</TableHead>
+                        <TableHead>Assinatura</TableHead>
                         <TableHead>Categoria</TableHead>
                         <TableHead>Observações</TableHead>
                         <TableHead>Status</TableHead>

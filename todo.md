@@ -16,4 +16,21 @@
 - [x] Exibir informações do parceiro que fez a indicação
 - [x] Criar sistema de autenticação para parceiros
 - [x] Testar todas as funcionalidades
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
+
+## Notificações Personalizadas
+
+- [x] Implementar notificação ao proprietário quando nova indicação é criada
+- [x] Implementar schema de notificações no banco de dados
+- [x] Criar sistema de notificações in-app para parceiros
+- [x] Notificar parceiros quando status de indicação mudar
+- [x] Adicionar badge de notificações não lidas no header
+- [x] Criar página de visualização de notificações
+- [x] Testar todas as notificações
+- [ ] Salvar checkpoint com sistema de notificações
+
+## Ajustes de Nomenclatura
+
+- [x] Alterar "plano de saúde" para "plano de assinatura" em todas as páginas
+- [x] Atualizar textos do formulário
+- [x] Atualizar descrições e labels

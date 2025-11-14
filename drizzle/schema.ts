@@ -51,3 +51,27 @@ export const indicacoes = mysqlTable("indicacoes", {
 
 export type Indicacao = typeof indicacoes.$inferSelect;
 export type InsertIndicacao = typeof indicacoes.$inferInsert;
+
+/**
+ * Tabela de notificações para os usuários
+ * Armazena notificações in-app sobre mudanças de status e eventos
+ */
+export const notificacoes = mysqlTable("notificacoes", {
+  id: int("id").autoincrement().primaryKey(),
+  /** ID do usuário que receberá a notificação */
+  userId: int("userId").notNull(),
+  /** Título da notificação */
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  /** Mensagem da notificação */
+  mensagem: text("mensagem").notNull(),
+  /** Tipo de notificação */
+  tipo: mysqlEnum("tipo", ["nova_indicacao", "status_alterado", "sistema"]).notNull(),
+  /** ID da indicação relacionada (opcional) */
+  indicacaoId: int("indicacaoId"),
+  /** Se a notificação foi lida */
+  lida: int("lida").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Notificacao = typeof notificacoes.$inferSelect;
+export type InsertNotificacao = typeof notificacoes.$inferInsert;

@@ -1,6 +1,6 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { indicacoes, InsertIndicacao, InsertUser, users } from "../drizzle/schema";
+import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -158,6 +158,88 @@ export async function updateIndicacaoStatus(id: number, status: "pendente" | "em
     .update(indicacoes)
     .set({ status, updatedAt: new Date() })
     .where(eq(indicacoes.id, id));
+
+  return result;
+}
+
+/**
+ * Criar uma nova notificação
+ */
+export async function createNotificacao(data: InsertNotificacao) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.insert(notificacoes).values(data);
+  return result;
+}
+
+/**
+ * Listar notificações de um usuário
+ */
+export async function getNotificacoesByUser(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .select()
+    .from(notificacoes)
+    .where(eq(notificacoes.userId, userId))
+    .orderBy(desc(notificacoes.createdAt));
+
+  return result;
+}
+
+/**
+ * Contar notificações não lidas de um usuário
+ */
+export async function countUnreadNotificacoes(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .select()
+    .from(notificacoes)
+    .where(and(eq(notificacoes.userId, userId), eq(notificacoes.lida, 0)));
+
+  return result.length;
+}
+
+/**
+ * Marcar notificação como lida
+ */
+export async function markNotificacaoAsRead(id: number, userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .update(notificacoes)
+    .set({ lida: 1 })
+    .where(and(eq(notificacoes.id, id), eq(notificacoes.userId, userId)));
+
+  return result;
+}
+
+/**
+ * Marcar todas as notificações como lidas
+ */
+export async function markAllNotificacoesAsRead(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .update(notificacoes)
+    .set({ lida: 1 })
+    .where(eq(notificacoes.userId, userId));
 
   return result;
 }

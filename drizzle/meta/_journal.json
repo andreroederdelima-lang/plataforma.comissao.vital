@@ -15,6 +15,13 @@
       "when": 1763103533198,
       "tag": "0001_purple_night_nurse",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1763114912219,
+      "tag": "0002_lonely_gideon",
+      "breakpoints": true
     }
   ]
 }
