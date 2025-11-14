@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { indicacoes, InsertIndicacao, InsertUser, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,75 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+/**
+ * Criar uma nova indicação
+ */
+export async function createIndicacao(data: InsertIndicacao) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.insert(indicacoes).values(data);
+  return result;
+}
+
+/**
+ * Listar todas as indicações (para admin)
+ */
+export async function getAllIndicacoes() {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .select({
+      indicacao: indicacoes,
+      parceiro: {
+        id: users.id,
+        name: users.name,
+        email: users.email,
+      },
+    })
+    .from(indicacoes)
+    .leftJoin(users, eq(indicacoes.parceiroId, users.id))
+    .orderBy(desc(indicacoes.createdAt));
+
+  return result;
+}
+
+/**
+ * Listar indicações de um parceiro específico
+ */
+export async function getIndicacoesByParceiro(parceiroId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .select()
+    .from(indicacoes)
+    .where(eq(indicacoes.parceiroId, parceiroId))
+    .orderBy(desc(indicacoes.createdAt));
+
+  return result;
+}
+
+/**
+ * Atualizar status de uma indicação (para admin)
+ */
+export async function updateIndicacaoStatus(id: number, status: "pendente" | "em_analise" | "aprovada" | "recusada") {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .update(indicacoes)
+    .set({ status, updatedAt: new Date() })
+    .where(eq(indicacoes.id, id));
+
+  return result;
+}
