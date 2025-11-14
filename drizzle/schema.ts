@@ -26,7 +26,7 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 /**
- * Tabela de indicações de planos de saúde
+ * Tabela de indicações de planos de assinatura
  * Armazena todas as indicações feitas pelos parceiros
  */
 export const indicacoes = mysqlTable("indicacoes", {

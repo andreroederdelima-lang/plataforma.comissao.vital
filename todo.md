@@ -27,10 +27,16 @@
 - [x] Adicionar badge de notificações não lidas no header
 - [x] Criar página de visualização de notificações
 - [x] Testar todas as notificações
-- [ ] Salvar checkpoint com sistema de notificações
+- [x] Salvar checkpoint com sistema de notificações
 
 ## Ajustes de Nomenclatura
 
 - [x] Alterar "plano de saúde" para "plano de assinatura" em todas as páginas
 - [x] Atualizar textos do formulário
 - [x] Atualizar descrições e labels
+
+## Correção de Texto de Compartilhamento
+
+- [x] Encontrar e corrigir "plano de saúde" no texto de compartilhamento/meta tags
+- [x] Atualizar título e descrição do site
+- [x] Testar compartilhamento do link
