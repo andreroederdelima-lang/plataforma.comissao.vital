@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { z } from "zod";
 import { createIndicacao, getAllIndicacoes, getIndicacoesByParceiro, updateIndicacaoStatus, createNotificacao, getNotificacoesByUser, countUnreadNotificacoes, markNotificacaoAsRead, markAllNotificacoesAsRead } from "./db";
 import { notifyOwner } from "./_core/notification";
-import { notifyNewIndicacao, notifyStatusChange } from "./_core/email";
+import { notifyNewIndicacao, notifyStatusChange, notifyProblematicStatus } from "./_core/email";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -83,7 +83,7 @@ export const appRouter = router({
     updateStatus: protectedProcedure
       .input(z.object({
         id: z.number(),
-        status: z.enum(["falando_com_vendedor", "venda_fechada", "nao_respondeu_vendedor", "nao_comprou"]),
+        status: z.enum(["aguardando_contato", "em_negociacao", "venda_com_objecoes", "venda_fechada", "nao_comprou", "cliente_sem_interesse"]),
       }))
       .mutation(async ({ ctx, input }) => {
         if (ctx.user.role !== "admin" && ctx.user.role !== "vendedor") {
@@ -101,10 +101,12 @@ export const appRouter = router({
         
         if (indicacao && indicacao.parceiro) {
           const statusLabels = {
-            falando_com_vendedor: "Falando com Vendedor",
+            aguardando_contato: "Aguardando Contato",
+            em_negociacao: "Em Negociação",
+            venda_com_objecoes: "Venda com Objeções",
             venda_fechada: "Venda Fechada",
-            nao_respondeu_vendedor: "Não Respondeu Vendedor",
             nao_comprou: "Não Comprou",
+            cliente_sem_interesse: "Cliente Sem Interesse",
           };
           
           // Notificar o parceiro
@@ -116,12 +118,24 @@ export const appRouter = router({
             indicacaoId: input.id,
           });
           
-          // Notificar administrativo e comercial por email
-          await notifyStatusChange({
-            nomeIndicado: indicacao.indicacao.nomeIndicado,
-            nomeParceiro: indicacao.parceiro.name || indicacao.parceiro.email || "Parceiro",
-            novoStatus: input.status,
-          });
+          // Verificar se é um status problemático
+          const statusProblematicos = ["venda_com_objecoes", "nao_comprou", "cliente_sem_interesse"];
+          if (statusProblematicos.includes(input.status)) {
+            // Notificar parceiro e administrativo sobre status problemático
+            await notifyProblematicStatus({
+              nomeIndicado: indicacao.indicacao.nomeIndicado,
+              nomeParceiro: indicacao.parceiro?.name || "Parceiro",
+              parceiroEmail: indicacao.parceiro?.email || "",
+              novoStatus: input.status,
+            });
+          } else {
+            // Notificar sobre a mudança de status normal
+            await notifyStatusChange({
+              nomeIndicado: indicacao.indicacao.nomeIndicado,
+              nomeParceiro: indicacao.parceiro?.name || "Parceiro",
+              novoStatus: statusLabels[input.status],
+            });
+          }
         }
         
         return { success: true };

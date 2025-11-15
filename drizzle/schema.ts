@@ -44,7 +44,7 @@ export const indicacoes = mysqlTable("indicacoes", {
   /** Observações adicionais sobre a indicação */
   observacoes: text("observacoes"),
   /** Status da indicação para controle de comissionamento */
-  status: mysqlEnum("status", ["falando_com_vendedor", "venda_fechada", "nao_respondeu_vendedor", "nao_comprou"]).default("falando_com_vendedor").notNull(),
+  status: mysqlEnum("status", ["aguardando_contato", "em_negociacao", "venda_com_objecoes", "venda_fechada", "nao_comprou", "cliente_sem_interesse"]).default("aguardando_contato").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

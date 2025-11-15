@@ -39,6 +39,19 @@ export async function notifyNewIndicacao(params: {
 }
 
 /**
+ * Enviar email para o parceiro
+ */
+export async function sendEmailToParceiro(params: {
+  parceiroEmail: string;
+  subject: string;
+  message: string;
+}) {
+  // Por enquanto apenas logamos, mas aqui seria integrado com serviço de email
+  console.log(`Email para parceiro ${params.parceiroEmail}: ${params.subject} - ${params.message}`);
+  return true;
+}
+
+/**
  * Notificar sobre mudança de status
  */
 export async function notifyStatusChange(params: {
@@ -51,17 +64,23 @@ export async function notifyStatusChange(params: {
   let statusMessage = "";
   
   switch (novoStatus) {
+    case "aguardando_contato":
+      statusMessage = "está aguardando contato";
+      break;
+    case "em_negociacao":
+      statusMessage = "está em negociação";
+      break;
+    case "venda_com_objecoes":
+      statusMessage = "está com objeções na venda";
+      break;
     case "venda_fechada":
       statusMessage = "comprou";
       break;
     case "nao_comprou":
       statusMessage = "não comprou";
       break;
-    case "falando_com_vendedor":
-      statusMessage = "está conversando com o vendedor";
-      break;
-    case "nao_respondeu_vendedor":
-      statusMessage = "não respondeu o vendedor";
+    case "cliente_sem_interesse":
+      statusMessage = "não tem interesse";
       break;
     default:
       statusMessage = novoStatus;
@@ -72,5 +91,51 @@ export async function notifyStatusChange(params: {
   await sendEmailToTeam({
     subject: "Status de Indicação Atualizado",
     message,
+  });
+}
+
+/**
+ * Notificar parceiro e administrativo sobre status problemático
+ */
+export async function notifyProblematicStatus(params: {
+  nomeIndicado: string;
+  nomeParceiro: string;
+  parceiroEmail: string;
+  novoStatus: string;
+}) {
+  const { nomeIndicado, nomeParceiro, parceiroEmail, novoStatus } = params;
+  
+  let statusMessage = "";
+  let messageToPartner = "";
+  
+  switch (novoStatus) {
+    case "venda_com_objecoes":
+      statusMessage = "está com objeções na venda";
+      messageToPartner = `Olá ${nomeParceiro},\n\nO cliente "${nomeIndicado}" que você indicou está com algumas objeções durante a negociação.\n\nPor favor, entre em contato com ele para esclarecer possíveis dúvidas e incentivá-lo a finalizar a compra.\n\nObrigado!\nEquipe Sua Saúde Vital`;
+      break;
+    case "nao_comprou":
+      statusMessage = "não comprou";
+      messageToPartner = `Olá ${nomeParceiro},\n\nInfelizmente o cliente "${nomeIndicado}" que você indicou não finalizou a compra.\n\nPor favor, entre em contato com ele para entender os motivos e ver se é possível reverter a situação.\n\nObrigado!\nEquipe Sua Saúde Vital`;
+      break;
+    case "cliente_sem_interesse":
+      statusMessage = "não tem interesse";
+      messageToPartner = `Olá ${nomeParceiro},\n\nO cliente "${nomeIndicado}" que você indicou demonstrou não ter interesse no plano.\n\nPor favor, entre em contato com ele para entender melhor suas necessidades e ver se podemos oferecer uma solução adequada.\n\nObrigado!\nEquipe Sua Saúde Vital`;
+      break;
+    default:
+      return;
+  }
+  
+  // Enviar email para administrativo
+  const messageToAdmin = `O cliente "${nomeIndicado}" indicado por "${nomeParceiro}", ${statusMessage}.`;
+  await sendEmailToTeam({
+    subject: "Atenção: Status Problemático de Indicação",
+    message: messageToAdmin,
+  });
+  
+  // Enviar email para o parceiro
+  await sendEmailToParceiro({
+    parceiroEmail,
+    subject: "Ação Necessária: Sua Indicação",
+    message: messageToPartner,
   });
 }

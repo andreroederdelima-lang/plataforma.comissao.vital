@@ -1,0 +1,1 @@
+ALTER TABLE `indicacoes` MODIFY COLUMN `status` enum('aguardando_contato','em_negociacao','venda_com_objecoes','venda_fechada','nao_comprou','cliente_sem_interesse') NOT NULL DEFAULT 'aguardando_contato';

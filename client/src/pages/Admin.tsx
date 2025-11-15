@@ -27,17 +27,21 @@ import { Link, useLocation } from "wouter";
 import * as XLSX from "xlsx";
 
 const statusLabels = {
-  falando_com_vendedor: "Falando com Vendedor",
+  aguardando_contato: "Aguardando Contato",
+  em_negociacao: "Em Negociação",
+  venda_com_objecoes: "Venda com Objeções",
   venda_fechada: "Venda Fechada",
-  nao_respondeu_vendedor: "Não Respondeu Vendedor",
   nao_comprou: "Não Comprou",
+  cliente_sem_interesse: "Cliente Sem Interesse",
 };
 
 const statusColors = {
-  falando_com_vendedor: "bg-blue-500/10 text-blue-700 border-blue-500/20",
+  aguardando_contato: "bg-gray-500/10 text-gray-700 border-gray-500/20",
+  em_negociacao: "bg-blue-500/10 text-blue-700 border-blue-500/20",
+  venda_com_objecoes: "bg-orange-500/10 text-orange-700 border-orange-500/20",
   venda_fechada: "bg-green-500/10 text-green-700 border-green-500/20",
-  nao_respondeu_vendedor: "bg-yellow-500/10 text-yellow-700 border-yellow-500/20",
   nao_comprou: "bg-red-500/10 text-red-700 border-red-500/20",
+  cliente_sem_interesse: "bg-red-500/10 text-red-700 border-red-500/20",
 };
 
 const tipoPlanoLabels = {
@@ -66,7 +70,7 @@ export default function Admin() {
     },
   });
 
-  const handleStatusChange = (id: number, status: "falando_com_vendedor" | "venda_fechada" | "nao_respondeu_vendedor" | "nao_comprou") => {
+  const handleStatusChange = (id: number, status: "aguardando_contato" | "em_negociacao" | "venda_com_objecoes" | "venda_fechada" | "nao_comprou" | "cliente_sem_interesse") => {
     updateStatusMutation.mutate({ id, status });
   };
 
@@ -216,9 +220,9 @@ export default function Admin() {
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <p className="text-3xl font-bold text-blue-600">
-                      {indicacoes.filter(i => i.indicacao.status === "falando_com_vendedor").length}
+                      {indicacoes.filter(i => i.indicacao.status === "em_negociacao").length}
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">Falando com Vendedor</p>
+                    <p className="text-sm text-muted-foreground mt-1">Em Negociação</p>
                   </div>
                 </CardContent>
               </Card>
@@ -306,7 +310,7 @@ export default function Admin() {
                               onValueChange={(value) =>
                                 handleStatusChange(
                                   item.indicacao.id,
-                                  value as "falando_com_vendedor" | "venda_fechada" | "nao_respondeu_vendedor" | "nao_comprou"
+                                  value as "aguardando_contato" | "em_negociacao" | "venda_com_objecoes" | "venda_fechada" | "nao_comprou" | "cliente_sem_interesse"
                                 )
                               }
                               disabled={updateStatusMutation.isPending}
@@ -315,10 +319,12 @@ export default function Admin() {
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="falando_com_vendedor">Falando com Vendedor</SelectItem>
+                                <SelectItem value="aguardando_contato">Aguardando Contato</SelectItem>
+                                <SelectItem value="em_negociacao">Em Negociação</SelectItem>
+                                <SelectItem value="venda_com_objecoes">Venda com Objeções</SelectItem>
                                 <SelectItem value="venda_fechada">Venda Fechada</SelectItem>
-                                <SelectItem value="nao_respondeu_vendedor">Não Respondeu Vendedor</SelectItem>
                                 <SelectItem value="nao_comprou">Não Comprou</SelectItem>
+                                <SelectItem value="cliente_sem_interesse">Cliente Sem Interesse</SelectItem>
                               </SelectContent>
                             </Select>
                           </TableCell>

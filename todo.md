@@ -62,4 +62,20 @@
 - [x] Substituir logo atual pelo logo correto fornecido
 - [x] Garantir que o logo seja exibido corretamente em todas as páginas
 - [x] Testar visualização do logo
-- [ ] Salvar checkpoint com logo corrigido
+- [x] Salvar checkpoint com logo corrigido
+
+## Reorganização de Status e Emails Automáticos
+
+- [x] Reorganizar status das indicações com mais detalhes:
+  - Aguardando Contato
+  - Em Negociação
+  - Venda com Objeções (envia email)
+  - Venda Fechada
+  - Não Comprou (envia email)
+  - Cliente Sem Interesse (envia email)
+- [x] Implementar envio de email para administrativo quando status problemático
+- [x] Implementar envio de email para parceiro quando status problemático
+- [x] Atualizar schema do banco de dados com novos status
+- [x] Atualizar todas as páginas com novos status
+- [x] Testar sistema de emails
+- [ ] Salvar checkpoint final

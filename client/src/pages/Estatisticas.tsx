@@ -65,10 +65,12 @@ export default function Estatisticas() {
         case "nao_comprou":
           stat.naoComprou++;
           break;
-        case "falando_com_vendedor":
+        case "aguardando_contato":
+        case "em_negociacao":
           stat.falandoComVendedor++;
           break;
-        case "nao_respondeu_vendedor":
+        case "venda_com_objecoes":
+        case "cliente_sem_interesse":
           stat.naoRespondeu++;
           break;
       }

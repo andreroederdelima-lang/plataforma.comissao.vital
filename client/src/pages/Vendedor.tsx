@@ -65,7 +65,7 @@ export default function Vendedor() {
     },
   });
 
-  const handleStatusChange = (id: number, status: "falando_com_vendedor" | "venda_fechada" | "nao_respondeu_vendedor" | "nao_comprou") => {
+  const handleStatusChange = (id: number, status: "aguardando_contato" | "em_negociacao" | "venda_com_objecoes" | "venda_fechada" | "nao_comprou" | "cliente_sem_interesse") => {
     updateStatusMutation.mutate({ id, status });
   };
 
@@ -156,9 +156,9 @@ export default function Vendedor() {
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <p className="text-3xl font-bold text-blue-600">
-                      {indicacoes.filter(i => i.indicacao.status === "falando_com_vendedor").length}
+                      {indicacoes.filter(i => i.indicacao.status === "em_negociacao").length}
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">Falando com Vendedor</p>
+                    <p className="text-sm text-muted-foreground mt-1">Em Negociação</p>
                   </div>
                 </CardContent>
               </Card>
@@ -253,7 +253,7 @@ export default function Vendedor() {
                               onValueChange={(value) =>
                                 handleStatusChange(
                                   item.indicacao.id,
-                                  value as "falando_com_vendedor" | "venda_fechada" | "nao_respondeu_vendedor" | "nao_comprou"
+                                  value as "aguardando_contato" | "em_negociacao" | "venda_com_objecoes" | "venda_fechada" | "nao_comprou" | "cliente_sem_interesse"
                                 )
                               }
                               disabled={updateStatusMutation.isPending}
@@ -262,10 +262,12 @@ export default function Vendedor() {
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="falando_com_vendedor">Falando com Vendedor</SelectItem>
+                                <SelectItem value="aguardando_contato">Aguardando Contato</SelectItem>
+                                <SelectItem value="em_negociacao">Em Negociação</SelectItem>
+                                <SelectItem value="venda_com_objecoes">Venda com Objeções</SelectItem>
                                 <SelectItem value="venda_fechada">Venda Fechada</SelectItem>
-                                <SelectItem value="nao_respondeu_vendedor">Não Respondeu Vendedor</SelectItem>
                                 <SelectItem value="nao_comprou">Não Comprou</SelectItem>
+                                <SelectItem value="cliente_sem_interesse">Cliente Sem Interesse</SelectItem>
                               </SelectContent>
                             </Select>
                           </TableCell>
