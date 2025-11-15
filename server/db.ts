@@ -148,7 +148,7 @@ export async function getIndicacoesByParceiro(parceiroId: number) {
 /**
  * Atualizar status de uma indicação (para admin)
  */
-export async function updateIndicacaoStatus(id: number, status: "pendente" | "em_analise" | "aprovada" | "recusada") {
+export async function updateIndicacaoStatus(id: number, status: "falando_com_vendedor" | "venda_fechada" | "nao_respondeu_vendedor" | "nao_comprou") {
   const db = await getDb();
   if (!db) {
     throw new Error("Database not available");

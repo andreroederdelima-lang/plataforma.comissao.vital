@@ -8,6 +8,8 @@ import Home from "./pages/Home";
 import MinhasIndicacoes from "./pages/MinhasIndicacoes";
 import Admin from "./pages/Admin";
 import Notificacoes from "./pages/Notificacoes";
+import Vendedor from "./pages/Vendedor";
+import Estatisticas from "./pages/Estatisticas";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -17,6 +19,8 @@ function Router() {
       <Route path={"/minhas-indicacoes"} component={MinhasIndicacoes} />
       <Route path={"/admin"} component={Admin} />
       <Route path={"/notificacoes"} component={Notificacoes} />
+      <Route path={"/vendedor"} component={Vendedor} />
+      <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

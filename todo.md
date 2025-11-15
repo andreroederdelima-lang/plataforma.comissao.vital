@@ -40,3 +40,19 @@
 - [x] Encontrar e corrigir "plano de saúde" no texto de compartilhamento/meta tags
 - [x] Atualizar título e descrição do site
 - [x] Testar compartilhamento do link
+
+## Melhorias e Novas Funcionalidades
+
+- [x] Alterar status das indicações para: Falando com Vendedor, Venda fechada, Não respondeu vendedor, Não comprou
+- [x] Atualizar schema do banco de dados com novos status
+- [x] Criar role "vendedor" no sistema
+- [x] Implementar controle de acesso para vendedor (apenas visualizar e alterar status)
+- [x] Criar credenciais para vendedor (comercial@suasaudevital.com.br)
+- [x] Implementar envio de email quando nova indicação é criada
+- [x] Implementar envio de email quando status é alterado
+- [x] Configurar emails: administrativo@suasaudevital.com.br e comercial@suasaudevital.com.br
+- [x] Adicionar botão de exportação para Excel/CSV
+- [x] Criar dashboard de estatísticas por parceiro
+- [x] Melhorar logo - aumentar tamanho e ajustar fundo
+- [x] Testar todas as novas funcionalidades
+- [ ] Salvar checkpoint final com todas as melhorias

@@ -16,7 +16,7 @@ export const users = mysqlTable("users", {
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  role: mysqlEnum("role", ["user", "admin", "vendedor"]).default("user").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -44,7 +44,7 @@ export const indicacoes = mysqlTable("indicacoes", {
   /** Observações adicionais sobre a indicação */
   observacoes: text("observacoes"),
   /** Status da indicação para controle de comissionamento */
-  status: mysqlEnum("status", ["pendente", "em_analise", "aprovada", "recusada"]).default("pendente").notNull(),
+  status: mysqlEnum("status", ["falando_com_vendedor", "venda_fechada", "nao_respondeu_vendedor", "nao_comprou"]).default("falando_com_vendedor").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

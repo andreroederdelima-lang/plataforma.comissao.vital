@@ -19,12 +19,11 @@ import {
 } from "@/components/ui/table";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, BarChart3, Download, Loader2, LogOut, UserCircle } from "lucide-react";
+import { ArrowLeft, Loader2, LogOut, UserCircle } from "lucide-react";
 import { NotificationBadge } from "@/components/NotificationBadge";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
-import * as XLSX from "xlsx";
 
 const statusLabels = {
   falando_com_vendedor: "Falando com Vendedor",
@@ -50,7 +49,7 @@ const categoriaLabels = {
   pessoa_fisica: "Pessoa Física",
 };
 
-export default function Admin() {
+export default function Vendedor() {
   const { user, loading: authLoading, logout } = useAuth();
   const [, setLocation] = useLocation();
   const { data: indicacoes, isLoading } = trpc.indicacoes.listAll.useQuery();
@@ -70,34 +69,6 @@ export default function Admin() {
     updateStatusMutation.mutate({ id, status });
   };
 
-  const handleExportExcel = () => {
-    if (!indicacoes || indicacoes.length === 0) {
-      toast.error("Nenhuma indicação para exportar");
-      return;
-    }
-
-    const data = indicacoes.map((item) => ({
-      Data: new Date(item.indicacao.createdAt).toLocaleDateString("pt-BR"),
-      Parceiro: item.parceiro?.name || "N/A",
-      "Email Parceiro": item.parceiro?.email || "N/A",
-      "Nome Indicado": item.indicacao.nomeIndicado,
-      WhatsApp: item.indicacao.whatsappIndicado,
-      "Tipo Assinatura": tipoPlanoLabels[item.indicacao.tipoPlano],
-      Categoria: categoriaLabels[item.indicacao.categoria],
-      Observações: item.indicacao.observacoes || "-",
-      Status: statusLabels[item.indicacao.status],
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Indicações");
-    
-    const fileName = `indicacoes_${new Date().toISOString().split('T')[0]}.xlsx`;
-    XLSX.writeFile(workbook, fileName);
-    
-    toast.success("Arquivo Excel exportado com sucesso!");
-  };
-
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/5">
@@ -106,23 +77,10 @@ export default function Admin() {
     );
   }
 
-  // Verificar se é admin
-  if (!user || user.role !== "admin") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/5">
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle>Acesso Negado</CardTitle>
-            <CardDescription>
-              Você não tem permissão para acessar esta página.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => setLocation("/")}>Voltar para Home</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+  // Verificar se o usuário é vendedor
+  if (!user || user.role !== "vendedor") {
+    setLocation("/");
+    return null;
   }
 
   if (isLoading) {
@@ -142,7 +100,7 @@ export default function Admin() {
             <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-16 w-auto" />
             <div>
               <h1 className="text-xl font-bold text-foreground">Sua Saúde Vital</h1>
-              <p className="text-sm text-muted-foreground">Painel Administrativo</p>
+              <p className="text-sm text-muted-foreground">Painel do Vendedor</p>
             </div>
           </div>
           
@@ -150,7 +108,7 @@ export default function Admin() {
             <div className="flex items-center gap-2 text-sm">
               <UserCircle className="h-5 w-5 text-muted-foreground" />
               <span className="font-medium">{user.name || user.email}</span>
-              <Badge variant="outline" className="ml-1">Admin</Badge>
+              <Badge variant="outline" className="ml-1">Vendedor</Badge>
             </div>
             <NotificationBadge />
             <Button variant="ghost" size="sm" onClick={() => logout()}>
@@ -174,34 +132,16 @@ export default function Admin() {
           {/* Header */}
           <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-2xl">Gerenciar Indicações</CardTitle>
-                  <CardDescription>
-                    Visualize e gerencie todas as indicações dos parceiros
-                  </CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Link href="/estatisticas">
-                    <Button variant="outline">
-                      <BarChart3 className="h-4 w-4 mr-2" />
-                      Estatísticas
-                    </Button>
-                  </Link>
-                  {indicacoes && indicacoes.length > 0 && (
-                    <Button onClick={handleExportExcel} variant="outline">
-                      <Download className="h-4 w-4 mr-2" />
-                      Exportar Excel
-                    </Button>
-                  )}
-                </div>
-              </div>
+              <CardTitle className="text-2xl">Gerenciar Indicações</CardTitle>
+              <CardDescription>
+                Visualize e atualize o status das indicações recebidas
+              </CardDescription>
             </CardHeader>
           </Card>
 
           {/* Statistics */}
-          {indicacoes && indicacoes.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {indicacoes && (
+            <div className="grid gap-4 md:grid-cols-4">
               <Card className="bg-card/80 backdrop-blur-sm">
                 <CardContent className="pt-6">
                   <div className="text-center">
@@ -249,11 +189,11 @@ export default function Admin() {
           <Card className="bg-card/80 backdrop-blur-sm">
             <CardContent className="pt-6">
               {!indicacoes || indicacoes.length === 0 ? (
-                <div className="py-12 text-center text-muted-foreground">
-                  Nenhuma indicação registrada ainda.
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">Nenhuma indicação encontrada.</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
+                <div className="rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -270,28 +210,35 @@ export default function Admin() {
                     <TableBody>
                       {indicacoes.map((item) => (
                         <TableRow key={item.indicacao.id}>
-                          <TableCell className="whitespace-nowrap">
+                          <TableCell className="font-medium">
                             {new Date(item.indicacao.createdAt).toLocaleDateString("pt-BR")}
                           </TableCell>
                           <TableCell>
                             <div>
                               <p className="font-medium">{item.parceiro?.name || "N/A"}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {item.parceiro?.email || ""}
-                              </p>
+                              <p className="text-xs text-muted-foreground">{item.parceiro?.email}</p>
                             </div>
                           </TableCell>
                           <TableCell className="font-medium">
                             {item.indicacao.nomeIndicado}
                           </TableCell>
-                          <TableCell>{item.indicacao.whatsappIndicado}</TableCell>
+                          <TableCell>
+                            <a
+                              href={`https://wa.me/${item.indicacao.whatsappIndicado.replace(/\D/g, "")}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline"
+                            >
+                              {item.indicacao.whatsappIndicado}
+                            </a>
+                          </TableCell>
                           <TableCell>
                             <Badge variant="outline">
                               {tipoPlanoLabels[item.indicacao.tipoPlano]}
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            <Badge variant="outline">
+                            <Badge variant="secondary">
                               {categoriaLabels[item.indicacao.categoria]}
                             </Badge>
                           </TableCell>

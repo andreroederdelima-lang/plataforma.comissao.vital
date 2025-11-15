@@ -1,0 +1,8 @@
+{
+  "query": "UPDATE indicacoes SET status = 'falando_com_vendedor' WHERE status = 'pendente' OR status = 'em_analise'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute UPDATE indicacoes SET status = 'falando_com_vendedor' WHERE status = 'pendente' OR status = 'em_analise'",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1265 (01000) at line 1: Data truncated for column '%s' at row %d"
+  ]
+}

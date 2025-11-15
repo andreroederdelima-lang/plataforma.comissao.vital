@@ -9,17 +9,24 @@ import { NotificationBadge } from "@/components/NotificationBadge";
 import { Link } from "wouter";
 
 const statusLabels = {
-  pendente: "Pendente",
-  em_analise: "Em Análise",
-  aprovada: "Aprovada",
-  recusada: "Recusada",
+  falando_com_vendedor: "Falando com Vendedor",
+  venda_fechada: "Venda Fechada",
+  nao_respondeu_vendedor: "Não Respondeu Vendedor",
+  nao_comprou: "Não Comprou",
+};
+
+const statusVariants = {
+  falando_com_vendedor: "default" as const,
+  venda_fechada: "default" as const,
+  nao_respondeu_vendedor: "secondary" as const,
+  nao_comprou: "destructive" as const,
 };
 
 const statusColors = {
-  pendente: "bg-yellow-500/10 text-yellow-700 border-yellow-500/20",
-  em_analise: "bg-blue-500/10 text-blue-700 border-blue-500/20",
-  aprovada: "bg-green-500/10 text-green-700 border-green-500/20",
-  recusada: "bg-red-500/10 text-red-700 border-red-500/20",
+  falando_com_vendedor: "bg-blue-500/10 text-blue-700 border-blue-500/20",
+  venda_fechada: "bg-green-500/10 text-green-700 border-green-500/20",
+  nao_respondeu_vendedor: "bg-yellow-500/10 text-yellow-700 border-yellow-500/20",
+  nao_comprou: "bg-red-500/10 text-red-700 border-red-500/20",
 };
 
 const tipoPlanoLabels = {
@@ -50,7 +57,7 @@ export default function MinhasIndicacoes() {
       <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-10">
         <div className="container py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-12 w-auto" />
+            <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-16 w-auto" />
             <div>
               <h1 className="text-xl font-bold text-foreground">Sua Saúde Vital</h1>
               <p className="text-sm text-muted-foreground">Minhas Indicações</p>

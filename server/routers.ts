@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { z } from "zod";
 import { createIndicacao, getAllIndicacoes, getIndicacoesByParceiro, updateIndicacaoStatus, createNotificacao, getNotificacoesByUser, countUnreadNotificacoes, markNotificacaoAsRead, markAllNotificacoesAsRead } from "./db";
 import { notifyOwner } from "./_core/notification";
+import { notifyNewIndicacao, notifyStatusChange } from "./_core/email";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -42,11 +43,14 @@ export const appRouter = router({
           observacoes: input.observacoes || null,
         });
 
-        // Notificar o proprietário sobre a nova indicação
+        // Notificar o proprietário e equipe sobre a nova indicação
         const parceiroNome = ctx.user.name || ctx.user.email || "Parceiro";
-        await notifyOwner({
-          title: "Nova Indicação Recebida",
-          content: `${parceiroNome} enviou uma nova indicação: ${input.nomeIndicado} (${input.tipoPlano} - ${input.categoria})`,
+        await notifyNewIndicacao({
+          nomeIndicado: input.nomeIndicado,
+          nomeParceiro: parceiroNome,
+          tipoPlano: input.tipoPlano === "familiar" ? "Familiar" : "Individual",
+          categoria: input.categoria === "empresarial" ? "Empresarial" : "Pessoa Física",
+          whatsapp: input.whatsappIndicado,
         });
 
         return { success: true };
@@ -79,13 +83,13 @@ export const appRouter = router({
     updateStatus: protectedProcedure
       .input(z.object({
         id: z.number(),
-        status: z.enum(["pendente", "em_analise", "aprovada", "recusada"]),
+        status: z.enum(["falando_com_vendedor", "venda_fechada", "nao_respondeu_vendedor", "nao_comprou"]),
       }))
       .mutation(async ({ ctx, input }) => {
-        if (ctx.user.role !== "admin") {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "vendedor") {
           throw new TRPCError({
             code: "FORBIDDEN",
-            message: "Apenas administradores podem atualizar o status",
+            message: "Apenas administradores e vendedores podem atualizar o status",
           });
         }
 
@@ -97,18 +101,26 @@ export const appRouter = router({
         
         if (indicacao && indicacao.parceiro) {
           const statusLabels = {
-            pendente: "Pendente",
-            em_analise: "Em Análise",
-            aprovada: "Aprovada",
-            recusada: "Recusada",
+            falando_com_vendedor: "Falando com Vendedor",
+            venda_fechada: "Venda Fechada",
+            nao_respondeu_vendedor: "Não Respondeu Vendedor",
+            nao_comprou: "Não Comprou",
           };
           
+          // Notificar o parceiro
           await createNotificacao({
             userId: indicacao.indicacao.parceiroId,
             titulo: "Status de Indicação Atualizado",
             mensagem: `A indicação de ${indicacao.indicacao.nomeIndicado} foi atualizada para: ${statusLabels[input.status]}`,
             tipo: "status_alterado",
             indicacaoId: input.id,
+          });
+          
+          // Notificar administrativo e comercial por email
+          await notifyStatusChange({
+            nomeIndicado: indicacao.indicacao.nomeIndicado,
+            nomeParceiro: indicacao.parceiro.name || indicacao.parceiro.email || "Parceiro",
+            novoStatus: input.status,
           });
         }
         

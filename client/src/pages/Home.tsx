@@ -69,7 +69,7 @@ export default function Home() {
       <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-10">
         <div className="container py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-12 w-auto" />
+            <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-16 w-auto" />
             <div>
               <h1 className="text-xl font-bold text-foreground">Sua Saúde Vital</h1>
               <p className="text-sm text-muted-foreground">Sistema de Indicações</p>
@@ -92,6 +92,13 @@ export default function Home() {
                 <Link href="/admin">
                   <Button variant="outline" size="sm">
                     Painel Admin
+                  </Button>
+                </Link>
+              )}
+              {user.role === "vendedor" && (
+                <Link href="/vendedor">
+                  <Button variant="outline" size="sm">
+                    Painel Vendedor
                   </Button>
                 </Link>
               )}
