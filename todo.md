@@ -55,4 +55,11 @@
 - [x] Criar dashboard de estatísticas por parceiro
 - [x] Melhorar logo - aumentar tamanho e ajustar fundo
 - [x] Testar todas as novas funcionalidades
-- [ ] Salvar checkpoint final com todas as melhorias
+- [x] Salvar checkpoint final com todas as melhorias
+
+## Correção do Logo
+
+- [x] Substituir logo atual pelo logo correto fornecido
+- [x] Garantir que o logo seja exibido corretamente em todas as páginas
+- [x] Testar visualização do logo
+- [ ] Salvar checkpoint com logo corrigido
