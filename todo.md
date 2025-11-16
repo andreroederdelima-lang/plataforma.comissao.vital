@@ -110,4 +110,12 @@
 - [x] Adicionar campo de chave PIX no perfil do parceiro
 - [x] Criar página de relatório de comissões
 - [x] Testar cálculos e funcionalidades
+- [x] Salvar checkpoint final
+
+## Atualização de Logo
+
+- [x] Copiar novo logo "VITAL - Cuidado e Proteção" para o projeto
+- [x] Atualizar const.ts com novo logo
+- [x] Verificar que o logo está sendo exibido em todas as páginas
+- [x] Testar visualização
 - [ ] Salvar checkpoint final
