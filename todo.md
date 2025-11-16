@@ -92,3 +92,10 @@
   - "Tem mãe acamada"
 - [x] Testar todos os ajustes
 - [ ] Salvar checkpoint final
+
+## Reverter Logo Original
+
+- [x] Voltar a usar logo original fornecido (logo-vital.png)
+- [x] Manter tamanho aumentado (h-24)
+- [x] Testar visualização
+- [ ] Salvar checkpoint final
