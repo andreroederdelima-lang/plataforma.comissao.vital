@@ -243,3 +243,57 @@ export async function markAllNotificacoesAsRead(userId: number) {
 
   return result;
 }
+
+/**
+ * Atualizar comissão de uma indicação
+ */
+export async function updateIndicacaoComissao(id: number, tipoComissao: "valor_fixo" | "percentual", valorComissao: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.update(indicacoes)
+    .set({ tipoComissao, valorComissao })
+    .where(eq(indicacoes.id, id));
+}
+
+/**
+ * Calcular comissões por parceiro
+ */
+export async function getComissoesPorParceiro() {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .select({
+      indicacao: indicacoes,
+      parceiro: {
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        chavePix: users.chavePix,
+      },
+    })
+    .from(indicacoes)
+    .leftJoin(users, eq(indicacoes.parceiroId, users.id))
+    .where(eq(indicacoes.status, "venda_fechada"));
+
+  return result;
+}
+
+/**
+ * Atualizar chave PIX do usuário
+ */
+export async function updateChavePix(userId: number, chavePix: string) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.update(users)
+    .set({ chavePix })
+    .where(eq(users.id, userId));
+}

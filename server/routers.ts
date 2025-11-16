@@ -19,6 +19,15 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+    updateChavePix: protectedProcedure
+      .input(z.object({
+        chavePix: z.string().min(1, "Chave PIX é obrigatória"),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { updateChavePix } = await import("./db");
+        await updateChavePix(ctx.user.id, input.chavePix);
+        return { success: true };
+      }),
   }),
 
   indicacoes: router({
@@ -140,6 +149,43 @@ export const appRouter = router({
         
         return { success: true };
       }),
+
+    /**
+     * Atualizar comissão de uma indicação (apenas admin)
+     */
+    updateComissao: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        tipoComissao: z.enum(["valor_fixo", "percentual"]),
+        valorComissao: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores podem atualizar comissões",
+          });
+        }
+
+        const { updateIndicacaoComissao } = await import("./db");
+        await updateIndicacaoComissao(input.id, input.tipoComissao, input.valorComissao);
+        return { success: true };
+      }),
+
+    /**
+     * Listar vendas fechadas com comissões (apenas admin)
+     */
+    getComissoes: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Apenas administradores podem visualizar comissões",
+        });
+      }
+
+      const allIndicacoes = await getAllIndicacoes();
+      return allIndicacoes.filter(i => i.indicacao.status === "venda_fechada");
+    }),
   }),
 
   notificacoes: router({

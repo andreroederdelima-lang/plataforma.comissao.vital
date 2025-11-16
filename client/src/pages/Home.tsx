@@ -83,10 +83,11 @@ export default function Home() {
                 <span className="font-medium">{user.name || user.email}</span>
               </div>
               <NotificationBadge />
-              <Link href="/minhas-indicacoes">
-                <Button variant="outline" size="sm">
-                  Minhas Indicações
-                </Button>
+                <Link href="/minhas-indicacoes">
+                <Button variant="ghost" size="sm">Minhas Indicações</Button>
+              </Link>
+              <Link href="/perfil">
+                <Button variant="ghost" size="sm">Meu Perfil</Button>
               </Link>
               {user.role === "admin" && (
                 <Link href="/admin">

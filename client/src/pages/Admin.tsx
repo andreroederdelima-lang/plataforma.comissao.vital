@@ -19,12 +19,72 @@ import {
 } from "@/components/ui/table";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, BarChart3, Download, Loader2, LogOut, UserCircle } from "lucide-react";
+import { ArrowLeft, BarChart3, DollarSign, Download, Loader2, LogOut, UserCircle } from "lucide-react";
 import { NotificationBadge } from "@/components/NotificationBadge";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
 import * as XLSX from "xlsx";
+import { Input } from "@/components/ui/input";
+
+function ComissaoCell({ indicacao }: { indicacao: any }) {
+  const [tipoComissao, setTipoComissao] = useState<"valor_fixo" | "percentual" | null>(indicacao.tipoComissao || null);
+  const [valorComissao, setValorComissao] = useState<string>(indicacao.valorComissao ? String(indicacao.valorComissao) : "");
+  const utils = trpc.useUtils();
+
+  const updateComissaoMutation = trpc.indicacoes.updateComissao.useMutation({
+    onSuccess: () => {
+      toast.success("Comissão atualizada!");
+      utils.indicacoes.listAll.invalidate();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erro ao atualizar comissão");
+    },
+  });
+
+  const handleSave = () => {
+    if (!tipoComissao || !valorComissao) {
+      toast.error("Preencha tipo e valor da comissão");
+      return;
+    }
+    updateComissaoMutation.mutate({
+      id: indicacao.id,
+      tipoComissao,
+      valorComissao: parseInt(valorComissao),
+    });
+  };
+
+  return (
+    <div className="flex flex-col gap-2 min-w-[200px]">
+      <Select value={tipoComissao || ""} onValueChange={(v) => setTipoComissao(v as "valor_fixo" | "percentual")}>
+        <SelectTrigger className="h-8">
+          <SelectValue placeholder="Tipo" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="valor_fixo">Valor Fixo (R$)</SelectItem>
+          <SelectItem value="percentual">Percentual (%)</SelectItem>
+        </SelectContent>
+      </Select>
+      <div className="flex gap-1">
+        <Input
+          type="number"
+          placeholder={tipoComissao === "percentual" ? "Ex: 10" : "Ex: 5000"}
+          value={valorComissao}
+          onChange={(e) => setValorComissao(e.target.value)}
+          className="h-8"
+        />
+        <Button size="sm" onClick={handleSave} disabled={updateComissaoMutation.isPending} className="h-8 px-2">
+          OK
+        </Button>
+      </div>
+      {indicacao.tipoComissao && indicacao.valorComissao && (
+        <p className="text-xs text-muted-foreground">
+          {indicacao.tipoComissao === "percentual" ? `${indicacao.valorComissao}%` : `R$ ${(indicacao.valorComissao / 100).toFixed(2)}`}
+        </p>
+      )}
+    </div>
+  );
+}
 
 const statusLabels = {
   aguardando_contato: "Aguardando Contato",
@@ -186,12 +246,18 @@ export default function Admin() {
                   </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Link href="/estatisticas">
-                    <Button variant="outline">
-                      <BarChart3 className="h-4 w-4 mr-2" />
-                      Estatísticas
-                    </Button>
-                  </Link>
+              <Link href="/estatisticas">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Estatísticas
+                </Button>
+              </Link>
+              <Link href="/comissoes">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <DollarSign className="h-4 w-4" />
+                  Comissões
+                </Button>
+              </Link>
                   {indicacoes && indicacoes.length > 0 && (
                     <Button onClick={handleExportExcel} variant="outline">
                       <Download className="h-4 w-4 mr-2" />
@@ -268,6 +334,7 @@ export default function Admin() {
                         <TableHead>Assinatura</TableHead>
                         <TableHead>Categoria</TableHead>
                         <TableHead>Observações</TableHead>
+                        <TableHead>Comissão</TableHead>
                         <TableHead>Status</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -303,6 +370,9 @@ export default function Admin() {
                             <p className="text-sm text-muted-foreground truncate">
                               {item.indicacao.observacoes || "-"}
                             </p>
+                          </TableCell>
+                          <TableCell>
+                            <ComissaoCell indicacao={item.indicacao} />
                           </TableCell>
                           <TableCell>
                             <Select

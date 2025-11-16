@@ -91,11 +91,23 @@
   - "Quer dar para empregada doméstica e avó"
   - "Tem mãe acamada"
 - [x] Testar todos os ajustes
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
 
 ## Reverter Logo Original
 
 - [x] Voltar a usar logo original fornecido (logo-vital.png)
 - [x] Manter tamanho aumentado (h-24)
 - [x] Testar visualização
+- [x] Salvar checkpoint final
+
+## Sistema de Comissões e PIX
+
+- [x] Adicionar campo de valor de comissão na tabela de indicações
+- [x] Adicionar campo de tipo de comissão (valor fixo ou percentual)
+- [x] Adicionar campo de chave PIX na tabela de usuários
+- [x] Implementar campo de comissão na área admin para cada indicação
+- [x] Criar cálculo automático de comissões por parceiro
+- [x] Adicionar campo de chave PIX no perfil do parceiro
+- [x] Criar página de relatório de comissões
+- [x] Testar cálculos e funcionalidades
 - [ ] Salvar checkpoint final

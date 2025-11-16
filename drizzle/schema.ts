@@ -17,6 +17,8 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin", "vendedor"]).default("user").notNull(),
+  /** Chave PIX do parceiro para recebimento de comissões */
+  chavePix: varchar("chavePix", { length: 255 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -45,6 +47,10 @@ export const indicacoes = mysqlTable("indicacoes", {
   observacoes: text("observacoes"),
   /** Status da indicação para controle de comissionamento */
   status: mysqlEnum("status", ["aguardando_contato", "em_negociacao", "venda_com_objecoes", "venda_fechada", "nao_comprou", "cliente_sem_interesse"]).default("aguardando_contato").notNull(),
+  /** Tipo de comissão: valor fixo ou percentual */
+  tipoComissao: mysqlEnum("tipoComissao", ["valor_fixo", "percentual"]),
+  /** Valor da comissão (em centavos se valor fixo, ou percentual se percentual) */
+  valorComissao: int("valorComissao"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
