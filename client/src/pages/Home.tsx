@@ -69,7 +69,7 @@ export default function Home() {
       <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-10">
         <div className="container py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-16 w-auto" />
+            <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-24" />
             <div>
               <h1 className="text-xl font-bold text-foreground">Sua Saúde Vital</h1>
               <p className="text-sm text-muted-foreground">Sistema de Indicações</p>
@@ -212,7 +212,7 @@ export default function Home() {
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="empresarial" id="empresarial" />
                         <Label htmlFor="empresarial" className="cursor-pointer font-normal">
-                          Empresarial
+                          Empresarial <span className="text-muted-foreground text-sm">(descreva o nome da empresa nas observações)</span>
                         </Label>
                       </div>
                     </RadioGroup>
@@ -227,7 +227,7 @@ export default function Home() {
                       id="observacoes"
                       value={observacoes}
                       onChange={(e) => setObservacoes(e.target.value)}
-                      placeholder="Informações adicionais sobre a indicação..."
+                      placeholder="Exemplos: Tem 5 filhos pequenos e um marido | Quer dar para empregada doméstica e avó | Tem mãe acamada | Nome da empresa (se empresarial)"
                       rows={4}
                       className="text-base resize-none"
                     />

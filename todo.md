@@ -78,4 +78,17 @@
 - [x] Atualizar schema do banco de dados com novos status
 - [x] Atualizar todas as páginas com novos status
 - [x] Testar sistema de emails
+- [x] Salvar checkpoint final
+
+## Ajustes de UX e Logo
+
+- [x] Remover fundo branco do logo
+- [x] Aumentar tamanho do logo na página inicial para melhor visibilidade
+- [x] Adicionar orientação no campo "Tipo de Assinatura" (empresarial = nome da empresa)
+- [x] Adicionar campo condicional para nome da empresa quando escolher "Empresarial"
+- [x] Pré-preencher campo de observações com exemplos:
+  - "Tem 5 filhos pequenos e um marido"
+  - "Quer dar para empregada doméstica e avó"
+  - "Tem mãe acamada"
+- [x] Testar todos os ajustes
 - [ ] Salvar checkpoint final
