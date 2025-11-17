@@ -1,4 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import AdminLayout from "@/components/AdminLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -87,7 +88,9 @@ const tipoPlanoLabels = {
   individual: "Individual",
 };
 
-function ComissaoConfigSection() {
+// Componente ComissaoConfigSection removido - agora está em /admin/configuracoes
+
+function ComissaoConfigSection_REMOVED() {
   const { data: configs, isLoading } = trpc.comissaoConfig.list.useQuery();
   const utils = trpc.useUtils();
   
@@ -296,34 +299,8 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5">
-      {/* Header */}
-      <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-10">
-        <div className="container py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-16 w-auto" />
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Sua Saúde Vital</h1>
-              <p className="text-sm text-muted-foreground">Painel Administrativo</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm">
-              <UserCircle className="h-5 w-5 text-muted-foreground" />
-              <span className="font-medium">{user.name || user.email}</span>
-              <Badge variant="outline" className="ml-1">Admin</Badge>
-            </div>
-            <NotificationBadge />
-            <Button variant="ghost" size="sm" onClick={() => logout()}>
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container py-8">
+    <AdminLayout>
+      <div className="container py-8">
         <div className="space-y-6">
           {/* Back Button */}
           <Link href="/">
@@ -412,19 +389,6 @@ export default function Admin() {
               </Card>
             </div>
           )}
-
-          {/* Configuração de Comissões */}
-          <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
-            <CardHeader>
-              <CardTitle className="text-xl">Configuração de Comissões por Tipo de Plano</CardTitle>
-              <CardDescription>
-                Defina os valores de comissão para cada tipo de plano. Estes valores serão usados para calcular automaticamente as comissões dos parceiros.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ComissaoConfigSection />
-            </CardContent>
-          </Card>
 
           {/* Table */}
           <Card className="bg-card/80 backdrop-blur-sm">
@@ -518,7 +482,7 @@ export default function Admin() {
             </CardContent>
           </Card>
         </div>
-      </main>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }

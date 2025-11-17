@@ -149,4 +149,15 @@
 - [x] Remover coluna de comissão manual (Tipo + Valor) da tabela de indicações
 - [x] Adicionar coluna mostrando valor calculado automaticamente baseado no tipo de plano
 - [x] Testar visualização
+- [x] Salvar checkpoint
+
+## Menu Lateral e Página de Configurações de Comissão
+
+- [x] Criar componente de menu lateral (sidebar) para o painel admin
+- [x] Adicionar abas no menu: Indicações, Configurações, Estatísticas, Comissões
+- [x] Criar página dedicada /admin/configuracoes para configurações de comissão
+- [x] Implementar campos de entrada em formato R$ (reais) ao invés de centavos
+- [x] Adicionar conversão automática de R$ para centavos no frontend
+- [x] Remover seção de configuração da página Admin principal
+- [x] Testar navegação entre abas
 - [ ] Salvar checkpoint
