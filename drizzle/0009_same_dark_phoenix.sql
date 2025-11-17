@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `canDelete` int DEFAULT 1 NOT NULL;

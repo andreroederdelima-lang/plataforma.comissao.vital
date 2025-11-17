@@ -178,4 +178,13 @@
 - [x] Ajustar largura e scroll da tabela no painel admin
 - [x] Garantir que coluna de Comissão seja totalmente visível
 - [x] Testar responsividade em mobile e web
+- [x] Salvar checkpoint
+
+## Adicionar Usuário Comercial com Permissões Limitadas
+
+- [x] Adicionar comercial@suasaudevital.com.br ao banco de dados como admin
+- [x] Criar campo de permissão no schema (admin_completo vs admin_comercial)
+- [x] Implementar lógica de permissões no backend
+- [x] Ocultar botões de exclusão para admin comercial no frontend (não há botões de exclusão no sistema)
+- [x] Testar login e permissões do usuário comercial
 - [ ] Salvar checkpoint
