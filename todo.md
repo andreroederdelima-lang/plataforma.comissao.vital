@@ -142,4 +142,11 @@
 - [x] Atualizar cálculo automático de comissões baseado nos valores configurados
 - [x] Atualizar página de relatório de comissões para usar novos valores
 - [x] Testar cálculo automático com diferentes cenários
+- [x] Salvar checkpoint
+
+## Remover Campos Manuais de Comissão da Tabela
+
+- [x] Remover coluna de comissão manual (Tipo + Valor) da tabela de indicações
+- [x] Adicionar coluna mostrando valor calculado automaticamente baseado no tipo de plano
+- [x] Testar visualização
 - [ ] Salvar checkpoint

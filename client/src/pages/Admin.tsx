@@ -27,61 +27,39 @@ import { Link, useLocation } from "wouter";
 import * as XLSX from "xlsx";
 import { Input } from "@/components/ui/input";
 
-function ComissaoCell({ indicacao }: { indicacao: any }) {
-  const [tipoComissao, setTipoComissao] = useState<"valor_fixo" | "percentual" | null>(indicacao.tipoComissao || null);
-  const [valorComissao, setValorComissao] = useState<string>(indicacao.valorComissao ? String(indicacao.valorComissao) : "");
-  const utils = trpc.useUtils();
-
-  const updateComissaoMutation = trpc.indicacoes.updateComissao.useMutation({
-    onSuccess: () => {
-      toast.success("Comissão atualizada!");
-      utils.indicacoes.listAll.invalidate();
-    },
-    onError: (error: any) => {
-      toast.error(error.message || "Erro ao atualizar comissão");
-    },
-  });
-
-  const handleSave = () => {
-    if (!tipoComissao || !valorComissao) {
-      toast.error("Preencha tipo e valor da comissão");
-      return;
+function ComissaoAutoCell({ indicacao }: { indicacao: any }) {
+  const { data: configs } = trpc.comissaoConfig.list.useQuery();
+  
+  // Calcular comissão automaticamente baseado no tipo de plano
+  let valorComissao = 0;
+  
+  // Primeiro tenta usar valor manual (se definido)
+  if (indicacao.tipoComissao && indicacao.valorComissao) {
+    valorComissao = indicacao.valorComissao;
+  } else {
+    // Caso contrário, usa valor configurado para o tipo de plano
+    const config = configs?.find(c => c.tipoPlano === indicacao.tipoPlano);
+    if (config) {
+      valorComissao = config.valorComissao;
     }
-    updateComissaoMutation.mutate({
-      id: indicacao.id,
-      tipoComissao,
-      valorComissao: parseInt(valorComissao),
-    });
-  };
-
-  return (
-    <div className="flex flex-col gap-2 min-w-[200px]">
-      <Select value={tipoComissao || ""} onValueChange={(v) => setTipoComissao(v as "valor_fixo" | "percentual")}>
-        <SelectTrigger className="h-8">
-          <SelectValue placeholder="Tipo" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="valor_fixo">Valor Fixo (R$)</SelectItem>
-          <SelectItem value="percentual">Percentual (%)</SelectItem>
-        </SelectContent>
-      </Select>
-      <div className="flex gap-1">
-        <Input
-          type="number"
-          placeholder={tipoComissao === "percentual" ? "Ex: 10" : "Ex: 5000"}
-          value={valorComissao}
-          onChange={(e) => setValorComissao(e.target.value)}
-          className="h-8"
-        />
-        <Button size="sm" onClick={handleSave} disabled={updateComissaoMutation.isPending} className="h-8 px-2">
-          OK
-        </Button>
+  }
+  
+  if (valorComissao === 0) {
+    return (
+      <div className="text-sm text-muted-foreground">
+        Não configurado
       </div>
-      {indicacao.tipoComissao && indicacao.valorComissao && (
-        <p className="text-xs text-muted-foreground">
-          {indicacao.tipoComissao === "percentual" ? `${indicacao.valorComissao}%` : `R$ ${(indicacao.valorComissao / 100).toFixed(2)}`}
-        </p>
-      )}
+    );
+  }
+  
+  return (
+    <div className="text-sm">
+      <p className="font-semibold text-green-600">
+        R$ {(valorComissao / 100).toFixed(2)}
+      </p>
+      <p className="text-xs text-muted-foreground">
+        {indicacao.tipoPlano === "familiar" ? "Familiar" : "Individual"}
+      </p>
     </div>
   );
 }
@@ -505,7 +483,7 @@ export default function Admin() {
                             </p>
                           </TableCell>
                           <TableCell>
-                            <ComissaoCell indicacao={item.indicacao} />
+                            <ComissaoAutoCell indicacao={item.indicacao} />
                           </TableCell>
                           <TableCell>
                             <Select
