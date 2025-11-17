@@ -118,4 +118,11 @@
 - [x] Atualizar const.ts com novo logo
 - [x] Verificar que o logo está sendo exibido em todas as páginas
 - [x] Testar visualização
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
+
+## Atualização para Logo Horizontal
+
+- [x] Copiar logo horizontal para o projeto
+- [x] Atualizar const.ts
+- [x] Testar visualização
+- [ ] Salvar checkpoint
