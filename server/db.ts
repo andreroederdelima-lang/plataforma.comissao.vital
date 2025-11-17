@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users } from "../drizzle/schema";
+import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -296,4 +296,51 @@ export async function updateChavePix(userId: number, chavePix: string) {
   await db.update(users)
     .set({ chavePix })
     .where(eq(users.id, userId));
+}
+
+/**
+ * Listar configurações de comissão
+ */
+export async function getComissaoConfigs() {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.select().from(comissaoConfig);
+  return result;
+}
+
+/**
+ * Criar ou atualizar configuração de comissão por tipo de plano
+ */
+export async function upsertComissaoConfig(tipoPlano: "familiar" | "individual", valorComissao: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.insert(comissaoConfig)
+    .values({ tipoPlano, valorComissao })
+    .onDuplicateKeyUpdate({
+      set: { valorComissao, updatedAt: new Date() },
+    });
+}
+
+/**
+ * Obter valor de comissão por tipo de plano
+ */
+export async function getComissaoByTipoPlano(tipoPlano: "familiar" | "individual") {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .select()
+    .from(comissaoConfig)
+    .where(eq(comissaoConfig.tipoPlano, tipoPlano))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
 }

@@ -109,6 +109,126 @@ const tipoPlanoLabels = {
   individual: "Individual",
 };
 
+function ComissaoConfigSection() {
+  const { data: configs, isLoading } = trpc.comissaoConfig.list.useQuery();
+  const utils = trpc.useUtils();
+  
+  const [valorFamiliar, setValorFamiliar] = useState<string>("");
+  const [valorIndividual, setValorIndividual] = useState<string>("");
+  
+  const updateMutation = trpc.comissaoConfig.update.useMutation({
+    onSuccess: () => {
+      toast.success("Configuração atualizada!");
+      utils.comissaoConfig.list.invalidate();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erro ao atualizar configuração");
+    },
+  });
+  
+  // Atualizar valores quando configs carregarem
+  useState(() => {
+    if (configs) {
+      const familiar = configs.find(c => c.tipoPlano === "familiar");
+      const individual = configs.find(c => c.tipoPlano === "individual");
+      if (familiar) setValorFamiliar(String(familiar.valorComissao));
+      if (individual) setValorIndividual(String(individual.valorComissao));
+    }
+  });
+  
+  const handleSave = (tipoPlano: "familiar" | "individual", valor: string) => {
+    if (!valor || parseInt(valor) < 0) {
+      toast.error("Valor inválido");
+      return;
+    }
+    updateMutation.mutate({
+      tipoPlano,
+      valorComissao: parseInt(valor),
+    });
+  };
+  
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  const configFamiliar = configs?.find(c => c.tipoPlano === "familiar");
+  const configIndividual = configs?.find(c => c.tipoPlano === "individual");
+  
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Plano Familiar */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <DollarSign className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h3 className="font-semibold">Plano Familiar</h3>
+            <p className="text-xs text-muted-foreground">Valor da comissão em centavos</p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Input
+            type="number"
+            placeholder="Ex: 10000 (R$ 100,00)"
+            value={valorFamiliar || (configFamiliar?.valorComissao || "")}
+            onChange={(e) => setValorFamiliar(e.target.value)}
+            className="flex-1"
+          />
+          <Button
+            onClick={() => handleSave("familiar", valorFamiliar || String(configFamiliar?.valorComissao || 0))}
+            disabled={updateMutation.isPending}
+          >
+            Salvar
+          </Button>
+        </div>
+        {configFamiliar && (
+          <p className="text-sm text-muted-foreground">
+            Valor atual: <span className="font-semibold text-foreground">R$ {(configFamiliar.valorComissao / 100).toFixed(2)}</span>
+          </p>
+        )}
+      </div>
+      
+      {/* Plano Individual */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <DollarSign className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h3 className="font-semibold">Plano Individual</h3>
+            <p className="text-xs text-muted-foreground">Valor da comissão em centavos</p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Input
+            type="number"
+            placeholder="Ex: 5000 (R$ 50,00)"
+            value={valorIndividual || (configIndividual?.valorComissao || "")}
+            onChange={(e) => setValorIndividual(e.target.value)}
+            className="flex-1"
+          />
+          <Button
+            onClick={() => handleSave("individual", valorIndividual || String(configIndividual?.valorComissao || 0))}
+            disabled={updateMutation.isPending}
+          >
+            Salvar
+          </Button>
+        </div>
+        {configIndividual && (
+          <p className="text-sm text-muted-foreground">
+            Valor atual: <span className="font-semibold text-foreground">R$ {(configIndividual.valorComissao / 100).toFixed(2)}</span>
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const categoriaLabels = {
   empresarial: "Empresarial",
   pessoa_fisica: "Pessoa Física",
@@ -314,6 +434,19 @@ export default function Admin() {
               </Card>
             </div>
           )}
+
+          {/* Configuração de Comissões */}
+          <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
+            <CardHeader>
+              <CardTitle className="text-xl">Configuração de Comissões por Tipo de Plano</CardTitle>
+              <CardDescription>
+                Defina os valores de comissão para cada tipo de plano. Estes valores serão usados para calcular automaticamente as comissões dos parceiros.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ComissaoConfigSection />
+            </CardContent>
+          </Card>
 
           {/* Table */}
           <Card className="bg-card/80 backdrop-blur-sm">

@@ -19,6 +19,7 @@ import { Link } from "wouter";
 export default function Comissoes() {
   const { user, loading, logout } = useAuth();
   const { data: comissoes, isLoading } = trpc.indicacoes.getComissoes.useQuery();
+  const { data: configs } = trpc.comissaoConfig.list.useQuery();
 
   if (loading || isLoading) {
     return (
@@ -55,12 +56,25 @@ export default function Comissoes() {
       };
     }
 
-    acc[parceiroId].indicacoes.push(item.indicacao);
+    // Calcular comissão automaticamente baseado no tipo de plano
+    let valorComissao = 0;
     
-    // Calcular comissão se definida
+    // Primeiro tenta usar valor manual (se definido)
     if (item.indicacao.tipoComissao && item.indicacao.valorComissao) {
-      acc[parceiroId].totalComissao += item.indicacao.valorComissao;
+      valorComissao = item.indicacao.valorComissao;
+    } else {
+      // Caso contrário, usa valor configurado para o tipo de plano
+      const config = configs?.find(c => c.tipoPlano === item.indicacao.tipoPlano);
+      if (config) {
+        valorComissao = config.valorComissao;
+      }
     }
+    
+    acc[parceiroId].indicacoes.push({
+      ...item.indicacao,
+      valorComissaoCalculado: valorComissao,
+    });
+    acc[parceiroId].totalComissao += valorComissao;
 
     return acc;
   }, {});
@@ -185,8 +199,8 @@ export default function Comissoes() {
                           <TableRow>
                             <TableHead>Cliente</TableHead>
                             <TableHead>WhatsApp</TableHead>
+                            <TableHead>Tipo Plano</TableHead>
                             <TableHead>Data</TableHead>
-                            <TableHead>Tipo Comissão</TableHead>
                             <TableHead>Valor Comissão</TableHead>
                           </TableRow>
                         </TableHeader>
@@ -198,26 +212,20 @@ export default function Comissoes() {
                               </TableCell>
                               <TableCell>{indicacao.whatsappIndicado}</TableCell>
                               <TableCell>
+                                <Badge variant="outline">
+                                  {indicacao.tipoPlano === "familiar" ? "Familiar" : "Individual"}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
                                 {new Date(indicacao.createdAt).toLocaleDateString("pt-BR")}
                               </TableCell>
                               <TableCell>
-                                {indicacao.tipoComissao ? (
-                                  <Badge variant="outline">
-                                    {indicacao.tipoComissao === "valor_fixo" ? "Valor Fixo" : "Percentual"}
-                                  </Badge>
-                                ) : (
-                                  <span className="text-muted-foreground text-sm">Não definido</span>
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {indicacao.tipoComissao && indicacao.valorComissao ? (
-                                  <span className="font-semibold">
-                                    {indicacao.tipoComissao === "percentual"
-                                      ? `${indicacao.valorComissao}%`
-                                      : `R$ ${(indicacao.valorComissao / 100).toFixed(2)}`}
+                                {indicacao.valorComissaoCalculado > 0 ? (
+                                  <span className="font-semibold text-green-600">
+                                    R$ {(indicacao.valorComissaoCalculado / 100).toFixed(2)}
                                   </span>
                                 ) : (
-                                  <span className="text-muted-foreground text-sm">-</span>
+                                  <span className="text-muted-foreground text-sm">Não configurado</span>
                                 )}
                               </TableCell>
                             </TableRow>

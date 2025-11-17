@@ -132,4 +132,14 @@
 - [x] Copiar novo logo para o projeto
 - [x] Atualizar const.ts
 - [x] Testar visualização
+- [x] Salvar checkpoint
+
+## Sistema de Configuração de Comissões por Tipo de Plano
+
+- [x] Criar tabela comissaoConfig no banco de dados (tipo de plano, valor)
+- [x] Implementar procedures para gerenciar configurações de comissão
+- [x] Criar interface no painel admin para editar valores de comissão por plano
+- [x] Atualizar cálculo automático de comissões baseado nos valores configurados
+- [x] Atualizar página de relatório de comissões para usar novos valores
+- [x] Testar cálculo automático com diferentes cenários
 - [ ] Salvar checkpoint

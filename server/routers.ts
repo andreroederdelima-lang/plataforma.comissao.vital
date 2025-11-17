@@ -188,6 +188,44 @@ export const appRouter = router({
     }),
   }),
 
+  comissaoConfig: router({
+    /**
+     * Listar configurações de comissão (apenas admin)
+     */
+    list: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Apenas administradores podem visualizar configurações",
+        });
+      }
+
+      const { getComissaoConfigs } = await import("./db");
+      return await getComissaoConfigs();
+    }),
+
+    /**
+     * Atualizar configuração de comissão por tipo de plano (apenas admin)
+     */
+    update: protectedProcedure
+      .input(z.object({
+        tipoPlano: z.enum(["familiar", "individual"]),
+        valorComissao: z.number().min(0, "Valor deve ser positivo"),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores podem atualizar configurações",
+          });
+        }
+
+        const { upsertComissaoConfig } = await import("./db");
+        await upsertComissaoConfig(input.tipoPlano, input.valorComissao);
+        return { success: true };
+      }),
+  }),
+
   notificacoes: router({
     /**
      * Listar notificações do usuário logado

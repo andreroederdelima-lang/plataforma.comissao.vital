@@ -81,3 +81,20 @@ export const notificacoes = mysqlTable("notificacoes", {
 
 export type Notificacao = typeof notificacoes.$inferSelect;
 export type InsertNotificacao = typeof notificacoes.$inferInsert;
+
+/**
+ * Tabela de configuração de comissões por tipo de plano
+ * Armazena os valores de comissão para cada tipo de plano (Individual/Familiar)
+ */
+export const comissaoConfig = mysqlTable("comissaoConfig", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Tipo de plano: Familiar ou Individual */
+  tipoPlano: mysqlEnum("tipoPlano", ["familiar", "individual"]).notNull().unique(),
+  /** Valor da comissão em centavos (R$ 100,00 = 10000) */
+  valorComissao: int("valorComissao").notNull().default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ComissaoConfig = typeof comissaoConfig.$inferSelect;
+export type InsertComissaoConfig = typeof comissaoConfig.$inferInsert;
