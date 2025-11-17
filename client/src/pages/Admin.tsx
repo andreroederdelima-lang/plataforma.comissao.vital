@@ -275,15 +275,15 @@ export default function Admin() {
           )}
 
           {/* Table */}
-          <Card className="bg-card/80 backdrop-blur-sm">
-            <CardContent className="pt-6">
+          <Card className="bg-card/80 backdrop-blur-sm overflow-hidden">
+            <CardContent className="pt-6 px-0">
               {!indicacoes || indicacoes.length === 0 ? (
-                <div className="py-12 text-center text-muted-foreground">
+                <div className="py-12 text-center text-muted-foreground px-6">
                   Nenhuma indicação registrada ainda.
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <Table>
+                <div className="overflow-x-auto px-6">
+                  <Table className="min-w-[1400px]">
                     <TableHeader>
                       <TableRow>
                         <TableHead>Data</TableHead>

@@ -171,4 +171,11 @@
 - [x] Adicionar campo "Tipo de Plano" no formulário de indicações
 - [x] Ajustar cálculo automático para considerar tipo de plano + categoria
 - [x] Testar todas as combinações
+- [x] Salvar checkpoint
+
+## Corrigir Layout da Tabela de Indicações
+
+- [x] Ajustar largura e scroll da tabela no painel admin
+- [x] Garantir que coluna de Comissão seja totalmente visível
+- [x] Testar responsividade em mobile e web
 - [ ] Salvar checkpoint
