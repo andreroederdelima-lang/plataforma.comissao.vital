@@ -125,4 +125,11 @@
 - [x] Copiar logo horizontal para o projeto
 - [x] Atualizar const.ts
 - [x] Testar visualização
+- [x] Salvar checkpoint
+
+## Atualização para Logo VITAL - Serviços Médicos
+
+- [x] Copiar novo logo para o projeto
+- [x] Atualizar const.ts
+- [x] Testar visualização
 - [ ] Salvar checkpoint
