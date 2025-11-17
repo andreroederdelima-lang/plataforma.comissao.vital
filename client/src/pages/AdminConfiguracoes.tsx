@@ -9,12 +9,13 @@ import { Loader2, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+type ComissaoKey = `${string}_${string}_${string}`; // nomePlano_tipoPlano_categoria
+
 export default function AdminConfiguracoes() {
   const { user, loading } = useAuth();
   const { data: configs, isLoading } = trpc.comissaoConfig.list.useQuery();
   
-  const [valorFamiliar, setValorFamiliar] = useState("");
-  const [valorIndividual, setValorIndividual] = useState("");
+  const [valores, setValores] = useState<Record<ComissaoKey, string>>({});
 
   const upsertMutation = trpc.comissaoConfig.update.useMutation({
     onSuccess: () => {
@@ -29,20 +30,22 @@ export default function AdminConfiguracoes() {
   // Carregar valores existentes
   useEffect(() => {
     if (configs) {
-      const familiar = configs.find(c => c.tipoPlano === "familiar");
-      const individual = configs.find(c => c.tipoPlano === "individual");
-      
-      if (familiar) {
-        setValorFamiliar((familiar.valorComissao / 100).toFixed(2));
-      }
-      if (individual) {
-        setValorIndividual((individual.valorComissao / 100).toFixed(2));
-      }
+      const novosValores: Record<ComissaoKey, string> = {};
+      configs.forEach(c => {
+        const key: ComissaoKey = `${c.nomePlano}_${c.tipoPlano}_${c.categoria}`;
+        novosValores[key] = (c.valorComissao / 100).toFixed(2);
+      });
+      setValores(novosValores);
     }
   }, [configs]);
 
-  const handleSave = (tipoPlano: "familiar" | "individual") => {
-    const valor = tipoPlano === "familiar" ? valorFamiliar : valorIndividual;
+  const handleSave = (
+    nomePlano: "essencial" | "premium",
+    tipoPlano: "familiar" | "individual",
+    categoria: "empresarial" | "pessoa_fisica"
+  ) => {
+    const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
+    const valor = valores[key];
     
     if (!valor || parseFloat(valor) <= 0) {
       toast.error("Digite um valor válido");
@@ -53,9 +56,21 @@ export default function AdminConfiguracoes() {
     const valorEmCentavos = Math.round(parseFloat(valor) * 100);
 
     upsertMutation.mutate({
+      nomePlano,
       tipoPlano,
+      categoria,
       valorComissao: valorEmCentavos,
     });
+  };
+
+  const getValor = (nomePlano: string, tipoPlano: string, categoria: string) => {
+    const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
+    return valores[key] || "";
+  };
+
+  const setValor = (nomePlano: string, tipoPlano: string, categoria: string, value: string) => {
+    const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
+    setValores(prev => ({ ...prev, [key]: value }));
   };
 
   if (loading || isLoading) {
@@ -84,117 +99,98 @@ export default function AdminConfiguracoes() {
     );
   }
 
+  const planoConfigs = [
+    {
+      nomePlano: "essencial" as const,
+      titulo: "Plano Essencial",
+      icon: "🔵",
+      items: [
+        { tipoPlano: "individual" as const, categoria: "pessoa_fisica" as const, label: "Individual - Pessoa Física" },
+        { tipoPlano: "familiar" as const, categoria: "pessoa_fisica" as const, label: "Familiar - Pessoa Física" },
+        { tipoPlano: "individual" as const, categoria: "empresarial" as const, label: "Individual - Empresarial" },
+        { tipoPlano: "familiar" as const, categoria: "empresarial" as const, label: "Familiar - Empresarial" },
+      ]
+    },
+    {
+      nomePlano: "premium" as const,
+      titulo: "Plano Premium",
+      icon: "⭐",
+      items: [
+        { tipoPlano: "individual" as const, categoria: "pessoa_fisica" as const, label: "Individual - Pessoa Física" },
+        { tipoPlano: "familiar" as const, categoria: "pessoa_fisica" as const, label: "Familiar - Pessoa Física" },
+        { tipoPlano: "individual" as const, categoria: "empresarial" as const, label: "Individual - Empresarial" },
+        { tipoPlano: "familiar" as const, categoria: "empresarial" as const, label: "Familiar - Empresarial" },
+      ]
+    },
+  ];
+
   return (
     <AdminLayout>
-      <div className="container py-8 max-w-4xl">
+      <div className="container py-8 max-w-5xl">
         <div className="space-y-6">
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold text-foreground">Configurações de Comissão</h1>
             <p className="text-muted-foreground mt-2">
-              Defina os valores de comissão para cada tipo de plano. Os valores serão aplicados automaticamente às novas indicações.
+              Defina os valores de comissão para cada combinação de plano. Os valores serão aplicados automaticamente às novas indicações.
             </p>
           </div>
 
-          {/* Plano Familiar */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <span className="text-2xl">👨‍👩‍👧‍👦</span>
-                Plano Familiar
-              </CardTitle>
-              <CardDescription>
-                Valor da comissão para vendas de planos familiares
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="valor-familiar">Valor da Comissão (R$)</Label>
-                <div className="flex gap-3">
-                  <div className="relative flex-1">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                      R$
-                    </span>
-                    <Input
-                      id="valor-familiar"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      placeholder="0,00"
-                      value={valorFamiliar}
-                      onChange={(e) => setValorFamiliar(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                  <Button
-                    onClick={() => handleSave("familiar")}
-                    disabled={upsertMutation.isPending}
-                    className="gap-2"
-                  >
-                    {upsertMutation.isPending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Save className="h-4 w-4" />
-                    )}
-                    Salvar
-                  </Button>
+          {/* Cards por tipo de plano */}
+          {planoConfigs.map(planoConfig => (
+            <Card key={planoConfig.nomePlano}>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">{planoConfig.icon}</span>
+                  {planoConfig.titulo}
+                </CardTitle>
+                <CardDescription>
+                  Configure os valores de comissão para todas as variações do {planoConfig.titulo.toLowerCase()}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {planoConfig.items.map(item => {
+                    const valor = getValor(planoConfig.nomePlano, item.tipoPlano, item.categoria);
+                    return (
+                      <div key={`${planoConfig.nomePlano}_${item.tipoPlano}_${item.categoria}`} className="space-y-2 p-4 border rounded-lg">
+                        <Label className="text-sm font-medium">{item.label}</Label>
+                        <div className="flex gap-2">
+                          <div className="relative flex-1">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                              R$
+                            </span>
+                            <Input
+                              type="number"
+                              step="0.01"
+                              min="0"
+                              placeholder="0,00"
+                              value={valor}
+                              onChange={(e) => setValor(planoConfig.nomePlano, item.tipoPlano, item.categoria, e.target.value)}
+                              className="pl-10"
+                            />
+                          </div>
+                          <Button
+                            size="sm"
+                            onClick={() => handleSave(planoConfig.nomePlano, item.tipoPlano, item.categoria)}
+                            disabled={upsertMutation.isPending}
+                            className="gap-1"
+                          >
+                            {upsertMutation.isPending ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : (
+                              <Save className="h-3 w-3" />
+                            )}
+                            Salvar
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Exemplo: Digite 100.00 para R$ 100,00
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Plano Individual */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <span className="text-2xl">👤</span>
-                Plano Individual
-              </CardTitle>
-              <CardDescription>
-                Valor da comissão para vendas de planos individuais
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="valor-individual">Valor da Comissão (R$)</Label>
-                <div className="flex gap-3">
-                  <div className="relative flex-1">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                      R$
-                    </span>
-                    <Input
-                      id="valor-individual"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      placeholder="0,00"
-                      value={valorIndividual}
-                      onChange={(e) => setValorIndividual(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                  <Button
-                    onClick={() => handleSave("individual")}
-                    disabled={upsertMutation.isPending}
-                    className="gap-2"
-                  >
-                    {upsertMutation.isPending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Save className="h-4 w-4" />
-                    )}
-                    Salvar
-                  </Button>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Exemplo: Digite 50.00 para R$ 50,00
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
 
           {/* Info Card */}
           <Card className="bg-primary/5 border-primary/20">

@@ -38,6 +38,7 @@ export const appRouter = router({
       .input(z.object({
         nomeIndicado: z.string().min(1, "Nome é obrigatório"),
         whatsappIndicado: z.string().min(1, "WhatsApp é obrigatório"),
+        nomePlano: z.enum(["essencial", "premium"]),
         tipoPlano: z.enum(["familiar", "individual"]),
         categoria: z.enum(["empresarial", "pessoa_fisica"]),
         observacoes: z.string().optional(),
@@ -47,6 +48,7 @@ export const appRouter = router({
           parceiroId: ctx.user.id,
           nomeIndicado: input.nomeIndicado,
           whatsappIndicado: input.whatsappIndicado,
+          nomePlano: input.nomePlano,
           tipoPlano: input.tipoPlano,
           categoria: input.categoria,
           observacoes: input.observacoes || null,
@@ -209,7 +211,9 @@ export const appRouter = router({
      */
     update: protectedProcedure
       .input(z.object({
+        nomePlano: z.enum(["essencial", "premium"]),
         tipoPlano: z.enum(["familiar", "individual"]),
+        categoria: z.enum(["empresarial", "pessoa_fisica"]),
         valorComissao: z.number().min(0, "Valor deve ser positivo"),
       }))
       .mutation(async ({ ctx, input }) => {
@@ -221,7 +225,7 @@ export const appRouter = router({
         }
 
         const { upsertComissaoConfig } = await import("./db");
-        await upsertComissaoConfig(input.tipoPlano, input.valorComissao);
+        await upsertComissaoConfig(input.nomePlano, input.tipoPlano, input.categoria, input.valorComissao);
         return { success: true };
       }),
   }),

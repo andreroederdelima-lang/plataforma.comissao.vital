@@ -41,6 +41,8 @@ export const indicacoes = mysqlTable("indicacoes", {
   whatsappIndicado: varchar("whatsappIndicado", { length: 20 }).notNull(),
   /** Tipo de plano: Familiar ou Individual */
   tipoPlano: mysqlEnum("tipoPlano", ["familiar", "individual"]).notNull(),
+  /** Nome do plano: Essencial ou Premium */
+  nomePlano: mysqlEnum("nomePlano", ["essencial", "premium"]).notNull(),
   /** Categoria: Empresarial ou Pessoa Física */
   categoria: mysqlEnum("categoria", ["empresarial", "pessoa_fisica"]).notNull(),
   /** Observações adicionais sobre a indicação */
@@ -84,12 +86,17 @@ export type InsertNotificacao = typeof notificacoes.$inferInsert;
 
 /**
  * Tabela de configuração de comissões por tipo de plano
- * Armazena os valores de comissão para cada tipo de plano (Individual/Familiar)
+ * Armazena os valores de comissão para cada combinação de plano + tipo + categoria
+ * Exemplos: Essencial Individual Pessoa Física, Premium Familiar Empresarial, etc.
  */
 export const comissaoConfig = mysqlTable("comissaoConfig", {
   id: int("id").autoincrement().primaryKey(),
+  /** Nome do plano: Essencial ou Premium */
+  nomePlano: mysqlEnum("nomePlano", ["essencial", "premium"]).notNull(),
   /** Tipo de plano: Familiar ou Individual */
-  tipoPlano: mysqlEnum("tipoPlano", ["familiar", "individual"]).notNull().unique(),
+  tipoPlano: mysqlEnum("tipoPlano", ["familiar", "individual"]).notNull(),
+  /** Categoria: Empresarial ou Pessoa Física */
+  categoria: mysqlEnum("categoria", ["empresarial", "pessoa_fisica"]).notNull(),
   /** Valor da comissão em centavos (R$ 100,00 = 10000) */
   valorComissao: int("valorComissao").notNull().default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

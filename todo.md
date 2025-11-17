@@ -160,4 +160,15 @@
 - [x] Adicionar conversão automática de R$ para centavos no frontend
 - [x] Remover seção de configuração da página Admin principal
 - [x] Testar navegação entre abas
+- [x] Salvar checkpoint
+
+## Expandir Tipos de Planos e Categorias de Comissão
+
+- [x] Atualizar schema para incluir tipo de plano (Essencial/Premium) na tabela comissaoConfig
+- [x] Atualizar schema para suportar combinações: Essencial Individual, Essencial Familiar, Essencial Empresarial Individual, Essencial Empresarial Familiar, Premium Individual, Premium Familiar, Premium Empresarial Individual, Premium Empresarial Familiar
+- [x] Atualizar procedures do backend para novos campos
+- [x] Atualizar interface de configurações com cards organizados por tipo e categoria
+- [x] Adicionar campo "Tipo de Plano" no formulário de indicações
+- [x] Ajustar cálculo automático para considerar tipo de plano + categoria
+- [x] Testar todas as combinações
 - [ ] Salvar checkpoint

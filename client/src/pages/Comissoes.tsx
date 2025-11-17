@@ -56,15 +56,19 @@ export default function Comissoes() {
       };
     }
 
-    // Calcular comissão automaticamente baseado no tipo de plano
+    // Calcular comissão automaticamente baseado no tipo de plano + categoria
     let valorComissao = 0;
     
     // Primeiro tenta usar valor manual (se definido)
     if (item.indicacao.tipoComissao && item.indicacao.valorComissao) {
       valorComissao = item.indicacao.valorComissao;
     } else {
-      // Caso contrário, usa valor configurado para o tipo de plano
-      const config = configs?.find(c => c.tipoPlano === item.indicacao.tipoPlano);
+      // Caso contrário, usa valor configurado para a combinação nomePlano + tipoPlano + categoria
+      const config = configs?.find(c => 
+        c.nomePlano === item.indicacao.nomePlano &&
+        c.tipoPlano === item.indicacao.tipoPlano &&
+        c.categoria === item.indicacao.categoria
+      );
       if (config) {
         valorComissao = config.valorComissao;
       }

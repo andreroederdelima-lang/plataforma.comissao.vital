@@ -17,6 +17,7 @@ export default function Home() {
   const { user, loading, isAuthenticated, logout } = useAuth();
   const [nomeIndicado, setNomeIndicado] = useState("");
   const [whatsappIndicado, setWhatsappIndicado] = useState("");
+  const [nomePlano, setNomePlano] = useState<"essencial" | "premium">("essencial");
   const [tipoPlano, setTipoPlano] = useState<"familiar" | "individual">("individual");
   const [categoria, setCategoria] = useState<"empresarial" | "pessoa_fisica">("pessoa_fisica");
   const [observacoes, setObservacoes] = useState("");
@@ -28,6 +29,7 @@ export default function Home() {
       // Limpar formulário
       setNomeIndicado("");
       setWhatsappIndicado("");
+      setNomePlano("essencial");
       setTipoPlano("individual");
       setCategoria("pessoa_fisica");
       setObservacoes("");
@@ -49,6 +51,7 @@ export default function Home() {
     createMutation.mutate({
       nomeIndicado,
       whatsappIndicado,
+      nomePlano,
       tipoPlano,
       categoria,
       observacoes,
@@ -171,6 +174,29 @@ export default function Home() {
                       required
                       className="text-base"
                     />
+                  </div>
+
+                  {/* Nome do Plano */}
+                  <div className="space-y-3">
+                    <Label className="text-base font-semibold">Tipo de Plano *</Label>
+                    <RadioGroup
+                      value={nomePlano}
+                      onValueChange={(value) => setNomePlano(value as "essencial" | "premium")}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="essencial" id="essencial" />
+                        <Label htmlFor="essencial" className="cursor-pointer font-normal">
+                          Essencial
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="premium" id="premium" />
+                        <Label htmlFor="premium" className="cursor-pointer font-normal">
+                          Premium
+                        </Label>
+                      </div>
+                    </RadioGroup>
                   </div>
 
                   {/* Tipo de Assinatura */}

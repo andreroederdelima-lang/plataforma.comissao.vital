@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -314,23 +314,49 @@ export async function getComissaoConfigs() {
 /**
  * Criar ou atualizar configuração de comissão por tipo de plano
  */
-export async function upsertComissaoConfig(tipoPlano: "familiar" | "individual", valorComissao: number) {
+export async function upsertComissaoConfig(
+  nomePlano: "essencial" | "premium",
+  tipoPlano: "familiar" | "individual",
+  categoria: "empresarial" | "pessoa_fisica",
+  valorComissao: number
+) {
   const db = await getDb();
   if (!db) {
     throw new Error("Database not available");
   }
 
-  await db.insert(comissaoConfig)
-    .values({ tipoPlano, valorComissao })
-    .onDuplicateKeyUpdate({
-      set: { valorComissao, updatedAt: new Date() },
-    });
+  // Buscar se já existe uma configuração com essa combinação
+  const existing = await db.select()
+    .from(comissaoConfig)
+    .where(
+      and(
+        eq(comissaoConfig.nomePlano, nomePlano),
+        eq(comissaoConfig.tipoPlano, tipoPlano),
+        eq(comissaoConfig.categoria, categoria)
+      )
+    )
+    .limit(1);
+
+  if (existing.length > 0) {
+    // Atualizar existente
+    await db.update(comissaoConfig)
+      .set({ valorComissao, updatedAt: new Date() })
+      .where(eq(comissaoConfig.id, existing[0].id));
+  } else {
+    // Inserir novo
+    await db.insert(comissaoConfig)
+      .values({ nomePlano, tipoPlano, categoria, valorComissao });
+  }
 }
 
 /**
- * Obter valor de comissão por tipo de plano
+ * Obter valor de comissão por combinação de plano + tipo + categoria
  */
-export async function getComissaoByTipoPlano(tipoPlano: "familiar" | "individual") {
+export async function getComissaoByTipoPlano(
+  nomePlano: "essencial" | "premium",
+  tipoPlano: "familiar" | "individual",
+  categoria: "empresarial" | "pessoa_fisica"
+) {
   const db = await getDb();
   if (!db) {
     throw new Error("Database not available");
@@ -339,7 +365,13 @@ export async function getComissaoByTipoPlano(tipoPlano: "familiar" | "individual
   const result = await db
     .select()
     .from(comissaoConfig)
-    .where(eq(comissaoConfig.tipoPlano, tipoPlano))
+    .where(
+      and(
+        eq(comissaoConfig.nomePlano, nomePlano),
+        eq(comissaoConfig.tipoPlano, tipoPlano),
+        eq(comissaoConfig.categoria, categoria)
+      )
+    )
     .limit(1);
 
   return result.length > 0 ? result[0] : null;
