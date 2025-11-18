@@ -407,6 +407,27 @@ export const appRouter = router({
       }),
 
     /**
+     * Atualizar role do usuário
+     */
+    updateRole: protectedProcedure
+      .input(z.object({
+        userId: z.number(),
+        role: z.enum(["user", "admin", "vendedor", "comercial"]),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores podem alterar roles",
+          });
+        }
+
+        const { updateUserRole } = await import("./db");
+        await updateUserRole(input.userId, input.role);
+        return { success: true };
+      }),
+
+    /**
      * Excluir usuário
      */
     delete: protectedProcedure

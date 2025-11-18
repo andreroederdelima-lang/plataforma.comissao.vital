@@ -89,6 +89,21 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
+export async function updateUserRole(userId: number, role: "user" | "admin" | "vendedor" | "comercial") {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update user role: database not available");
+    return;
+  }
+
+  await db.update(users)
+    .set({ 
+      role, 
+      lastRoleChange: new Date() // Atualiza timestamp para invalidar sessões antigas
+    })
+    .where(eq(users.id, userId));
+}
+
 /**
  * Criar uma nova indicação
  */

@@ -292,6 +292,13 @@ class SDKServer {
       throw ForbiddenError("User not found");
     }
 
+    // Verificar se o role foi alterado (para invalidar sessão)
+    // Se lastRoleChange for mais recente que lastSignedIn, significa que o role foi alterado após o login
+    if (user.lastRoleChange && user.lastSignedIn && user.lastRoleChange > user.lastSignedIn) {
+      console.log(`[Auth] Role changed for user ${user.openId}, invalidating session`);
+      throw ForbiddenError("Session invalidated due to role change. Please login again.");
+    }
+
     await db.upsertUser({
       openId: user.openId,
       lastSignedIn: signedInAt,

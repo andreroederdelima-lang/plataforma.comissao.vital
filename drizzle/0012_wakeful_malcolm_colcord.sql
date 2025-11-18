@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `lastRoleChange` timestamp DEFAULT (now()) NOT NULL;

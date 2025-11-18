@@ -26,6 +26,8 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  /** Timestamp da última mudança de role (para invalidar sessões antigas) */
+  lastRoleChange: timestamp("lastRoleChange").defaultNow().notNull(),
 });
 
 export type User = typeof users.$inferSelect;

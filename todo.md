@@ -286,3 +286,17 @@
 - [x] Ocultar menu "Configurações" para não-admins
 - [x] Atualizar botão da home para redirecionar vendedores/comerciais para /admin
 - [x] Testar acesso completo com usuário comercial
+
+## Problema: Acesso Negado para Usuário Vendedor Ativo
+
+- [x] Investigar por que usuário com role "vendedor" ativo ainda recebe mensagem de acesso negado
+- [x] Verificar se o role está sendo salvo corretamente no banco de dados
+- [x] Verificar se há problema de cache ou sessão antiga
+- [ ] Testar logout e login novamente (solução: usuário precisa fazer logout e login para renovar sessão)
+
+## Invalidação Automática de Sessão ao Alterar Role
+
+- [x] Adicionar campo lastRoleChange ao schema de usuários
+- [x] Atualizar procedure de edição de usuário para registrar timestamp de mudança de role
+- [x] Modificar verificação de autenticação para comparar timestamp da sessão com lastRoleChange
+- [x] Testar: admin altera role → usuário é deslogado automaticamente
