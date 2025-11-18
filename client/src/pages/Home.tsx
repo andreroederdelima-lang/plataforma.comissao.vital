@@ -7,14 +7,16 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { APP_LOGO, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { Loader2, LogOut, UserCircle } from "lucide-react";
+import { Loader2, LogOut, Menu, UserCircle, X } from "lucide-react";
 import { NotificationBadge } from "@/components/NotificationBadge";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 
 export default function Home() {
   const { user, loading, isAuthenticated, logout } = useAuth();
+  const [, setLocation] = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [nomeIndicado, setNomeIndicado] = useState("");
   const [whatsappIndicado, setWhatsappIndicado] = useState("");
   const [nomePlano, setNomePlano] = useState<"essencial" | "premium">("essencial");
@@ -115,7 +117,10 @@ export default function Home() {
                     </Button>
                   </Link>
                 )}
-                <Button variant="ghost" size="sm" onClick={() => logout()}>
+                <Button variant="ghost" size="sm" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                  <Menu className="h-5 w-5" />
+                </Button>
+                <Button variant="ghost" size="sm" className="hidden md:flex" onClick={() => logout()}>
                   <LogOut className="h-4 w-4" />
                 </Button>
               </div>
@@ -123,6 +128,28 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu Dropdown */}
+      {isAuthenticated && user && mobileMenuOpen && (
+        <div className="md:hidden bg-background border-b border-border">
+          <div className="container py-4 space-y-2">
+            <Link href="/minhas-indicacoes">
+              <Button variant="ghost" className="w-full justify-start" onClick={() => setMobileMenuOpen(false)}>
+                Minhas Indicações
+              </Button>
+            </Link>
+            <Link href="/perfil">
+              <Button variant="ghost" className="w-full justify-start" onClick={() => setMobileMenuOpen(false)}>
+                Meu Perfil
+              </Button>
+            </Link>
+            <Button variant="ghost" className="w-full justify-start text-destructive" onClick={() => { logout(); setMobileMenuOpen(false); }}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Sair
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="container py-8 max-w-4xl">
@@ -153,10 +180,13 @@ export default function Home() {
                       : "Acesse o painel administrativo para gerenciar o sistema"}
                   </p>
                 </div>
-                <Button variant="default" size="lg" className="w-full md:w-auto" asChild>
-                  <Link href={user?.role === "admin" ? "/admin" : "/vendedor"}>
-                    {user?.role === "admin" ? "Acessar Painel Admin" : "Acessar Painel do Vendedor"}
-                  </Link>
+                <Button 
+                  variant="default" 
+                  size="lg" 
+                  className="w-full md:w-auto"
+                  onClick={() => setLocation(user?.role === "admin" ? "/admin" : "/vendedor")}
+                >
+                  {user?.role === "admin" ? "Acessar Painel Admin" : "Acessar Painel do Vendedor"}
                 </Button>
               </CardContent>
             </Card>

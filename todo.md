@@ -258,3 +258,8 @@
 
 - [x] Corrigir header desalinhado no mobile (texto sobrepondo logo e links)
 - [x] Corrigir botão "Acessar Painel do Vendedor" que não está redirecionando
+
+## Menu Hambúrguer Mobile e Correção de Navegação
+
+- [x] Corrigir botão "Acessar Painel do Vendedor" no banner que ainda não está funcionando
+- [x] Adicionar menu hambúrguer no mobile para acessar "Minhas Indicações" e "Meu Perfil"
