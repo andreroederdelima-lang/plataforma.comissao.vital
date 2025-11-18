@@ -300,3 +300,18 @@
 - [x] Atualizar procedure de edição de usuário para registrar timestamp de mudança de role
 - [x] Modificar verificação de autenticação para comparar timestamp da sessão com lastRoleChange
 - [x] Testar: admin altera role → usuário é deslogado automaticamente
+
+## Simplificação do Sistema de Vendedores
+
+- [ ] Adicionar coluna de classificação/status na tabela de indicações do painel admin
+- [ ] Permitir admin alterar status das indicações diretamente
+- [ ] Criar tabela de vendedores separada (apenas nome e chave PIX, sem conta Manus)
+- [ ] Adicionar página de cadastro de vendedores no painel admin
+- [ ] Atualizar formulário de indicação para selecionar vendedor da lista
+- [ ] Testar fluxo: cadastrar vendedor → registrar indicação → classificar indicação
+
+## Bug Crítico: Erro ao Classificar Indicação
+
+- [x] Investigar erro "NotFoundError: Falha ao executar 'removeChild' em 'Node'" no Select de status
+- [x] Corrigir problema de renderização do componente Select na tabela de indicações
+- [x] Testar alteração de status de indicações

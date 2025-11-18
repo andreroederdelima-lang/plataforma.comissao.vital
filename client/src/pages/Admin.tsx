@@ -336,28 +336,24 @@ export default function Admin() {
                             <ComissaoAutoCell indicacao={item.indicacao} />
                           </TableCell>
                           <TableCell>
-                            <Select
+                            <select
                               value={item.indicacao.status}
-                              onValueChange={(value) =>
+                              onChange={(e) =>
                                 handleStatusChange(
                                   item.indicacao.id,
-                                  value as "aguardando_contato" | "em_negociacao" | "venda_com_objecoes" | "venda_fechada" | "nao_comprou" | "cliente_sem_interesse"
+                                  e.target.value as "aguardando_contato" | "em_negociacao" | "venda_com_objecoes" | "venda_fechada" | "nao_comprou" | "cliente_sem_interesse"
                                 )
                               }
                               disabled={updateStatusMutation.isPending}
+                              className="w-[180px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                              <SelectTrigger className="w-[180px]">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="aguardando_contato">Aguardando Contato</SelectItem>
-                                <SelectItem value="em_negociacao">Em Negociação</SelectItem>
-                                <SelectItem value="venda_com_objecoes">Venda com Objeções</SelectItem>
-                                <SelectItem value="venda_fechada">Venda Fechada</SelectItem>
-                                <SelectItem value="nao_comprou">Não Comprou</SelectItem>
-                                <SelectItem value="cliente_sem_interesse">Cliente Sem Interesse</SelectItem>
-                              </SelectContent>
-                            </Select>
+                              <option value="aguardando_contato">Aguardando Contato</option>
+                              <option value="em_negociacao">Em Negociação</option>
+                              <option value="venda_com_objecoes">Venda com Objeções</option>
+                              <option value="venda_fechada">Venda Fechada</option>
+                              <option value="nao_comprou">Não Comprou</option>
+                              <option value="cliente_sem_interesse">Cliente Sem Interesse</option>
+                            </select>
                           </TableCell>
                         </TableRow>
                       ))}

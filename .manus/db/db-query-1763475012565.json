@@ -1,0 +1,73 @@
+{
+  "query": "SELECT id, name, email, role, isActive FROM users ORDER BY createdAt DESC LIMIT 10",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT id, name, email, role, isActive FROM users ORDER BY createdAt DESC LIMIT 10",
+  "rows": [
+    {
+      "id": "750018",
+      "name": "financeiro",
+      "email": "financeiro@suasaudevital.com.br",
+      "role": "user",
+      "isActive": "1"
+    },
+    {
+      "id": "750008",
+      "name": "Pedro",
+      "email": "financeiro@suasaudevital.com.br",
+      "role": "vendedor",
+      "isActive": "1"
+    },
+    {
+      "id": "690459",
+      "name": "Cristian Barotto",
+      "email": "barotto.fire27@gmail.com",
+      "role": "user",
+      "isActive": "1"
+    },
+    {
+      "id": "690437",
+      "name": "Petry Alisson",
+      "email": "alissonnpetryy@gmail.com",
+      "role": "user",
+      "isActive": "1"
+    },
+    {
+      "id": "660519",
+      "name": "Vendedor",
+      "email": "comercial@suasaudevital.com.br",
+      "role": "user",
+      "isActive": "1"
+    },
+    {
+      "id": "660506",
+      "name": "Pedro",
+      "email": "comercial@suasaudevital.com.br",
+      "role": "vendedor",
+      "isActive": "1"
+    },
+    {
+      "id": "210015",
+      "name": "André Roeder de Lima",
+      "email": "andreroederdelima@gmail.com",
+      "role": "user",
+      "isActive": "1"
+    },
+    {
+      "id": "30001",
+      "name": "valeeuropeumedicos Vale Europeu SM",
+      "email": "valeeuropeusm@gmail.com",
+      "role": "user",
+      "isActive": "1"
+    },
+    {
+      "id": "1",
+      "name": "Administrativo Sua Saúde Vital",
+      "email": "administrativo@suasaudevital.com.br",
+      "role": "admin",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\tisActive\n750018\tfinanceiro\tfinanceiro@suasaudevital.com.br\tuser\t1\n750008\tPedro\tfinanceiro@suasaudevital.com.br\tvendedor\t1\n690459\tCristian Barotto\tbarotto.fire27@gmail.com\tuser\t1\n690437\tPetry Alisson\talissonnpetryy@gmail.com\tuser\t1\n660519\tVendedor\tcomercial@suasaudevital.com.br\tuser\t1\n660506\tPedro\tcomercial@suasaudevital.com.br\tvendedor\t1\n210015\tAndré Roeder de Lima\tandreroederdelima@gmail.com\tuser\t1\n30001\tvaleeuropeumedicos Vale Europeu SM\tvaleeuropeusm@gmail.com\tuser\t1\n1\tAdministrativo Sua Saúde Vital\tadministrativo@suasaudevital.com.br\tadmin\t1\n",
+  "stderr": "",
+  "execution_time_ms": 2358
+}
