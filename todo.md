@@ -277,3 +277,12 @@
 - [x] Confirmar que a rota /vendedor está corretamente configurada
 - [x] Testar navegação programática
 - [x] Corrigir verificação de role na página Vendedor.tsx para aceitar 'comercial'
+
+## Liberar Página Admin para Vendedores/Comerciais com Restrições
+
+- [x] Modificar página Admin.tsx para aceitar vendedores e comerciais
+- [x] Ocultar botões de deletar indicações para não-admins
+- [x] Ocultar menu "Usuários" para não-admins
+- [x] Ocultar menu "Configurações" para não-admins
+- [x] Atualizar botão da home para redirecionar vendedores/comerciais para /admin
+- [x] Testar acesso completo com usuário comercial

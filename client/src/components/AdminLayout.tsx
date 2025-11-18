@@ -23,33 +23,40 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const { user, logout } = useAuth();
   const [location] = useLocation();
 
+  const isAdmin = user?.role === "admin";
+
   const menuItems = [
     {
       path: "/admin",
       label: "Indicações",
       icon: ClipboardList,
+      adminOnly: false,
     },
     {
       path: "/admin/usuarios",
       label: "Usuários",
       icon: Users,
+      adminOnly: true,
     },
     {
       path: "/admin/configuracoes",
       label: "Configurações",
       icon: Settings,
+      adminOnly: true,
     },
     {
       path: "/estatisticas",
       label: "Estatísticas",
       icon: BarChart3,
+      adminOnly: false,
     },
     {
       path: "/comissoes",
       label: "Comissões",
       icon: DollarSign,
+      adminOnly: false,
     },
-  ];
+  ].filter(item => !item.adminOnly || isAdmin);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5 flex">
@@ -60,7 +67,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <Link href="/">
             <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-16 w-auto cursor-pointer" />
           </Link>
-          <h2 className="mt-3 text-lg font-bold text-foreground">Painel Admin</h2>
+          <h2 className="mt-3 text-lg font-bold text-foreground">{isAdmin ? "Painel Admin" : "Painel do Vendedor"}</h2>
         </div>
 
         {/* Menu Items */}

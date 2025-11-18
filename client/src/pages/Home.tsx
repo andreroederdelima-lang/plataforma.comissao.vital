@@ -111,7 +111,7 @@ export default function Home() {
                   </Link>
                 )}
                 {(user.role === "vendedor" || user.role === "comercial") && (
-                  <Link href="/vendedor">
+                  <Link href="/admin">
                     <Button variant="default" size="sm">
                       Painel
                     </Button>
@@ -184,7 +184,7 @@ export default function Home() {
                   variant="default" 
                   size="lg" 
                   className="w-full md:w-auto"
-                  onClick={() => setLocation(user?.role === "admin" ? "/admin" : "/vendedor")}
+                  onClick={() => setLocation("/admin")}
                 >
                   {user?.role === "admin" ? "Acessar Painel Admin" : "Acessar Painel do Vendedor"}
                 </Button>
