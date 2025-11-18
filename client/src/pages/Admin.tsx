@@ -289,6 +289,7 @@ export default function Admin() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Data</TableHead>
+                        <TableHead className="w-[200px]">Status</TableHead>
                         <TableHead>Parceiro</TableHead>
                         <TableHead>Nome Indicado</TableHead>
                         <TableHead>WhatsApp</TableHead>
@@ -296,7 +297,6 @@ export default function Admin() {
                         <TableHead>Categoria</TableHead>
                         <TableHead>Observações</TableHead>
                         <TableHead>Comissão</TableHead>
-                        <TableHead>Status</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -304,6 +304,36 @@ export default function Admin() {
                         <TableRow key={item.indicacao.id}>
                           <TableCell className="whitespace-nowrap">
                             {new Date(item.indicacao.createdAt).toLocaleDateString("pt-BR")}
+                          </TableCell>
+                          <TableCell>
+                            <select
+                              value={item.indicacao.status}
+                              onChange={(e) =>
+                                handleStatusChange(
+                                  item.indicacao.id,
+                                  e.target.value as "aguardando_contato" | "em_negociacao" | "venda_com_objecoes" | "venda_fechada" | "nao_comprou" | "cliente_sem_interesse"
+                                )
+                              }
+                              disabled={updateStatusMutation.isPending}
+                              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              style={{
+                                backgroundColor: item.indicacao.status === 'venda_fechada' ? '#dcfce7' : 
+                                                item.indicacao.status === 'em_negociacao' ? '#dbeafe' :
+                                                item.indicacao.status === 'venda_com_objecoes' ? '#fed7aa' :
+                                                item.indicacao.status === 'nao_comprou' || item.indicacao.status === 'cliente_sem_interesse' ? '#fee2e2' : '#f3f4f6',
+                                color: item.indicacao.status === 'venda_fechada' ? '#166534' : 
+                                       item.indicacao.status === 'em_negociacao' ? '#1e40af' :
+                                       item.indicacao.status === 'venda_com_objecoes' ? '#9a3412' :
+                                       item.indicacao.status === 'nao_comprou' || item.indicacao.status === 'cliente_sem_interesse' ? '#991b1b' : '#374151'
+                              }}
+                            >
+                              <option value="aguardando_contato">Aguardando Contato</option>
+                              <option value="em_negociacao">Em Negociação</option>
+                              <option value="venda_com_objecoes">Venda com Objeções</option>
+                              <option value="venda_fechada">Venda Fechada</option>
+                              <option value="nao_comprou">Não Comprou</option>
+                              <option value="cliente_sem_interesse">Cliente Sem Interesse</option>
+                            </select>
                           </TableCell>
                           <TableCell>
                             <div>
@@ -334,26 +364,6 @@ export default function Admin() {
                           </TableCell>
                           <TableCell>
                             <ComissaoAutoCell indicacao={item.indicacao} />
-                          </TableCell>
-                          <TableCell>
-                            <select
-                              value={item.indicacao.status}
-                              onChange={(e) =>
-                                handleStatusChange(
-                                  item.indicacao.id,
-                                  e.target.value as "aguardando_contato" | "em_negociacao" | "venda_com_objecoes" | "venda_fechada" | "nao_comprou" | "cliente_sem_interesse"
-                                )
-                              }
-                              disabled={updateStatusMutation.isPending}
-                              className="w-[180px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                              <option value="aguardando_contato">Aguardando Contato</option>
-                              <option value="em_negociacao">Em Negociação</option>
-                              <option value="venda_com_objecoes">Venda com Objeções</option>
-                              <option value="venda_fechada">Venda Fechada</option>
-                              <option value="nao_comprou">Não Comprou</option>
-                              <option value="cliente_sem_interesse">Cliente Sem Interesse</option>
-                            </select>
                           </TableCell>
                         </TableRow>
                       ))}

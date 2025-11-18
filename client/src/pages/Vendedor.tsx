@@ -139,7 +139,95 @@ export default function Vendedor() {
             </CardHeader>
           </Card>
 
-          {/* Statistics */}
+          {/* Dashboard Motivador */}
+          {indicacoes && (() => {
+            // Calcular totais de comissões
+            const totalGanho = indicacoes
+              .filter(i => i.indicacao.status === "venda_fechada")
+              .reduce((sum, i) => sum + (i.indicacao.valorComissao || 0), 0);
+            
+            const totalEmNegociacao = indicacoes
+              .filter(i => i.indicacao.status === "em_negociacao")
+              .reduce((sum, i) => sum + (i.indicacao.valorComissao || 0), 0);
+            
+            const totalIndicacoes = indicacoes.length;
+            const vendasFechadas = indicacoes.filter(i => i.indicacao.status === "venda_fechada").length;
+            const emNegociacao = indicacoes.filter(i => i.indicacao.status === "em_negociacao").length;
+            
+            return (
+              <div className="space-y-4">
+                {/* Cards de Valores em Destaque */}
+                <div className="grid gap-4 md:grid-cols-3">
+                  <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+                    <CardContent className="pt-6">
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-green-700 mb-2">💰 Comissões Ganhas</p>
+                        <p className="text-4xl font-bold text-green-600">
+                          R$ {(totalGanho / 100).toFixed(2)}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          {vendasFechadas} vendas fechadas
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+                    <CardContent className="pt-6">
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-blue-700 mb-2">🔥 Potencial em Negociação</p>
+                        <p className="text-4xl font-bold text-blue-600">
+                          R$ {(totalEmNegociacao / 100).toFixed(2)}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          {emNegociacao} indicações em andamento
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+                    <CardContent className="pt-6">
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-purple-700 mb-2">🎯 Total de Indicações</p>
+                        <p className="text-4xl font-bold text-purple-600">
+                          {totalIndicacoes}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Taxa de conversão: {totalIndicacoes > 0 ? ((vendasFechadas / totalIndicacoes) * 100).toFixed(1) : 0}%
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                {/* Barra de Progresso e Motivação */}
+                <Card className="bg-gradient-to-r from-primary/5 to-accent/5">
+                  <CardContent className="pt-6">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium">🎖️ Continue indicando e ganhe mais!</p>
+                        <p className="text-sm text-muted-foreground">
+                          Próximo nível: {Math.ceil(totalIndicacoes / 10) * 10} indicações
+                        </p>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div 
+                          className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min((totalIndicacoes % 10) * 10, 100)}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-center text-muted-foreground">
+                        Você já indicou {totalIndicacoes} pessoas! Faltam {10 - (totalIndicacoes % 10)} para o próximo marco.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            );
+          })()}
+          
+          {/* Estatísticas Rápidas */}
           {indicacoes && (
             <div className="grid gap-4 md:grid-cols-4">
               <Card className="bg-card/80 backdrop-blur-sm">

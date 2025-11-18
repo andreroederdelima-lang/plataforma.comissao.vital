@@ -315,3 +315,13 @@
 - [x] Investigar erro "NotFoundError: Falha ao executar 'removeChild' em 'Node'" no Select de status
 - [x] Corrigir problema de renderização do componente Select na tabela de indicações
 - [x] Testar alteração de status de indicações
+
+## Gamificação e Motivação de Promotores
+
+- [x] Reorganizar tabela admin - mover coluna "Status" para logo após "Data" (início da linha)
+- [x] Adicionar dashboard no painel do vendedor com valores em R$ destacados
+- [x] Mostrar total de comissões ganhas (vendas fechadas)
+- [x] Mostrar total em negociação (potencial de ganho)
+- [x] Adicionar contador de indicações do mês
+- [x] Implementar barra de progresso para meta mensal
+- [x] Adicionar taxa de conversão visual
