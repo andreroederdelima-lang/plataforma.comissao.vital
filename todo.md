@@ -248,3 +248,13 @@
 
 - [x] Tornar banner de acesso à área do vendedor visível para todos os usuários
 - [x] Corrigir layout responsivo do banner para mobile (evitar elementos tortos)
+
+## Correção de Navegação do Botão do Vendedor
+
+- [x] Verificar e corrigir navegação do botão de acesso ao painel do vendedor
+- [x] Garantir que a rota /vendedor existe e está configurada corretamente
+
+## Correções de Layout Mobile e Navegação
+
+- [x] Corrigir header desalinhado no mobile (texto sobrepondo logo e links)
+- [x] Corrigir botão "Acessar Painel do Vendedor" que não está redirecionando

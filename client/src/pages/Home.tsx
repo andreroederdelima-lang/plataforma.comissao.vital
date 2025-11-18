@@ -70,55 +70,57 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5">
       {/* Header */}
       <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-10">
-        <div className="container py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-24" />
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Sua Saúde Vital</h1>
-              <p className="text-sm text-muted-foreground">Sistema de Indicações</p>
-            </div>
-          </div>
-          
-          {!isAuthenticated && (
-            <div className="flex items-center gap-3">
-              <Button variant="default" size="sm" asChild>
-                <a href={getLoginUrl()}>Acessar Painel</a>
-              </Button>
-            </div>
-          )}
-          
-          {isAuthenticated && user && (
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm">
-                <UserCircle className="h-5 w-5 text-muted-foreground" />
-                <span className="font-medium">{user.name || user.email}</span>
+        <div className="container py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo e Título */}
+            <div className="flex items-center gap-2 md:gap-3 min-w-0">
+              <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-12 md:h-16 flex-shrink-0" />
+              <div className="hidden sm:block">
+                <h1 className="text-base md:text-xl font-bold text-foreground">Sua Saúde Vital</h1>
+                <p className="text-xs md:text-sm text-muted-foreground">Sistema de Indicações</p>
               </div>
-              <NotificationBadge />
-              <Link href="/minhas-indicacoes">
-                <Button variant="ghost" size="sm">Minhas Indicações</Button>
-              </Link>
-              <Link href="/perfil">
-                <Button variant="ghost" size="sm">Meu Perfil</Button>
-              </Link>
-              {user.role === "admin" && (
-                <Link href="/admin">
-                  <Button variant="default" size="sm">
-                    Painel Admin
-                  </Button>
-                </Link>
-              )}
-              {user.role === "vendedor" && (
-                <Link href="/vendedor">
-                  <Button variant="default" size="sm">
-                    Painel Vendedor
-                  </Button>
-                </Link>
-              )}
-              <Button variant="ghost" size="sm" onClick={() => logout()}>
-                <LogOut className="h-4 w-4" />
-              </Button>
             </div>
-          )}
+            
+            {/* Botões de Ação */}
+            {!isAuthenticated && (
+              <div className="flex items-center gap-2">
+                <Button variant="default" size="sm" asChild>
+                  <a href={getLoginUrl()}>Acessar</a>
+                </Button>
+              </div>
+            )}
+            
+            {isAuthenticated && user && (
+              <div className="flex items-center gap-2">
+                <NotificationBadge />
+                <div className="hidden md:flex items-center gap-2">
+                  <Link href="/minhas-indicacoes">
+                    <Button variant="ghost" size="sm">Minhas Indicações</Button>
+                  </Link>
+                  <Link href="/perfil">
+                    <Button variant="ghost" size="sm">Meu Perfil</Button>
+                  </Link>
+                </div>
+                {user.role === "admin" && (
+                  <Link href="/admin">
+                    <Button variant="default" size="sm">
+                      Painel Admin
+                    </Button>
+                  </Link>
+                )}
+                {user.role === "vendedor" && (
+                  <Link href="/vendedor">
+                    <Button variant="default" size="sm">
+                      Painel
+                    </Button>
+                  </Link>
+                )}
+                <Button variant="ghost" size="sm" onClick={() => logout()}>
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -151,11 +153,11 @@ export default function Home() {
                       : "Acesse o painel administrativo para gerenciar o sistema"}
                   </p>
                 </div>
-                <Link href={user?.role === "admin" ? "/admin" : "/vendedor"}>
-                  <Button variant="default" size="lg" className="w-full md:w-auto">
+                <Button variant="default" size="lg" className="w-full md:w-auto" asChild>
+                  <Link href={user?.role === "admin" ? "/admin" : "/vendedor"}>
                     {user?.role === "admin" ? "Acessar Painel Admin" : "Acessar Painel do Vendedor"}
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
 
