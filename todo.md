@@ -325,3 +325,20 @@
 - [x] Adicionar contador de indicações do mês
 - [x] Implementar barra de progresso para meta mensal
 - [x] Adicionar taxa de conversão visual
+
+## Notificações Automáticas e Ranking
+
+- [x] Simplificar botões de acesso na página inicial (remover confusão entre "Login" e "Acessar Painel")
+- [x] Implementar notificação automática por e-mail quando indicação mudar para "Venda Fechada"
+- [x] E-mail deve informar vendedor sobre valor da comissão conquistada
+- [ ] Criar página de ranking com top 5 vendedores do mês (quem fechou vendas)
+- [ ] Criar página de ranking com top 5 promotores do mês (quem indicou assinaturas)
+- [ ] Mostrar total de comissões de cada um no ranking
+- [ ] Adicionar filtro por período no ranking (mês atual, últimos 30 dias, trimestre)
+
+## Integração Futura com Kommo CRM
+
+- [ ] Pesquisar documentação da API do Kommo
+- [ ] Criar procedure para sincronizar leads do Kommo
+- [ ] Implementar webhook para receber atualizações do Kommo
+- [ ] Gamificar vendedores baseado em métricas do CRM

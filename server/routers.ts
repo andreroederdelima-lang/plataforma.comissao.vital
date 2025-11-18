@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { z } from "zod";
 import { createIndicacao, getAllIndicacoes, getIndicacoesByParceiro, updateIndicacaoStatus, createNotificacao, getNotificacoesByUser, countUnreadNotificacoes, markNotificacaoAsRead, markAllNotificacoesAsRead } from "./db";
 import { notifyOwner } from "./_core/notification";
-import { notifyNewIndicacao, notifyStatusChange, notifyProblematicStatus } from "./_core/email";
+import { notifyNewIndicacao, notifyStatusChange, notifyProblematicStatus, notifyVendaFechada } from "./_core/email";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -129,9 +129,19 @@ export const appRouter = router({
             indicacaoId: input.id,
           });
           
+          // Verificar se é venda fechada
+          if (input.status === "venda_fechada") {
+            // Notificar vendedor sobre venda fechada com valor de comissão
+            await notifyVendaFechada({
+              nomeIndicado: indicacao.indicacao.nomeIndicado,
+              nomeParceiro: indicacao.parceiro?.name || "Parceiro",
+              parceiroEmail: indicacao.parceiro?.email || "",
+              valorComissao: indicacao.indicacao.valorComissao || 0,
+              tipoComissao: indicacao.indicacao.tipoComissao || "valor_fixo",
+            });
+          }
           // Verificar se é um status problemático
-          const statusProblematicos = ["venda_com_objecoes", "nao_comprou", "cliente_sem_interesse"];
-          if (statusProblematicos.includes(input.status)) {
+          else if (["venda_com_objecoes", "nao_comprou", "cliente_sem_interesse"].includes(input.status)) {
             // Notificar parceiro e administrativo sobre status problemático
             await notifyProblematicStatus({
               nomeIndicado: indicacao.indicacao.nomeIndicado,

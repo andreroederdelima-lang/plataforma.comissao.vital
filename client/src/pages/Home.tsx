@@ -83,11 +83,11 @@ export default function Home() {
               </div>
             </div>
             
-            {/* Botões de Ação */}
+            {/* Botão de Acesso */}
             {!isAuthenticated && (
               <div className="flex items-center gap-2">
                 <Button variant="default" size="sm" asChild>
-                  <a href={getLoginUrl()}>Acessar</a>
+                  <a href={getLoginUrl()}>🔐 Área Restrita</a>
                 </Button>
               </div>
             )}
@@ -169,28 +169,6 @@ export default function Home() {
           </Card>
         ) : (
           <div className="space-y-6">
-            {/* Banner de Acesso Rápido */}
-            <Card className="bg-primary/10 border-primary/30">
-              <CardContent className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4">
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{(user?.role === "vendedor" || user?.role === "comercial") ? "Área do Vendedor" : "Painel de Gerenciamento"}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {(user?.role === "vendedor" || user?.role === "comercial")
-                      ? "Acesse seu painel para gerenciar suas indicações e comissões"
-                      : "Acesse o painel administrativo para gerenciar o sistema"}
-                  </p>
-                </div>
-                <Button 
-                  variant="default" 
-                  size="lg" 
-                  className="w-full md:w-auto"
-                  onClick={() => setLocation("/admin")}
-                >
-                  {user?.role === "admin" ? "Acessar Painel Admin" : "Acessar Painel do Vendedor"}
-                </Button>
-              </CardContent>
-            </Card>
-
             {/* Hero Section */}
             <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
               <CardHeader className="text-center">

@@ -104,6 +104,48 @@ export async function notifyStatusChange(params: {
 }
 
 /**
+ * Notificar vendedor sobre venda fechada com valor de comissão
+ */
+export async function notifyVendaFechada(params: {
+  nomeIndicado: string;
+  nomeParceiro: string;
+  parceiroEmail: string;
+  valorComissao: number;
+  tipoComissao: string;
+}) {
+  const { nomeIndicado, nomeParceiro, parceiroEmail, valorComissao, tipoComissao } = params;
+  
+  const valorFormatado = tipoComissao === "percentual" 
+    ? `${valorComissao}%`
+    : `R$ ${valorComissao.toFixed(2).replace('.', ',')}`;
+  
+  const messageToPartner = `🎉 Parabéns ${nomeParceiro}!
+
+A venda do cliente "${nomeIndicado}" que você indicou foi FECHADA!
+
+💰 Sua comissão: ${valorFormatado}
+
+Continue indicando e ganhe mais! Cada indicação é uma nova oportunidade de ganho.
+
+Obrigado por ser nosso parceiro!
+Equipe Sua Saúde Vital`;
+  
+  // Enviar email para o vendedor/parceiro
+  await sendEmailToParceiro({
+    parceiroEmail,
+    subject: "🎉 Venda Fechada - Comissão Conquistada!",
+    message: messageToPartner,
+  });
+  
+  // Notificar administrativo
+  const messageToAdmin = `Venda fechada! Cliente "${nomeIndicado}" indicado por "${nomeParceiro}". Comissão: ${valorFormatado}`;
+  await sendEmailToTeam({
+    subject: "Venda Fechada - Comissão a Pagar",
+    message: messageToAdmin,
+  });
+}
+
+/**
  * Notificar parceiro e administrativo sobre status problemático
  */
 export async function notifyProblematicStatus(params: {
