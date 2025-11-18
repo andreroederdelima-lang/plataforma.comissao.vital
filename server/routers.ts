@@ -357,6 +357,93 @@ export const appRouter = router({
         await toggleUserActive(input.userId, input.isActive);
         return { success: true };
       }),
+
+    /**
+     * Reenviar convite por e-mail
+     */
+    resendInvite: protectedProcedure
+      .input(z.object({
+        userId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores podem reenviar convites",
+          });
+        }
+
+        const { getUserById } = await import("./db");
+        const user = await getUserById(input.userId);
+        
+        if (!user) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Usuário não encontrado",
+          });
+        }
+
+        if (!user.email) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Usuário não possui e-mail cadastrado",
+          });
+        }
+
+        try {
+          const { sendVendedorInvite } = await import("./email");
+          const emailSent = await sendVendedorInvite({ 
+            email: user.email, 
+            nome: user.name || user.email 
+          });
+          return { success: true, emailSent };
+        } catch (error) {
+          console.error("[Usuarios] Erro ao reenviar convite:", error);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Erro ao enviar e-mail de convite",
+          });
+        }
+      }),
+
+    /**
+     * Excluir usuário
+     */
+    delete: protectedProcedure
+      .input(z.object({
+        userId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores podem excluir usuários",
+          });
+        }
+
+        // Verificar se o usuário tem permissão de deletar (canDelete)
+        const { getUserById } = await import("./db");
+        const currentUser = await getUserById(ctx.user.id);
+        
+        if (currentUser?.canDelete === 0) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Você não tem permissão para excluir usuários",
+          });
+        }
+
+        // Não permitir excluir a si mesmo
+        if (input.userId === ctx.user.id) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Você não pode excluir seu próprio usuário",
+          });
+        }
+
+        const { deleteUser } = await import("./db");
+        await deleteUser(input.userId);
+        return { success: true };
+      }),
   }),
 });
 

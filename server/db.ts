@@ -452,3 +452,35 @@ export async function toggleUserActive(userId: number, isActive: boolean) {
     .set({ isActive: isActive ? 1 : 0, updatedAt: new Date() })
     .where(eq(users.id, userId));
 }
+
+/**
+ * Buscar usuário por ID
+ */
+export async function getUserById(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+/**
+ * Excluir usuário
+ */
+export async function deleteUser(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db
+    .delete(users)
+    .where(eq(users.id, userId));
+}

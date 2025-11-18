@@ -228,4 +228,10 @@
 - [x] Adaptar módulo email.ts para Resend
 - [x] Configurar RESEND_API_KEY
 - [x] Testar envio com Resend (sucesso!)
-- [ ] Salvar checkpoint
+- [x] Salvar checkpoint
+
+## Melhorias de UX e Funcionalidades
+
+- [x] Adicionar botão na página inicial para vendedor acessar seu painel
+- [x] Corrigir botão de e-mail no gerenciamento de usuários (deve reenviar convite)
+- [x] Implementar funcionalidade de exclusão de usuários com confirmação

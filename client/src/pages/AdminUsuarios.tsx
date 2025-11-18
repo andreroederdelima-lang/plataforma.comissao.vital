@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { UserPlus, Mail, Edit, Users } from "lucide-react";
+import { UserPlus, Mail, Edit, Users, Trash2 } from "lucide-react";
 
 export default function AdminUsuarios() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -65,6 +65,25 @@ export default function AdminUsuarios() {
     },
   });
 
+  const resendInviteMutation = trpc.usuarios.resendInvite.useMutation({
+    onSuccess: () => {
+      toast.success("Convite reenviado com sucesso!");
+    },
+    onError: (error) => {
+      toast.error(`Erro ao reenviar convite: ${error.message}`);
+    },
+  });
+
+  const deleteMutation = trpc.usuarios.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Usuário excluído com sucesso!");
+      utils.usuarios.list.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao excluir usuário: ${error.message}`);
+    },
+  });
+
   const handleCreateUser = () => {
     if (!newUserName || !newUserEmail) {
       toast.error("Nome e e-mail são obrigatórios");
@@ -92,6 +111,20 @@ export default function AdminUsuarios() {
       userId,
       isActive: currentStatus === 0,
     });
+  };
+
+  const handleResendInvite = (userId: number, userEmail: string) => {
+    if (!userEmail) {
+      toast.error("Usuário não possui e-mail cadastrado");
+      return;
+    }
+    resendInviteMutation.mutate({ userId });
+  };
+
+  const handleDeleteUser = (userId: number, userName: string) => {
+    if (confirm(`Tem certeza que deseja excluir o usuário "${userName}"? Esta ação não pode ser desfeita.`)) {
+      deleteMutation.mutate({ userId });
+    }
   };
 
   const openEditDialog = (user: any) => {
@@ -285,11 +318,28 @@ export default function AdminUsuarios() {
                               variant="ghost"
                               size="sm"
                               onClick={() => openEditDialog(user)}
+                              title="Editar usuário"
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm">
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleResendInvite(user.id, user.email || "")}
+                              disabled={resendInviteMutation.isPending || !user.email}
+                              title="Reenviar convite por e-mail"
+                            >
                               <Mail className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleDeleteUser(user.id, user.name || user.email || "Usuário")}
+                              disabled={deleteMutation.isPending}
+                              title="Excluir usuário"
+                              className="text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>
