@@ -200,4 +200,21 @@
 - [ ] Implementar sistema de envio de convites por e-mail (requer configuração SMTP - implementar depois)
 - [x] Adicionar aba "Usuários" no menu lateral do admin
 - [x] Testar todas as funcionalidades
+- [x] Salvar checkpoint
+
+## Sistema de Convites por E-mail
+
+- [x] Instalar biblioteca nodemailer
+- [x] Criar módulo de envio de e-mails (server/email.ts)
+- [x] Criar template de e-mail de convite
+- [x] Integrar envio de e-mail ao criar novo vendedor
+- [x] Solicitar credenciais SMTP do Gmail
+- [ ] Testar envio de convite
+- [ ] Salvar checkpoint
+
+## Integrar SMTP com Notificações de Parceiros
+
+- [x] Adicionar função genérica de envio de e-mail no módulo email.ts
+- [x] Atualizar _core/email.ts para usar SMTP real ao invés de console.log
+- [x] Testar envio de e-mail para parceiro (integração completa)
 - [ ] Salvar checkpoint

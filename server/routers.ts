@@ -302,7 +302,16 @@ export const appRouter = router({
 
         const { createVendedor } = await import("./db");
         await createVendedor(input.name, input.email, input.chavePix);
-        return { success: true };
+        
+        // Enviar e-mail de convite
+        try {
+          const { sendVendedorInvite } = await import("./email");
+          const emailSent = await sendVendedorInvite(input.email, input.name);
+          return { success: true, emailSent };
+        } catch (error) {
+          console.error("[Usuarios] Erro ao enviar e-mail de convite:", error);
+          return { success: true, emailSent: false };
+        }
       }),
 
     /**

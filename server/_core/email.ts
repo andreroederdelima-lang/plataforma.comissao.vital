@@ -46,9 +46,18 @@ export async function sendEmailToParceiro(params: {
   subject: string;
   message: string;
 }) {
-  // Por enquanto apenas logamos, mas aqui seria integrado com serviço de email
-  console.log(`Email para parceiro ${params.parceiroEmail}: ${params.subject} - ${params.message}`);
-  return true;
+  try {
+    const { sendEmail } = await import("../email");
+    const sent = await sendEmail({
+      to: params.parceiroEmail,
+      subject: params.subject,
+      text: params.message,
+    });
+    return sent;
+  } catch (error) {
+    console.error(`[Email] Erro ao enviar e-mail para parceiro ${params.parceiroEmail}:`, error);
+    return false;
+  }
 }
 
 /**
