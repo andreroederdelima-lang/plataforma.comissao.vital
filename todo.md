@@ -243,3 +243,8 @@
 ## Botão de Acesso à Área do Vendedor na Página Inicial
 
 - [x] Adicionar botão destacado no início da página de indicação para vendedores acessarem sua área
+
+## Ajustes de Visibilidade e Responsividade
+
+- [x] Tornar banner de acesso à área do vendedor visível para todos os usuários
+- [x] Corrigir layout responsivo do banner para mobile (evitar elementos tortos)

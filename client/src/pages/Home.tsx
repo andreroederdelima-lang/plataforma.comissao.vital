@@ -140,22 +140,24 @@ export default function Home() {
           </Card>
         ) : (
           <div className="space-y-6">
-            {/* Banner de Acesso Rápido para Vendedores */}
-            {user?.role === "vendedor" && (
-              <Card className="bg-primary/10 border-primary/30">
-                <CardContent className="flex items-center justify-between py-4">
-                  <div>
-                    <h3 className="font-semibold text-lg">Área do Vendedor</h3>
-                    <p className="text-sm text-muted-foreground">Acesse seu painel para gerenciar suas indicações e comissões</p>
-                  </div>
-                  <Link href="/vendedor">
-                    <Button variant="default" size="lg">
-                      Acessar Painel do Vendedor
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            )}
+            {/* Banner de Acesso Rápido */}
+            <Card className="bg-primary/10 border-primary/30">
+              <CardContent className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">{user?.role === "vendedor" ? "Área do Vendedor" : "Painel de Gerenciamento"}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {user?.role === "vendedor" 
+                      ? "Acesse seu painel para gerenciar suas indicações e comissões"
+                      : "Acesse o painel administrativo para gerenciar o sistema"}
+                  </p>
+                </div>
+                <Link href={user?.role === "admin" ? "/admin" : "/vendedor"}>
+                  <Button variant="default" size="lg" className="w-full md:w-auto">
+                    {user?.role === "admin" ? "Acessar Painel Admin" : "Acessar Painel do Vendedor"}
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
 
             {/* Hero Section */}
             <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
