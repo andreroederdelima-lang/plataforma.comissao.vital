@@ -347,3 +347,8 @@
 
 - [x] Alterar "Preencha os dados da pessoa que você está declarando para o plano de assinatura Sua Saúde Vital" para "Preencha os dados da pessoa que você está indicando as assinaturas Vital"
 - [x] Adicionar "(provável ou de maior interesse)" após "Tipo de Plano"
+
+## Definições de Promotor e Vendedor
+
+- [x] Alterar "Bem-vindo, Parceiro!" para "Boas-vindas Promotor e/ou Vendedor!"
+- [x] Adicionar definições pequenas e discretas explicando a diferença entre Promotor e Vendedor

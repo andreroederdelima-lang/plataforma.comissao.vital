@@ -156,9 +156,13 @@ export default function Home() {
         {!isAuthenticated ? (
           <Card className="bg-card/80 backdrop-blur-sm">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Bem-vindo, Parceiro!</CardTitle>
-              <CardDescription>
-                Faça login para começar a registrar suas indicações
+              <CardTitle className="text-2xl">Boas-vindas Promotor e/ou Vendedor!</CardTitle>
+              <CardDescription className="space-y-2">
+                <p>Faça login para começar a registrar suas indicações</p>
+                <p className="text-xs text-muted-foreground/70">
+                  <span className="font-medium">Promotor:</span> Indica clientes e recebe comissão por vendas fechadas. 
+                  <span className="font-medium ml-2">Vendedor:</span> Fecha vendas e gerencia o processo comercial.
+                </p>
               </CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center pb-8">
