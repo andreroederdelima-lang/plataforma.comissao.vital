@@ -235,3 +235,7 @@
 - [x] Adicionar botão na página inicial para vendedor acessar seu painel
 - [x] Corrigir botão de e-mail no gerenciamento de usuários (deve reenviar convite)
 - [x] Implementar funcionalidade de exclusão de usuários com confirmação
+
+## Botão de Login Visível na Página Inicial
+
+- [x] Adicionar botão de login visível na página inicial (antes do login) para vendedores e admins acessarem o sistema

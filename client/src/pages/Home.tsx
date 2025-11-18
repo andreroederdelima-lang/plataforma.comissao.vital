@@ -79,6 +79,14 @@ export default function Home() {
             </div>
           </div>
           
+          {!isAuthenticated && (
+            <div className="flex items-center gap-3">
+              <Button variant="default" size="sm" asChild>
+                <a href={getLoginUrl()}>Acessar Painel</a>
+              </Button>
+            </div>
+          )}
+          
           {isAuthenticated && user && (
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm">
