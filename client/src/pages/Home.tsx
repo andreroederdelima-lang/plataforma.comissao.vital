@@ -110,7 +110,7 @@ export default function Home() {
                     </Button>
                   </Link>
                 )}
-                {user.role === "vendedor" && (
+                {(user.role === "vendedor" || user.role === "comercial") && (
                   <Link href="/vendedor">
                     <Button variant="default" size="sm">
                       Painel
@@ -173,9 +173,9 @@ export default function Home() {
             <Card className="bg-primary/10 border-primary/30">
               <CardContent className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{user?.role === "vendedor" ? "Área do Vendedor" : "Painel de Gerenciamento"}</h3>
+                  <h3 className="font-semibold text-lg">{(user?.role === "vendedor" || user?.role === "comercial") ? "Área do Vendedor" : "Painel de Gerenciamento"}</h3>
                   <p className="text-sm text-muted-foreground">
-                    {user?.role === "vendedor" 
+                    {(user?.role === "vendedor" || user?.role === "comercial")
                       ? "Acesse seu painel para gerenciar suas indicações e comissões"
                       : "Acesse o painel administrativo para gerenciar o sistema"}
                   </p>

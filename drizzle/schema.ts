@@ -16,7 +16,7 @@ export const users = mysqlTable("users", {
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin", "vendedor"]).default("user").notNull(),
+  role: mysqlEnum("role", ["user", "admin", "vendedor", "comercial"]).default("user").notNull(),
   /** Permissão para deletar indicações (true para admin completo, false para admin comercial) */
   canDelete: int("canDelete").default(1).notNull(),
   /** Status do usuário (1 = ativo, 0 = desativado) */

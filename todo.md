@@ -263,3 +263,9 @@
 
 - [x] Corrigir botão "Acessar Painel do Vendedor" no banner que ainda não está funcionando
 - [x] Adicionar menu hambúrguer no mobile para acessar "Minhas Indicações" e "Meu Perfil"
+
+## Correção para Role 'Comercial'
+
+- [x] Verificar se página /vendedor existe
+- [x] Corrigir lógica do botão para reconhecer role 'comercial' (não apenas 'vendedor')
+- [x] Testar navegação com usuário comercial
