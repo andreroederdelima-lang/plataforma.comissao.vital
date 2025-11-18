@@ -342,3 +342,8 @@
 - [ ] Criar procedure para sincronizar leads do Kommo
 - [ ] Implementar webhook para receber atualizações do Kommo
 - [ ] Gamificar vendedores baseado em métricas do CRM
+
+## Ajustes de Texto no Formulário
+
+- [x] Alterar "Preencha os dados da pessoa que você está declarando para o plano de assinatura Sua Saúde Vital" para "Preencha os dados da pessoa que você está indicando as assinaturas Vital"
+- [x] Adicionar "(provável ou de maior interesse)" após "Tipo de Plano"

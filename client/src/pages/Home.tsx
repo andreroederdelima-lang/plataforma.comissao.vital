@@ -174,7 +174,7 @@ export default function Home() {
               <CardHeader className="text-center">
                 <CardTitle className="text-3xl">Registrar Nova Indicação</CardTitle>
                 <CardDescription className="text-base">
-                  Preencha os dados da pessoa que você está indicando para o plano de assinatura Sua Saúde Vital
+                  Preencha os dados da pessoa que você está indicando as assinaturas Vital
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -215,7 +215,7 @@ export default function Home() {
 
                   {/* Nome do Plano */}
                   <div className="space-y-3">
-                    <Label className="text-base font-semibold">Tipo de Plano *</Label>
+                    <Label className="text-base font-semibold">Tipo de Plano (provável ou de maior interesse) *</Label>
                     <RadioGroup
                       value={nomePlano}
                       onValueChange={(value) => setNomePlano(value as "essencial" | "premium")}
