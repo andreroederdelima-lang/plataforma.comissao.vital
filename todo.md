@@ -269,3 +269,11 @@
 - [x] Verificar se página /vendedor existe
 - [x] Corrigir lógica do botão para reconhecer role 'comercial' (não apenas 'vendedor')
 - [x] Testar navegação com usuário comercial
+
+## Problema Persistente: Botão do Vendedor Não Abre Página
+
+- [x] Investigar por que o botão "Acessar Painel do Vendedor" ainda não está funcionando
+- [x] Verificar se há erros no console do navegador
+- [x] Confirmar que a rota /vendedor está corretamente configurada
+- [x] Testar navegação programática
+- [x] Corrigir verificação de role na página Vendedor.tsx para aceitar 'comercial'

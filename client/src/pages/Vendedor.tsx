@@ -77,8 +77,8 @@ export default function Vendedor() {
     );
   }
 
-  // Verificar se o usuário é vendedor
-  if (!user || user.role !== "vendedor") {
+  // Verificar se o usuário é vendedor ou comercial
+  if (!user || (user.role !== "vendedor" && user.role !== "comercial")) {
     setLocation("/");
     return null;
   }
