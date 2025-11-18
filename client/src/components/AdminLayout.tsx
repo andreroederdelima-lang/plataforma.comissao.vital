@@ -10,6 +10,7 @@ import {
   LogOut,
   Settings,
   UserCircle,
+  Users,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { ReactNode } from "react";
@@ -27,6 +28,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       path: "/admin",
       label: "Indicações",
       icon: ClipboardList,
+    },
+    {
+      path: "/admin/usuarios",
+      label: "Usuários",
+      icon: Users,
     },
     {
       path: "/admin/configuracoes",

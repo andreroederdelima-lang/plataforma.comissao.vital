@@ -187,4 +187,17 @@
 - [x] Implementar lógica de permissões no backend
 - [x] Ocultar botões de exclusão para admin comercial no frontend (não há botões de exclusão no sistema)
 - [x] Testar login e permissões do usuário comercial
+- [x] Salvar checkpoint
+
+## Painel de Gerenciamento de Usuários
+
+- [x] Adicionar campo isActive ao schema de users
+- [x] Criar procedures para listar, criar, editar, ativar/desativar usuários
+- [x] Criar página AdminUsuarios.tsx com tabela de usuários
+- [x] Implementar formulário de criação de novo vendedor
+- [x] Implementar edição de informações do usuário
+- [x] Implementar toggle ativar/desativar usuário
+- [ ] Implementar sistema de envio de convites por e-mail (requer configuração SMTP - implementar depois)
+- [x] Adicionar aba "Usuários" no menu lateral do admin
+- [x] Testar todas as funcionalidades
 - [ ] Salvar checkpoint

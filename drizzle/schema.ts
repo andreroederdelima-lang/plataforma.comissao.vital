@@ -19,6 +19,8 @@ export const users = mysqlTable("users", {
   role: mysqlEnum("role", ["user", "admin", "vendedor"]).default("user").notNull(),
   /** Permissão para deletar indicações (true para admin completo, false para admin comercial) */
   canDelete: int("canDelete").default(1).notNull(),
+  /** Status do usuário (1 = ativo, 0 = desativado) */
+  isActive: int("isActive").default(1).notNull(),
   /** Chave PIX do parceiro para recebimento de comissões */
   chavePix: varchar("chavePix", { length: 255 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

@@ -263,6 +263,92 @@ export const appRouter = router({
       return { success: true };
     }),
   }),
+
+  /**
+   * Gerenciamento de usuários (apenas admin)
+   */
+  usuarios: router({
+    /**
+     * Listar todos os usuários
+     */
+    list: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Apenas administradores podem listar usuários",
+        });
+      }
+
+      const { getAllUsers } = await import("./db");
+      return await getAllUsers();
+    }),
+
+    /**
+     * Criar novo vendedor
+     */
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1, "Nome é obrigatório"),
+        email: z.string().email("E-mail inválido"),
+        chavePix: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores podem criar usuários",
+          });
+        }
+
+        const { createVendedor } = await import("./db");
+        await createVendedor(input.name, input.email, input.chavePix);
+        return { success: true };
+      }),
+
+    /**
+     * Atualizar informações do usuário
+     */
+    update: protectedProcedure
+      .input(z.object({
+        userId: z.number(),
+        name: z.string().optional(),
+        email: z.string().email().optional(),
+        chavePix: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores podem atualizar usuários",
+          });
+        }
+
+        const { updateUser } = await import("./db");
+        await updateUser(input.userId, input);
+        return { success: true };
+      }),
+
+    /**
+     * Ativar/Desativar usuário
+     */
+    toggleActive: protectedProcedure
+      .input(z.object({
+        userId: z.number(),
+        isActive: z.boolean(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores podem ativar/desativar usuários",
+          });
+        }
+
+        const { toggleUserActive } = await import("./db");
+        await toggleUserActive(input.userId, input.isActive);
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

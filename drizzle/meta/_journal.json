@@ -71,6 +71,13 @@
       "when": 1763412830593,
       "tag": "0009_same_dark_phoenix",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1763441664871,
+      "tag": "0010_tiny_supernaut",
+      "breakpoints": true
     }
   ]
 }

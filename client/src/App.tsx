@@ -13,6 +13,7 @@ import Estatisticas from "./pages/Estatisticas";
 import Perfil from "./pages/Perfil";
 import Comissoes from "./pages/Comissoes";
 import AdminConfiguracoes from "./pages/AdminConfiguracoes";
+import AdminUsuarios from "./pages/AdminUsuarios";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -21,6 +22,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/minhas-indicacoes"} component={MinhasIndicacoes} />
       <Route path={"/admin"} component={Admin} />
+      <Route path={"/admin/usuarios"} component={AdminUsuarios} />
       <Route path={"/admin/configuracoes"} component={AdminConfiguracoes} />
       <Route path={"/notificacoes"} component={Notificacoes} />
       <Route path={"/vendedor"} component={Vendedor} />

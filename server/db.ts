@@ -376,3 +376,79 @@ export async function getComissaoByTipoPlano(
 
   return result.length > 0 ? result[0] : null;
 }
+
+/**
+ * Listar todos os usuários (para admin)
+ */
+export async function getAllUsers() {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return await db
+    .select()
+    .from(users)
+    .orderBy(desc(users.createdAt));
+}
+
+/**
+ * Criar novo vendedor
+ */
+export async function createVendedor(name: string, email: string, chavePix?: string) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Gerar openId temporário baseado no email
+  const openId = `vendedor_${email.replace(/[@.]/g, "_")}_${Date.now()}`;
+
+  await db.insert(users).values({
+    openId,
+    name,
+    email,
+    role: "vendedor",
+    chavePix: chavePix || null,
+    loginMethod: "email",
+    isActive: 1,
+  });
+}
+
+/**
+ * Atualizar informações do usuário
+ */
+export async function updateUser(
+  userId: number,
+  data: { name?: string; email?: string; chavePix?: string }
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const updateData: any = { updatedAt: new Date() };
+  if (data.name !== undefined) updateData.name = data.name;
+  if (data.email !== undefined) updateData.email = data.email;
+  if (data.chavePix !== undefined) updateData.chavePix = data.chavePix;
+
+  await db
+    .update(users)
+    .set(updateData)
+    .where(eq(users.id, userId));
+}
+
+/**
+ * Ativar/Desativar usuário
+ */
+export async function toggleUserActive(userId: number, isActive: boolean) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db
+    .update(users)
+    .set({ isActive: isActive ? 1 : 0, updatedAt: new Date() })
+    .where(eq(users.id, userId));
+}
