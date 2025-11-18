@@ -210,11 +210,22 @@
 - [x] Integrar envio de e-mail ao criar novo vendedor
 - [x] Solicitar credenciais SMTP do Gmail
 - [ ] Testar envio de convite
-- [ ] Salvar checkpoint
+- [x] Salvar checkpoint
 
 ## Integrar SMTP com Notificações de Parceiros
 
 - [x] Adicionar função genérica de envio de e-mail no módulo email.ts
 - [x] Atualizar _core/email.ts para usar SMTP real ao invés de console.log
 - [x] Testar envio de e-mail para parceiro (integração completa)
+- [x] Salvar checkpoint
+
+## Resolver Problema de Envio de E-mail
+
+- [x] Criar script de teste SMTP
+- [x] Testar com credenciais atuais
+- [x] Verificar erro específico (espaços extras em SMTP_HOST)
+- [x] Migrar para Resend (API Key recebida)
+- [x] Adaptar módulo email.ts para Resend
+- [x] Configurar RESEND_API_KEY
+- [x] Testar envio com Resend (sucesso!)
 - [ ] Salvar checkpoint
