@@ -140,6 +140,23 @@ export default function Home() {
           </Card>
         ) : (
           <div className="space-y-6">
+            {/* Banner de Acesso Rápido para Vendedores */}
+            {user?.role === "vendedor" && (
+              <Card className="bg-primary/10 border-primary/30">
+                <CardContent className="flex items-center justify-between py-4">
+                  <div>
+                    <h3 className="font-semibold text-lg">Área do Vendedor</h3>
+                    <p className="text-sm text-muted-foreground">Acesse seu painel para gerenciar suas indicações e comissões</p>
+                  </div>
+                  <Link href="/vendedor">
+                    <Button variant="default" size="lg">
+                      Acessar Painel do Vendedor
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Hero Section */}
             <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
               <CardHeader className="text-center">

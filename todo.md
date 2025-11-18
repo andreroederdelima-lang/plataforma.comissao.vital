@@ -239,3 +239,7 @@
 ## Botão de Login Visível na Página Inicial
 
 - [x] Adicionar botão de login visível na página inicial (antes do login) para vendedores e admins acessarem o sistema
+
+## Botão de Acesso à Área do Vendedor na Página Inicial
+
+- [x] Adicionar botão destacado no início da página de indicação para vendedores acessarem sua área
