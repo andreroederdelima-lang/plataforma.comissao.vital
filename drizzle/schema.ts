@@ -23,6 +23,8 @@ export const users = mysqlTable("users", {
   isActive: int("isActive").default(1).notNull(),
   /** Chave PIX do parceiro para recebimento de comissões */
   chavePix: varchar("chavePix", { length: 255 }),
+  /** Hash da senha para indicadores (bcrypt) - null para usuários OAuth */
+  passwordHash: varchar("passwordHash", { length: 255 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -134,3 +136,23 @@ export const materiais = mysqlTable("materiais", {
 
 export type Material = typeof materiais.$inferSelect;
 export type InsertMaterial = typeof materiais.$inferInsert;
+
+/**
+ * Tabela de tokens de recuperação de senha
+ * Armazena tokens temporários para reset de senha
+ */
+export const passwordResetTokens = mysqlTable("password_reset_tokens", {
+  id: int("id").autoincrement().primaryKey(),
+  /** ID do usuário que solicitou a recuperação */
+  userId: int("userId").notNull(),
+  /** Token único gerado para recuperação */
+  token: varchar("token", { length: 255 }).notNull().unique(),
+  /** Data de expiração do token (válido por 1 hora) */
+  expiresAt: timestamp("expiresAt").notNull(),
+  /** Se o token já foi usado */
+  used: int("used").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
+export type InsertPasswordResetToken = typeof passwordResetTokens.$inferInsert;

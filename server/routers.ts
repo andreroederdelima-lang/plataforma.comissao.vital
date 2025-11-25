@@ -8,9 +8,11 @@ import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { materiaisRouter } from "./routers/materiais";
+import { authIndicadoresRouter } from "./routers/authIndicadores";
 
 export const appRouter = router({
   system: systemRouter,
+  authIndicadores: authIndicadoresRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {

@@ -109,3 +109,132 @@ export async function sendVendedorInvite(params: {
     html,
   });
 }
+
+/**
+ * Enviar e-mail de boas-vindas para indicador
+ */
+export async function sendIndicadorBoasVindas(params: {
+  nome: string;
+  email: string;
+}): Promise<boolean> {
+  const { nome, email } = params;
+
+  const loginUrl = `${process.env.VITE_OAUTH_PORTAL_URL || "http://localhost:3000"}/login-indicador`;
+
+  const subject = "Bem-vindo ao Programa de Indicações Vital! 🎉";
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #2B9C9C;">Bem-vindo, ${nome}!</h2>
+      
+      <p>Sua conta foi criada com sucesso no <strong>Programa de Indicações Vital</strong>!</p>
+      
+      <p>Agora você pode:</p>
+      <ul>
+        <li>Acessar materiais de divulgação</li>
+        <li>Gerar QR Codes personalizados</li>
+        <li>Acompanhar suas indicações</li>
+        <li>Visualizar suas comissões</li>
+      </ul>
+      
+      <p style="margin-top: 30px;">
+        <a href="${loginUrl}" style="background-color: #2B9C9C; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+          Acessar Painel
+        </a>
+      </p>
+      
+      <p style="margin-top: 30px; color: #666; font-size: 14px;">
+        Indique. Compartilhe cuidado. Vamos juntos levar saúde de qualidade a preço acessível a cada vez mais pessoas!
+      </p>
+      
+      <p style="margin-top: 20px; color: #666; font-size: 14px;">
+        <strong>Sua Saúde Vital</strong> — cuidando de quem cuida.
+      </p>
+    </div>
+  `;
+
+  const text = `
+Bem-vindo, ${nome}!
+
+Sua conta foi criada com sucesso no Programa de Indicações Vital!
+
+Agora você pode:
+- Acessar materiais de divulgação
+- Gerar QR Codes personalizados
+- Acompanhar suas indicações
+- Visualizar suas comissões
+
+Acesse seu painel: ${loginUrl}
+
+Indique. Compartilhe cuidado. Vamos juntos levar saúde de qualidade a preço acessível a cada vez mais pessoas!
+
+Sua Saúde Vital — cuidando de quem cuida.
+  `;
+
+  return sendEmail({ to: email, subject, text, html });
+}
+
+/**
+ * Enviar e-mail de recuperação de senha
+ */
+export async function sendRecuperacaoSenha(params: {
+  nome: string;
+  email: string;
+  token: string;
+}): Promise<boolean> {
+  const { nome, email, token } = params;
+
+  const baseUrl = process.env.VITE_OAUTH_PORTAL_URL || "http://localhost:3000";
+  const resetUrl = `${baseUrl}/recuperar-senha?token=${token}`;
+
+  const subject = "Recuperação de Senha - Vital";
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #2B9C9C;">Recuperação de Senha</h2>
+      
+      <p>Olá, ${nome}!</p>
+      
+      <p>Recebemos uma solicitação para redefinir a senha da sua conta no <strong>Programa de Indicações Vital</strong>.</p>
+      
+      <p>Clique no botão abaixo para criar uma nova senha:</p>
+      
+      <p style="margin-top: 30px;">
+        <a href="${resetUrl}" style="background-color: #2B9C9C; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+          Redefinir Senha
+        </a>
+      </p>
+      
+      <p style="margin-top: 30px; color: #666; font-size: 14px;">
+        Este link é válido por <strong>1 hora</strong>.
+      </p>
+      
+      <p style="color: #666; font-size: 14px;">
+        Se você não solicitou esta recuperação, ignore este e-mail. Sua senha permanecerá a mesma.
+      </p>
+      
+      <p style="margin-top: 30px; color: #666; font-size: 14px;">
+        <strong>Sua Saúde Vital</strong> — cuidando de quem cuida.
+      </p>
+    </div>
+  `;
+
+  const text = `
+Recuperação de Senha
+
+Olá, ${nome}!
+
+Recebemos uma solicitação para redefinir a senha da sua conta no Programa de Indicações Vital.
+
+Clique no link abaixo para criar uma nova senha:
+${resetUrl}
+
+Este link é válido por 1 hora.
+
+Se você não solicitou esta recuperação, ignore este e-mail. Sua senha permanecerá a mesma.
+
+Sua Saúde Vital — cuidando de quem cuida.
+  `;
+
+  return sendEmail({ to: email, subject, text, html });
+}

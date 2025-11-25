@@ -375,3 +375,42 @@
 - [ ] Testar listagem pública
 - [ ] Testar CRUD completo
 - [ ] Salvar checkpoint
+
+## Sistema de Upload de Materiais (Admin)
+
+- [ ] Criar página AdminMateriais.tsx com formulário de upload
+- [ ] Adicionar procedure tRPC para upload de arquivos
+- [ ] Implementar integração com S3 storage
+- [ ] Adicionar validações de tipo e tamanho de arquivo
+- [ ] Criar interface de listagem e gerenciamento
+- [ ] Adicionar rota /admin/materiais
+- [ ] Testar upload de imagens e PDFs
+
+## Sistema de Autenticação de Indicadores (E-mail + Senha)
+
+### Backend
+- [x] Adicionar campo senha (hash) na tabela users
+- [x] Criar tabela password_reset_tokens
+- [x] Instalar bcrypt para hash de senhas
+- [x] Criar procedure cadastrarIndicador
+- [x] Criar procedure loginIndicador
+- [x] Criar procedure solicitarRecuperacaoSenha
+- [x] Criar procedure redefinirSenha
+- [x] Criar sistema de sessão JWT
+
+### Frontend
+- [x] Criar página /cadastro-indicador
+- [x] Criar página /login-indicador
+- [x] Criar página /esqueci-senha
+- [x] Criar página /recuperar-senha
+- [x] Adicionar validações de formulário
+- [x] Implementar feedback visual
+
+### E-mails
+- [x] Template de boas-vindas
+- [x] Template de recuperação de senha
+
+### Testes
+- [ ] Testar fluxo de cadastro
+- [ ] Testar fluxo de login
+- [ ] Testar recuperação de senha

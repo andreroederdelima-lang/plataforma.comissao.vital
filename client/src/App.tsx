@@ -15,8 +15,13 @@ import Perfil from "./pages/Perfil";
 import Comissoes from "./pages/Comissoes";
 import AdminConfiguracoes from "./pages/AdminConfiguracoes";
 import AdminUsuarios from "./pages/AdminUsuarios";
+import AdminMateriais from "./pages/AdminMateriais";
 import MateriaisDivulgacao from "./pages/MateriaisDivulgacao";
 import QRCodes from "./pages/QRCodes";
+import CadastroIndicador from "./pages/CadastroIndicador";
+import LoginIndicador from "./pages/LoginIndicador";
+import EsqueciSenha from "./pages/EsqueciSenha";
+import RecuperarSenha from "./pages/RecuperarSenha";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -28,6 +33,7 @@ function Router() {
       <Route path={"/admin"} component={Admin} />
       <Route path={"/admin/usuarios"} component={AdminUsuarios} />
       <Route path={"/admin/configuracoes"} component={AdminConfiguracoes} />
+      <Route path={"/admin/materiais"} component={AdminMateriais} />
       <Route path={"/notificacoes"} component={Notificacoes} />
       <Route path={"/vendedor"} component={Vendedor} />
       <Route path={"/estatisticas"} component={Estatisticas} />
@@ -36,6 +42,10 @@ function Router() {
       <Route path={"/materiais-divulgacao"} component={MateriaisDivulgacao} />
       <Route path={"/qr-codes"} component={QRCodes} />
       <Route path={"/boas-vindas-indicadores"} component={BoasVindasIndicadores} />
+      <Route path={"/cadastro-indicador"} component={CadastroIndicador} />
+      <Route path={"/login-indicador"} component={LoginIndicador} />
+      <Route path={"/esqueci-senha"} component={EsqueciSenha} />
+      <Route path={"/recuperar-senha"} component={RecuperarSenha} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
