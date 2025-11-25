@@ -1,6 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial } from "../drizzle/schema";
+import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -566,7 +566,7 @@ export async function deleteMaterial(materialId: number) {
 }
 
 /**
- * Classificar lead como quente ou frio
+ * Classificar lead como quente ou frio e calcular comissão automaticamente
  */
 export async function classificarLead(
   indicacaoId: number,
@@ -578,27 +578,62 @@ export async function classificarLead(
     throw new Error("Database not available");
   }
 
+  // Buscar indicação atual
+  const indicacaoAtual = await db
+    .select()
+    .from(indicacoes)
+    .where(eq(indicacoes.id, indicacaoId))
+    .limit(1);
+
+  if (indicacaoAtual.length === 0) {
+    throw new Error("Indicação não encontrada");
+  }
+
+  const indicacao = indicacaoAtual[0];
+
+  // Buscar plano correspondente
+  const plano = await db
+    .select()
+    .from(planosSaude)
+    .where(
+      eq(planosSaude.tipo, indicacao.nomePlano)
+    )
+    .limit(1);
+
+  if (plano.length === 0) {
+    throw new Error("Plano não encontrado");
+  }
+
+  // Buscar configuração de comissão
+  const config = await db
+    .select()
+    .from(configuracaoComissoes)
+    .where(eq(configuracaoComissoes.tipoLead, classificacao))
+    .limit(1);
+
+  if (config.length === 0) {
+    throw new Error("Configuração de comissão não encontrada");
+  }
+
+  // Calcular comissão do indicador
+  const bonificacaoTotal = plano[0].bonificacaoPadrao; // em centavos
+  const percentualIndicador = config[0].percentualIndicador; // ex: 70 para 70%
+  const valorComissaoIndicador = Math.round((bonificacaoTotal * percentualIndicador) / 100);
+
   const updateData: any = {
     classificacaoLead: classificacao,
     dataClassificacao: new Date(),
+    tipoComissao: "valor_fixo" as const,
+    valorComissao: valorComissaoIndicador,
   };
 
   // Se houver observações do vendedor, adicionar às observações existentes
   if (observacoesVendedor) {
-    // Buscar indicação atual para preservar observações anteriores
-    const indicacaoAtual = await db
-      .select()
-      .from(indicacoes)
-      .where(eq(indicacoes.id, indicacaoId))
-      .limit(1);
-
-    if (indicacaoAtual.length > 0) {
-      const obsAntigas = indicacaoAtual[0].observacoes || "";
-      const obsNovas = obsAntigas
-        ? `${obsAntigas}\n\n[Vendedor]: ${observacoesVendedor}`
-        : `[Vendedor]: ${observacoesVendedor}`;
-      updateData.observacoes = obsNovas;
-    }
+    const obsAntigas = indicacao.observacoes || "";
+    const obsNovas = obsAntigas
+      ? `${obsAntigas}\n\n[Vendedor]: ${observacoesVendedor}`
+      : `[Vendedor]: ${observacoesVendedor}`;
+    updateData.observacoes = obsNovas;
   }
 
   await db

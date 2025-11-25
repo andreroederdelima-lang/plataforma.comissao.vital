@@ -460,3 +460,10 @@
 - [x] Remover texto de inversão de comissões da página inicial
 - [x] Adicionar link para tabela de comissões na home
 - [ ] Verificar sistema de envio de e-mails (cadastro, recuperação, notificações)
+
+## Cálculo Automático de Comissão
+
+- [x] Atualizar função classificarLead para buscar plano e configuração
+- [x] Calcular valor da comissão do indicador baseado no percentual
+- [x] Salvar valorComissao na indicação
+- [ ] Testar cálculo com diferentes cenários
