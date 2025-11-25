@@ -474,3 +474,11 @@
 - [x] Botão "Classificar Lead" que redireciona para /classificar-lead/:id
 - [x] Mostrar apenas para leads não classificados
 - [x] Badge visual para leads já classificados (quente/frio)
+
+## Configuração Gmail SMTP
+
+- [x] Configurar credenciais Gmail SMTP no sistema
+- [x] Atualizar código para usar nodemailer com Gmail
+- [x] Testar envio de e-mail de recuperação de senha
+- [x] Testar envio de e-mail de boas-vindas
+- [x] Verificar logs e confirmar funcionamento
