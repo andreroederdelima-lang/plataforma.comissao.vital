@@ -11,6 +11,8 @@ import {
   Settings,
   UserCircle,
   Users,
+  FileText,
+  QrCode,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { ReactNode } from "react";
@@ -54,6 +56,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       path: "/comissoes",
       label: "Comissões",
       icon: DollarSign,
+      adminOnly: false,
+    },
+    {
+      path: "/materiais-divulgacao",
+      label: "Materiais",
+      icon: FileText,
+      adminOnly: false,
+    },
+    {
+      path: "/qr-codes",
+      label: "QR Codes",
+      icon: QrCode,
       adminOnly: false,
     },
   ].filter(item => !item.adminOnly || isAdmin);

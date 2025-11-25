@@ -111,3 +111,26 @@ export const comissaoConfig = mysqlTable("comissaoConfig", {
 
 export type ComissaoConfig = typeof comissaoConfig.$inferSelect;
 export type InsertComissaoConfig = typeof comissaoConfig.$inferInsert;
+
+/**
+ * Tabela de materiais de divulgação
+ * Armazena banners, flyers, logos, PDFs e imagens para divulgação
+ */
+export const materiais = mysqlTable("materiais", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Título do material */
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  /** Descrição do material */
+  descricao: text("descricao"),
+  /** Tipo do material: banner, flyer, logo, pdf, imagem */
+  tipo: mysqlEnum("tipo", ["banner", "flyer", "logo", "pdf", "imagem"]).notNull(),
+  /** URL do arquivo no S3 */
+  url: varchar("url", { length: 500 }).notNull(),
+  /** Categoria do material (opcional) */
+  categoria: varchar("categoria", { length: 100 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Material = typeof materiais.$inferSelect;
+export type InsertMaterial = typeof materiais.$inferInsert;

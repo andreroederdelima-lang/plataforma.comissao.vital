@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import BoasVindasIndicadores from "./pages/BoasVindasIndicadores";
 import MinhasIndicacoes from "./pages/MinhasIndicacoes";
 import Admin from "./pages/Admin";
 import Notificacoes from "./pages/Notificacoes";
@@ -14,12 +15,15 @@ import Perfil from "./pages/Perfil";
 import Comissoes from "./pages/Comissoes";
 import AdminConfiguracoes from "./pages/AdminConfiguracoes";
 import AdminUsuarios from "./pages/AdminUsuarios";
+import MateriaisDivulgacao from "./pages/MateriaisDivulgacao";
+import QRCodes from "./pages/QRCodes";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/"} component={BoasVindasIndicadores} />
+      <Route path={"/indicar"} component={Home} />
       <Route path={"/minhas-indicacoes"} component={MinhasIndicacoes} />
       <Route path={"/admin"} component={Admin} />
       <Route path={"/admin/usuarios"} component={AdminUsuarios} />
@@ -29,6 +33,9 @@ function Router() {
       <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/perfil"} component={Perfil} />
       <Route path={"/comissoes"} component={Comissoes} />
+      <Route path={"/materiais-divulgacao"} component={MateriaisDivulgacao} />
+      <Route path={"/qr-codes"} component={QRCodes} />
+      <Route path={"/boas-vindas-indicadores"} component={BoasVindasIndicadores} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

@@ -7,6 +7,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
+import { materiaisRouter } from "./routers/materiais";
 
 export const appRouter = router({
   system: systemRouter,
@@ -197,6 +198,70 @@ export const appRouter = router({
 
       const allIndicacoes = await getAllIndicacoes();
       return allIndicacoes.filter(i => i.indicacao.status === "venda_fechada");
+    }),
+
+    /**
+     * Buscar dados do indicador logado
+     */
+    meuIndicador: protectedProcedure.query(async ({ ctx }) => {
+      const { getUserById } = await import("./db");
+      const user = await getUserById(ctx.user.id);
+      
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Usuário não encontrado",
+        });
+      }
+
+      // Buscar estatísticas básicas
+      const minhasIndicacoes = await getIndicacoesByParceiro(ctx.user.id);
+      const totalIndicacoes = minhasIndicacoes.length;
+      const vendasFechadas = minhasIndicacoes.filter(i => i.status === "venda_fechada").length;
+      const emNegociacao = minhasIndicacoes.filter(i => i.status === "em_negociacao").length;
+      
+      // Calcular total de comissões ganhas
+      const totalComissoes = minhasIndicacoes
+        .filter(i => i.status === "venda_fechada" && i.valorComissao)
+        .reduce((sum, i) => sum + (i.valorComissao || 0), 0);
+
+      return {
+        id: user.id,
+        nome: user.name,
+        email: user.email,
+        chavePix: user.chavePix,
+        tipo: user.role === "vendedor" || user.role === "comercial" ? "vendedor" : "promotor",
+        codigoIndicacao: `IND${user.id.toString().padStart(6, "0")}`,
+        estatisticas: {
+          totalIndicacoes,
+          vendasFechadas,
+          emNegociacao,
+          totalComissoes,
+          taxaConversao: totalIndicacoes > 0 ? (vendasFechadas / totalIndicacoes) * 100 : 0,
+        },
+      };
+    }),
+
+    /**
+     * Listar indicações do indicador logado com detalhes
+     */
+    listarIndicacoes: protectedProcedure.query(async ({ ctx }) => {
+      const indicacoes = await getIndicacoesByParceiro(ctx.user.id);
+      
+      return indicacoes.map(ind => ({
+        id: ind.id,
+        nomeIndicado: ind.nomeIndicado,
+        whatsappIndicado: ind.whatsappIndicado,
+        nomePlano: ind.nomePlano,
+        tipoPlano: ind.tipoPlano,
+        categoria: ind.categoria,
+        status: ind.status,
+        valorComissao: ind.valorComissao,
+        observacoes: ind.observacoes,
+        createdAt: ind.createdAt,
+        updatedAt: ind.updatedAt,
+        dataAtualizacao: ind.updatedAt, // Para compatibilidade com PainelVendedorLayout
+      }));
     }),
   }),
 
@@ -476,6 +541,11 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+
+  /**
+   * Router de materiais de divulgação
+   */
+  materiais: materiaisRouter,
 });
 
 export type AppRouter = typeof appRouter;

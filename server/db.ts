@@ -1,6 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig } from "../drizzle/schema";
+import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -498,4 +498,69 @@ export async function deleteUser(userId: number) {
   await db
     .delete(users)
     .where(eq(users.id, userId));
+}
+
+/**
+ * ========================================
+ * MATERIAIS DE DIVULGAÇÃO
+ * ========================================
+ */
+
+/**
+ * Listar todos os materiais
+ */
+export async function getAllMateriais() {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return await db
+    .select()
+    .from(materiais)
+    .orderBy(desc(materiais.createdAt));
+}
+
+/**
+ * Criar novo material
+ */
+export async function createMaterial(data: InsertMaterial) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.insert(materiais).values(data);
+}
+
+/**
+ * Atualizar material existente
+ */
+export async function updateMaterial(
+  materialId: number,
+  data: Partial<InsertMaterial>
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db
+    .update(materiais)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(materiais.id, materialId));
+}
+
+/**
+ * Excluir material
+ */
+export async function deleteMaterial(materialId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db
+    .delete(materiais)
+    .where(eq(materiais.id, materialId));
 }

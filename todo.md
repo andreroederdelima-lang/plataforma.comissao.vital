@@ -352,3 +352,26 @@
 
 - [x] Alterar "Bem-vindo, Parceiro!" para "Boas-vindas Promotor e/ou Vendedor!"
 - [x] Adicionar definições pequenas e discretas explicando a diferença entre Promotor e Vendedor
+
+## Sistema de Materiais de Divulgação
+
+### Backend e Banco de Dados
+- [x] Criar tabela materiais no schema do banco de dados
+- [x] Criar router server/routers/materiais.ts com procedures
+- [x] Registrar router materiais no router principal
+- [x] Executar migração do banco de dados
+
+### Frontend
+- [x] Criar página AdminMateriais.tsx para gerenciamento
+- [x] Criar página MateriaisDivulgacao.tsx pública
+- [x] Adicionar rotas no App.tsx
+- [x] Integrar com tRPC no frontend
+- [x] Adicionar procedures meuIndicador e listarIndicacoes
+- [x] Alterar página inicial para BoasVindasIndicadores
+- [x] Adicionar menu de navegação no AdminLayout
+
+### Testes e Finalização
+- [ ] Testar upload de materiais
+- [ ] Testar listagem pública
+- [ ] Testar CRUD completo
+- [ ] Salvar checkpoint
