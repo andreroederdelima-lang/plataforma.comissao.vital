@@ -46,17 +46,17 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
     {
       icon: FileText,
       label: "Indicações",
-      path: "/indicacoes",
+      path: "/minhas-indicacoes",
     },
     {
       icon: BarChart3,
       label: "Estatísticas",
-      path: "/indicacoes/estatisticas",
+      path: "/estatisticas",
     },
     {
       icon: DollarSign,
       label: "Comissões",
-      path: "/indicacoes/comissoes",
+      path: "/comissoes",
     },
     {
       icon: Image,
@@ -69,7 +69,7 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
     {
       icon: Plus,
       label: "Nova Indicação",
-      path: "/indicacoes",
+      path: "/minhas-indicacoes",
       action: "create",
     },
   ];
@@ -92,7 +92,7 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
             <div className="flex items-center gap-4">
               {/* Badge de Notificações */}
               <button
-                onClick={() => setLocation("/indicacoes")}
+                onClick={() => setLocation("/minhas-indicacoes")}
                 className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
                 title="Notificações de indicações"
               >
