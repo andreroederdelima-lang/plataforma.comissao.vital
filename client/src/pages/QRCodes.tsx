@@ -1,10 +1,37 @@
+import { useEffect } from "react";
+import { useLocation } from "wouter";
 import { APP_LOGO } from "@/const";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Printer, QrCode, Share2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function QRCodes() {
+  const [, setLocation] = useLocation();
+  const { user, loading } = useAuth();
+
+  // Redirecionar para login se não autenticado
+  useEffect(() => {
+    if (!loading && !user) {
+      setLocation("/login-indicador");
+    }
+  }, [user, loading, setLocation]);
+
+  // Mostrar loading enquanto verifica autenticação
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">Carregando...</p>
+      </div>
+    );
+  }
+
+  // Se não autenticado, não renderizar nada (vai redirecionar)
+  if (!user) {
+    return null;
+  }
+
   const handleDownload = () => {
     const link = document.createElement('a');
     link.href = '/qrcode-whatsapp-vendas.png';

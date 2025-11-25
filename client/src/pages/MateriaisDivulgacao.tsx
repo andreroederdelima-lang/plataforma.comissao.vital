@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import PainelVendedorLayout from "@/components/PainelVendedorLayout";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 
@@ -24,6 +26,30 @@ const VITAL_COLORS = {
 };
 
 export default function MateriaisDivulgacao() {
+  const [, setLocation] = useLocation();
+  const { user, loading } = useAuth();
+
+  // Redirecionar para login se não autenticado
+  useEffect(() => {
+    if (!loading && !user) {
+      setLocation("/login-indicador");
+    }
+  }, [user, loading, setLocation]);
+
+  // Mostrar loading enquanto verifica autenticação
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">Carregando...</p>
+      </div>
+    );
+  }
+
+  // Se não autenticado, não renderizar nada (vai redirecionar)
+  if (!user) {
+    return null;
+  }
+
   const copiarTexto = (texto: string) => {
     navigator.clipboard.writeText(texto);
     toast.success("Texto copiado!");

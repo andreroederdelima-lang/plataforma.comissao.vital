@@ -418,3 +418,9 @@
 ## Ajustes Solicitados
 
 - [x] Tornar Chave PIX obrigatória no cadastro de indicador (frontend e backend)
+
+## Correções Urgentes
+
+- [x] Corrigir redirecionamento OAuth após login de indicador (não deve tentar logar pela Manus)
+- [x] Adicionar campo editável de Chave PIX na página de perfil do indicador (já existia)
+- [ ] Testar fluxo completo de login e edição de perfil
