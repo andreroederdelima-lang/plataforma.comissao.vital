@@ -86,11 +86,17 @@ export default function BoasVindasIndicadores() {
                 Sua Saúde Vital — cuidando de quem cuida.
               </p>
 
-              {/* Observação sobre lead frio */}
-              <div className="mt-6 pt-4 border-t border-gray-200">
-                <p className="text-xs text-gray-500 text-center">
-                  <em>Observação importante: Em casos de lead frio ou com múltiplas objeções, as porcentagens de comissão (indicador x vendedor) podem ser invertidas.</em>
+              {/* Link para Tabela de Comissões */}
+              <div className="mt-6 pt-4 border-t border-gray-200 text-center">
+                <p className="text-sm text-gray-700 mb-2">
+                  📊 Quer saber <strong>quanto você pode ganhar</strong> por plano?
                 </p>
+                <button
+                  onClick={() => setLocation("/tabela-comissoes")}
+                  className="text-[#1e9d9f] hover:underline font-bold text-base"
+                >
+                  Ver Tabela Completa de Comissões →
+                </button>
               </div>
             </div>
 

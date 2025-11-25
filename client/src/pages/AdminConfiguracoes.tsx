@@ -16,6 +16,23 @@ export default function AdminConfiguracoes() {
   const { data: configs, isLoading } = trpc.comissaoConfig.list.useQuery();
   
   const [valores, setValores] = useState<Record<ComissaoKey, string>>({});
+  
+  // Estados para percentuais de comissão
+  const [percentualQuenteIndicador, setPercentualQuenteIndicador] = useState("70");
+  const [percentualQuenteVendedor, setPercentualQuenteVendedor] = useState("30");
+  const [percentualFrioIndicador, setPercentualFrioIndicador] = useState("30");
+  const [percentualFrioVendedor, setPercentualFrioVendedor] = useState("70");
+  
+  const { data: configsComissao } = trpc.comissoes.listarConfiguracoes.useQuery();
+  const atualizarConfigMutation = trpc.comissoes.atualizarConfiguracao.useMutation({
+    onSuccess: () => {
+      toast.success("Percentuais de comissão atualizados!");
+      trpc.useUtils().comissoes.listarConfiguracoes.invalidate();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erro ao atualizar percentuais");
+    },
+  });
 
   const upsertMutation = trpc.comissaoConfig.update.useMutation({
     onSuccess: () => {
@@ -27,6 +44,23 @@ export default function AdminConfiguracoes() {
     },
   });
 
+  // Carregar percentuais de comissão
+  useEffect(() => {
+    if (configsComissao) {
+      const configQuente = configsComissao.find((c: any) => c.tipoLead === 'quente');
+      const configFrio = configsComissao.find((c: any) => c.tipoLead === 'frio');
+      
+      if (configQuente) {
+        setPercentualQuenteIndicador(String(configQuente.percentualIndicador));
+        setPercentualQuenteVendedor(String(configQuente.percentualVendedor));
+      }
+      if (configFrio) {
+        setPercentualFrioIndicador(String(configFrio.percentualIndicador));
+        setPercentualFrioVendedor(String(configFrio.percentualVendedor));
+      }
+    }
+  }, [configsComissao]);
+  
   // Carregar valores existentes
   useEffect(() => {
     if (configs) {
@@ -130,11 +164,134 @@ export default function AdminConfiguracoes() {
         <div className="space-y-6">
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Configurações de Comissão</h1>
+            <h1 className="text-3xl font-bold text-foreground">Configurações do Sistema</h1>
             <p className="text-muted-foreground mt-2">
               Defina os valores de comissão para cada combinação de plano. Os valores serão aplicados automaticamente às novas indicações.
             </p>
           </div>
+
+          {/* Percentuais de Divisão de Comissão */}
+          <Card className="border-2 border-primary/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-2xl">📊</span>
+                Percentuais de Divisão de Comissão
+              </CardTitle>
+              <CardDescription>
+                Configure como a comissão é dividida entre indicador e vendedor para leads quentes e frios
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Lead Quente */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🔥</span>
+                  <h3 className="font-semibold text-lg">Lead Quente</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Indicador (%)</Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={percentualQuenteIndicador}
+                      onChange={(e) => setPercentualQuenteIndicador(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Vendedor (%)</Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={percentualQuenteVendedor}
+                      onChange={(e) => setPercentualQuenteVendedor(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <Button
+                  onClick={() => {
+                    const indicador = parseInt(percentualQuenteIndicador);
+                    const vendedor = parseInt(percentualQuenteVendedor);
+                    if (indicador + vendedor !== 100) {
+                      toast.error("A soma deve ser 100%");
+                      return;
+                    }
+                    atualizarConfigMutation.mutate({
+                      tipoLead: 'quente',
+                      percentualIndicador: indicador,
+                      percentualVendedor: vendedor,
+                    });
+                  }}
+                  disabled={atualizarConfigMutation.isPending}
+                  size="sm"
+                >
+                  {atualizarConfigMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+                  Salvar Lead Quente
+                </Button>
+              </div>
+
+              <div className="border-t" />
+
+              {/* Lead Frio */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">❄️</span>
+                  <h3 className="font-semibold text-lg">Lead Frio</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Indicador (%)</Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={percentualFrioIndicador}
+                      onChange={(e) => setPercentualFrioIndicador(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Vendedor (%)</Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={percentualFrioVendedor}
+                      onChange={(e) => setPercentualFrioVendedor(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <Button
+                  onClick={() => {
+                    const indicador = parseInt(percentualFrioIndicador);
+                    const vendedor = parseInt(percentualFrioVendedor);
+                    if (indicador + vendedor !== 100) {
+                      toast.error("A soma deve ser 100%");
+                      return;
+                    }
+                    atualizarConfigMutation.mutate({
+                      tipoLead: 'frio',
+                      percentualIndicador: indicador,
+                      percentualVendedor: vendedor,
+                    });
+                  }}
+                  disabled={atualizarConfigMutation.isPending}
+                  size="sm"
+                >
+                  {atualizarConfigMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+                  Salvar Lead Frio
+                </Button>
+              </div>
+
+              {/* Explicação */}
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-gray-700">
+                  <strong>⚠️ Importante:</strong> Estes percentuais serão aplicados automaticamente quando o vendedor classificar uma indicação como "quente" ou "fria". A página espelho de comissões (/tabela-comissoes) será atualizada automaticamente.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Cards por tipo de plano */}
           {planoConfigs.map(planoConfig => (

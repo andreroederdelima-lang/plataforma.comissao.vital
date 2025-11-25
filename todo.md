@@ -424,3 +424,39 @@
 - [x] Corrigir redirecionamento OAuth após login de indicador (não deve tentar logar pela Manus)
 - [x] Adicionar campo editável de Chave PIX na página de perfil do indicador (já existia)
 - [ ] Testar fluxo completo de login e edição de perfil
+
+## Sistema Completo de Comissões
+
+### Banco de Dados
+- [x] Criar tabela planos_saude com todos os planos (8 planos)
+- [x] Criar tabela configuracao_comissoes (lead quente 70/30, lead frio 30/70, venda direta 100%)
+- [x] Popular tabela planos com dados do PDF
+
+### Página Espelho de Comissões (Pública para Indicadores)
+- [x] Criar página /tabela-comissoes (pública, sem login)
+- [x] Mostrar 3 cenários: Lead Quente (70/30), Lead Frio (30/70), Venda Direta (100%)
+- [x] Exibir todos os 8 planos com valores
+- [x] Design motivador e visual
+- [x] Sincronizar automaticamente com Admin/Configurações
+- [x] Adicionar texto sobre inversão de comissões (removido da home)
+
+### Admin - Configurações de Comissões
+- [x] Adicionar seção em /admin/configuracoes para editar comissões
+- [x] Campos editáveis: % Lead Quente Indicador, % Lead Quente Vendedor
+- [x] Campos editáveis: % Lead Frio Indicador, % Lead Frio Vendedor
+- [x] Salvar alterações no banco
+- [x] Atualizar página espelho automaticamente
+
+### Página de Classificação de Leads (Vendedor)
+- [x] Criar página /classificar-lead/:id
+- [x] Vendedor classifica indicação recebida
+- [x] Opções: Lead Quente, Lead Frio
+- [x] Campos: Observações do vendedor
+- [x] Salvar classificação no banco com data
+- [ ] Atualizar comissão automaticamente baseado na classificação
+- [ ] Notificar indicador sobre classificação
+
+### Ajustes
+- [x] Remover texto de inversão de comissões da página inicial
+- [x] Adicionar link para tabela de comissões na home
+- [ ] Verificar sistema de envio de e-mails (cadastro, recuperação, notificações)

@@ -22,6 +22,8 @@ import CadastroIndicador from "./pages/CadastroIndicador";
 import LoginIndicador from "./pages/LoginIndicador";
 import EsqueciSenha from "./pages/EsqueciSenha";
 import RecuperarSenha from "./pages/RecuperarSenha";
+import TabelaComissoes from "./pages/TabelaComissoes";
+import ClassificarLead from "./pages/ClassificarLead";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -42,6 +44,8 @@ function Router() {
       <Route path={"/materiais-divulgacao"} component={MateriaisDivulgacao} />
       <Route path={"/qr-codes"} component={QRCodes} />
       <Route path={"/boas-vindas-indicadores"} component={BoasVindasIndicadores} />
+      <Route path={"/tabela-comissoes"} component={TabelaComissoes} />
+      <Route path={"/classificar-lead/:id"} component={ClassificarLead} />
       <Route path={"/cadastro-indicador"} component={CadastroIndicador} />
       <Route path={"/login-indicador"} component={LoginIndicador} />
       <Route path={"/esqueci-senha"} component={EsqueciSenha} />

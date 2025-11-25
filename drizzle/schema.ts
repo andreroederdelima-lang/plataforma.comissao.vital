@@ -61,6 +61,10 @@ export const indicacoes = mysqlTable("indicacoes", {
   tipoComissao: mysqlEnum("tipoComissao", ["valor_fixo", "percentual"]),
   /** Valor da comissão (em centavos se valor fixo, ou percentual se percentual) */
   valorComissao: int("valorComissao"),
+  /** Classificação do lead pelo vendedor: quente, frio ou null (não classificado) */
+  classificacaoLead: mysqlEnum("classificacaoLead", ["quente", "frio"]),
+  /** Data em que o lead foi classificado */
+  dataClassificacao: timestamp("dataClassificacao"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -156,3 +160,52 @@ export const passwordResetTokens = mysqlTable("password_reset_tokens", {
 
 export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
 export type InsertPasswordResetToken = typeof passwordResetTokens.$inferInsert;
+
+/**
+ * Tabela de planos de saúde disponíveis
+ * Armazena informações sobre todos os planos oferecidos
+ */
+export const planosSaude = mysqlTable("planos_saude", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Nome do plano (ex: "Essencial Individual") */
+  nome: varchar("nome", { length: 255 }).notNull(),
+  /** Categoria do plano: "individual", "familiar", "empresarial_individual", "empresarial_familiar" */
+  categoria: varchar("categoria", { length: 50 }).notNull(),
+  /** Tipo do plano: "essencial" ou "premium" */
+  tipo: varchar("tipo", { length: 50 }).notNull(),
+  /** Preço mensal do plano em centavos */
+  precoMensal: int("precoMensal").notNull(),
+  /** Bonificação/comissão padrão (100%) em centavos */
+  bonificacaoPadrao: int("bonificacaoPadrao").notNull(),
+  /** Percentual do primeiro mês (ex: 38.7 = 38,7%) */
+  percentualPrimeiroMes: int("percentualPrimeiroMes").notNull(), // Armazena como inteiro (387 = 38.7%)
+  /** Ordem de exibição */
+  ordem: int("ordem").notNull(),
+  /** Status do plano (1 = ativo, 0 = inativo) */
+  isActive: int("isActive").default(1).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PlanoSaude = typeof planosSaude.$inferSelect;
+export type InsertPlanoSaude = typeof planosSaude.$inferInsert;
+
+/**
+ * Tabela de configuração de comissões
+ * Armazena os percentuais de divisão de comissões entre indicador e vendedor
+ */
+export const configuracaoComissoes = mysqlTable("configuracao_comissoes", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Tipo de lead: "quente" ou "frio" */
+  tipoLead: varchar("tipoLead", { length: 20 }).notNull().unique(),
+  /** Percentual do indicador (ex: 70 para 70%) */
+  percentualIndicador: int("percentualIndicador").notNull(),
+  /** Percentual do vendedor (ex: 30 para 30%) */
+  percentualVendedor: int("percentualVendedor").notNull(),
+  /** Descrição do cenário */
+  descricao: text("descricao"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ConfiguracaoComissao = typeof configuracaoComissoes.$inferSelect;
+export type InsertConfiguracaoComissao = typeof configuracaoComissoes.$inferInsert;

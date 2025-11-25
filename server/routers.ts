@@ -9,10 +9,12 @@ import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { materiaisRouter } from "./routers/materiais";
 import { authIndicadoresRouter } from "./routers/authIndicadores";
+import { comissoesRouter } from "./routers/comissoes";
 
 export const appRouter = router({
   system: systemRouter,
   authIndicadores: authIndicadoresRouter,
+  comissoes: comissoesRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -243,6 +245,55 @@ export const appRouter = router({
         },
       };
     }),
+
+    /**
+     * Buscar indicação por ID (vendedor ou admin)
+     */
+    getById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "vendedor") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores e vendedores podem visualizar indicações",
+          });
+        }
+
+        const allIndicacoes = await getAllIndicacoes();
+        const indicacao = allIndicacoes.find(i => i.indicacao.id === input.id);
+        
+        if (!indicacao) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Indicação não encontrada",
+          });
+        }
+
+        return indicacao.indicacao;
+      }),
+
+    /**
+     * Classificar lead como quente ou frio (vendedor ou admin)
+     */
+    classificarLead: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        classificacao: z.enum(["quente", "frio"]),
+        observacoes: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "vendedor") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores e vendedores podem classificar leads",
+          });
+        }
+
+        const { classificarLead } = await import("./db");
+        await classificarLead(input.id, input.classificacao, input.observacoes);
+        
+        return { success: true };
+      }),
 
     /**
      * Listar indicações do indicador logado com detalhes

@@ -564,3 +564,45 @@ export async function deleteMaterial(materialId: number) {
     .delete(materiais)
     .where(eq(materiais.id, materialId));
 }
+
+/**
+ * Classificar lead como quente ou frio
+ */
+export async function classificarLead(
+  indicacaoId: number,
+  classificacao: "quente" | "frio",
+  observacoesVendedor?: string
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const updateData: any = {
+    classificacaoLead: classificacao,
+    dataClassificacao: new Date(),
+  };
+
+  // Se houver observações do vendedor, adicionar às observações existentes
+  if (observacoesVendedor) {
+    // Buscar indicação atual para preservar observações anteriores
+    const indicacaoAtual = await db
+      .select()
+      .from(indicacoes)
+      .where(eq(indicacoes.id, indicacaoId))
+      .limit(1);
+
+    if (indicacaoAtual.length > 0) {
+      const obsAntigas = indicacaoAtual[0].observacoes || "";
+      const obsNovas = obsAntigas
+        ? `${obsAntigas}\n\n[Vendedor]: ${observacoesVendedor}`
+        : `[Vendedor]: ${observacoesVendedor}`;
+      updateData.observacoes = obsNovas;
+    }
+  }
+
+  await db
+    .update(indicacoes)
+    .set(updateData)
+    .where(eq(indicacoes.id, indicacaoId));
+}
