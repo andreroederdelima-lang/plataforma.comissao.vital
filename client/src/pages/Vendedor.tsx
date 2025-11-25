@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Loader2, LogOut, UserCircle } from "lucide-react";
+import { ArrowLeft, Loader2, LogOut, UserCircle, Flame, ThermometerSnowflake, ClipboardCheck } from "lucide-react";
 import { NotificationBadge } from "@/components/NotificationBadge";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -293,6 +293,7 @@ export default function Vendedor() {
                         <TableHead>Categoria</TableHead>
                         <TableHead>Observações</TableHead>
                         <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -358,6 +359,33 @@ export default function Vendedor() {
                                 <SelectItem value="cliente_sem_interesse">Cliente Sem Interesse</SelectItem>
                               </SelectContent>
                             </Select>
+                          </TableCell>
+                          <TableCell>
+                            {!item.indicacao.classificacaoLead ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setLocation(`/classificar-lead/${item.indicacao.id}`)}
+                                className="gap-2"
+                              >
+                                <ClipboardCheck className="h-4 w-4" />
+                                Classificar
+                              </Button>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                {item.indicacao.classificacaoLead === "quente" ? (
+                                  <Badge className="bg-orange-500/10 text-orange-700 border-orange-500/20 gap-1">
+                                    <Flame className="h-3 w-3" />
+                                    Quente
+                                  </Badge>
+                                ) : (
+                                  <Badge className="bg-blue-500/10 text-blue-700 border-blue-500/20 gap-1">
+                                    <ThermometerSnowflake className="h-3 w-3" />
+                                    Frio
+                                  </Badge>
+                                )}
+                              </div>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}

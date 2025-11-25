@@ -467,3 +467,10 @@
 - [x] Calcular valor da comissão do indicador baseado no percentual
 - [x] Salvar valorComissao na indicação
 - [ ] Testar cálculo com diferentes cenários
+
+## Botão Classificar no Painel do Vendedor
+
+- [x] Adicionar coluna "Ções" na tabela de indicações do vendedor
+- [x] Botão "Classificar Lead" que redireciona para /classificar-lead/:id
+- [x] Mostrar apenas para leads não classificados
+- [x] Badge visual para leads já classificados (quente/frio)
