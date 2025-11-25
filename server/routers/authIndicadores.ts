@@ -18,7 +18,7 @@ export const authIndicadoresRouter = router({
       email: z.string().email("E-mail inválido"),
       whatsapp: z.string().min(10, "WhatsApp inválido"),
       senha: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
-      chavePix: z.string().optional(),
+      chavePix: z.string().min(1, "Chave PIX é obrigatória"),
     }))
     .mutation(async ({ input }) => {
       const { getDb } = await import("../db");
@@ -62,7 +62,7 @@ export const authIndicadoresRouter = router({
           name: input.nome,
           email: input.email,
           passwordHash,
-          chavePix: input.chavePix || null,
+          chavePix: input.chavePix,
           loginMethod: "email_password",
           role: "vendedor", // Indicadores são vendedores por padrão
           isActive: 1,

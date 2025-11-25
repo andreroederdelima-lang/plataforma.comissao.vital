@@ -54,12 +54,17 @@ export default function CadastroIndicador() {
       return;
     }
 
+    if (!formData.chavePix || formData.chavePix.trim().length === 0) {
+      toast.error("Chave PIX é obrigatória");
+      return;
+    }
+
     cadastrarMutation.mutate({
       nome: formData.nome,
       email: formData.email,
       whatsapp: formData.whatsapp,
       senha: formData.senha,
-      chavePix: formData.chavePix || undefined,
+      chavePix: formData.chavePix,
     });
   };
 
@@ -145,16 +150,17 @@ export default function CadastroIndicador() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="chavePix">Chave PIX (opcional)</Label>
+                <Label htmlFor="chavePix">Chave PIX *</Label>
                 <Input
                   id="chavePix"
                   type="text"
                   value={formData.chavePix}
                   onChange={(e) => setFormData({ ...formData, chavePix: e.target.value })}
-                  placeholder="Para receber comissões"
+                  placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória"
+                  required
                 />
                 <p className="text-xs text-muted-foreground">
-                  Você pode adicionar depois no seu perfil
+                  Necessário para receber suas comissões
                 </p>
               </div>
 

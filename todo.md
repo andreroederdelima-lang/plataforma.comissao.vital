@@ -414,3 +414,7 @@
 - [ ] Testar fluxo de cadastro
 - [ ] Testar fluxo de login
 - [ ] Testar recuperação de senha
+
+## Ajustes Solicitados
+
+- [x] Tornar Chave PIX obrigatória no cadastro de indicador (frontend e backend)
