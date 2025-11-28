@@ -69,7 +69,7 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
     {
       icon: Plus,
       label: "Nova Indicação",
-      path: "/minhas-indicacoes",
+      path: "/indicar",
       action: "create",
     },
   ];
