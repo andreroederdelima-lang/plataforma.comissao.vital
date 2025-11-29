@@ -1,0 +1,22 @@
+{
+  "query": "SELECT id, email, LENGTH(passwordHash) as hash_length, passwordHash IS NULL as is_null FROM users WHERE email = 'administrativo@suasaudevital.com.br';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT id, email, LENGTH(passwordHash) as hash_length, passwordHash IS NULL as is_null FROM users WHERE email = 'administrativo@suasaudevital.com.br';",
+  "rows": [
+    {
+      "id": "2280136",
+      "email": "administrativo@suasaudevital.com.br",
+      "hash_length": "NULL",
+      "is_null": "1"
+    },
+    {
+      "id": "2490001",
+      "email": "administrativo@suasaudevital.com.br",
+      "hash_length": "60",
+      "is_null": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\thash_length\tis_null\n2280136\tadministrativo@suasaudevital.com.br\tNULL\t1\n2490001\tadministrativo@suasaudevital.com.br\t60\t0\n",
+  "stderr": "",
+  "execution_time_ms": 1511
+}

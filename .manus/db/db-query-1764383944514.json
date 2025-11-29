@@ -1,0 +1,19 @@
+{
+  "query": "SELECT id, openId, name, email, passwordHash, role, isActive FROM users WHERE email = 'administrativo@suasaudevital.com.br' LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT id, openId, name, email, passwordHash, role, isActive FROM users WHERE email = 'administrativo@suasaudevital.com.br' LIMIT 1;",
+  "rows": [
+    {
+      "id": "2280136",
+      "openId": "B9yfGvNFUrDEqiS63T6Dd2",
+      "name": "Administrativo Sua Saúde Vital",
+      "email": "administrativo@suasaudevital.com.br",
+      "passwordHash": "NULL",
+      "role": "admin",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\tpasswordHash\trole\tisActive\n2280136\tB9yfGvNFUrDEqiS63T6Dd2\tAdministrativo Sua Saúde Vital\tadministrativo@suasaudevital.com.br\tNULL\tadmin\t1\n",
+  "stderr": "",
+  "execution_time_ms": 1613
+}

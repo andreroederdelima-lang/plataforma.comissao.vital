@@ -482,3 +482,35 @@
 - [x] Testar envio de e-mail de recuperação de senha
 - [x] Testar envio de e-mail de boas-vindas
 - [x] Verificar logs e confirmar funcionamento
+
+## Simplificação de Autenticação (E-mail/Senha para Todos)
+
+- [ ] Criar conta admin com e-mail/senha no banco de dados
+- [ ] Unificar sistema de autenticação para todos os usuários
+- [ ] Atualizar frontend para usar login unificado
+- [ ] Remover referências ao OAuth do código
+- [ ] Testar login de todos os perfis (promotor, vendedor, comercial, admin)
+- [ ] Salvar checkpoint final
+
+## Correção de Sistema de Sessão
+
+- [ ] Adaptar sistema de sessão para funcionar sem OAuth
+- [ ] Testar login admin com e-mail/senha
+- [ ] Adicionar botão "Painel Administrativo" na página inicial
+- [ ] Salvar checkpoint
+
+## Sistema de Sessão Completo e Área de Perfil do Usuário
+
+- [ ] Implementar criação de cookie JWT no auth.login
+- [ ] Implementar criação de cookie JWT no authIndicadores.login
+- [ ] Atualizar context.ts para validar JWT corretamente
+- [ ] Criar procedure para alterar senha do usuário
+- [ ] Criar procedure para editar perfil do usuário
+- [ ] Criar página /perfil para gerenciamento de dados pessoais
+- [ ] Adicionar formulário de alteração de senha
+- [ ] Adicionar formulário de edição de dados (nome, WhatsApp, chave PIX)
+- [ ] Testar login admin com sessão persistente
+- [ ] Testar login promotor com sessão persistente
+- [ ] Testar alteração de senha
+- [ ] Testar edição de perfil
+- [ ] Salvar checkpoint final

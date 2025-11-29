@@ -21,11 +21,16 @@ export default function LoginIndicador() {
     senha: "",
   });
 
-  const loginMutation = trpc.authIndicadores.login.useMutation({
+  const loginMutation = trpc.auth.login.useMutation({
     onSuccess: (data) => {
       toast.success(`Bem-vindo, ${data.user.nome}!`);
       // Recarregar página para atualizar contexto de autenticação
-      window.location.href = "/materiais-divulgacao";
+      // Redirecionar baseado no role
+      if (data.user.role === 'admin' || data.user.role === 'comercial' || data.user.role === 'vendedor') {
+        window.location.href = "/admin";
+      } else {
+        window.location.href = "/materiais-divulgacao";
+      }
     },
     onError: (error) => {
       toast.error(error.message || "Erro ao fazer login");

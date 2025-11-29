@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { APP_LOGO, getLoginUrl } from "@/const";
+import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Loader2, LogOut, Menu, UserCircle, X } from "lucide-react";
 import { NotificationBadge } from "@/components/NotificationBadge";
@@ -87,7 +87,7 @@ export default function Home() {
             {!isAuthenticated && (
               <div className="flex items-center gap-2">
                 <Button variant="default" size="sm" asChild>
-                  <a href={getLoginUrl()}>🔐 Área Restrita</a>
+                  <a href="/login-indicador">🔐 Área Restrita</a>
                 </Button>
               </div>
             )}
@@ -167,7 +167,7 @@ export default function Home() {
             </CardHeader>
             <CardContent className="flex justify-center pb-8">
               <Button size="lg" asChild>
-                <a href={getLoginUrl()}>Fazer Login</a>
+                <a href="/login-indicador">Fazer Login</a>
               </Button>
             </CardContent>
           </Card>

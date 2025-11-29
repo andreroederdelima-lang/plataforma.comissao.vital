@@ -17,6 +17,106 @@ export const appRouter = router({
   comissoes: comissoesRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
+    
+    /**
+     * Login unificado para todos os usuários (promotores, vendedores, admins)
+     */
+    login: publicProcedure
+      .input(z.object({
+        email: z.string().email("E-mail inválido"),
+        senha: z.string().min(1, "Senha é obrigatória"),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const bcrypt = await import("bcryptjs");
+        const { getDb } = await import("./db");
+        const db = await getDb();
+        
+        if (!db) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Banco de dados não disponível",
+          });
+        }
+
+        const { users } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
+
+        // Buscar usuário por e-mail
+        const result = await db
+          .select()
+          .from(users)
+          .where(eq(users.email, input.email))
+          .limit(1);
+
+        if (result.length === 0) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "E-mail ou senha incorretos",
+          });
+        }
+
+        const user = result[0];
+
+        // Verificar se usuário está ativo
+        if (user.isActive === 0) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Conta desativada. Entre em contato com o suporte.",
+          });
+        }
+
+        // Verificar senha
+        if (!user.passwordHash) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Esta conta usa outro método de login",
+          });
+        }
+
+        const senhaValida = await bcrypt.default.compare(input.senha, user.passwordHash);
+        
+        if (!senhaValida) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "E-mail ou senha incorretos",
+          });
+        }
+
+        // Atualizar lastSignedIn
+        await db
+          .update(users)
+          .set({ lastSignedIn: new Date() })
+          .where(eq(users.id, user.id));
+
+        // Criar sessão JWT
+        const jwt = await import("jsonwebtoken");
+        
+        const sessionToken = jwt.default.sign(
+          {
+            openId: user.openId,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          },
+          process.env.JWT_SECRET!,
+          { expiresIn: "365d" }
+        );
+
+        // Definir cookie de sessão
+        const cookieOptions = getSessionCookieOptions(ctx.req);
+        ctx.res.cookie(COOKIE_NAME, sessionToken, cookieOptions);
+
+        return {
+          success: true,
+          user: {
+            id: user.id,
+            nome: user.name,
+            email: user.email,
+            role: user.role,
+          },
+        };
+      }),
+    
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
@@ -31,6 +131,111 @@ export const appRouter = router({
       .mutation(async ({ ctx, input }) => {
         const { updateChavePix } = await import("./db");
         await updateChavePix(ctx.user.id, input.chavePix);
+        return { success: true };
+      }),
+    
+    /**
+     * Alterar senha do usuário logado
+     */
+    alterarSenha: protectedProcedure
+      .input(z.object({
+        senhaAtual: z.string().min(1, "Senha atual é obrigatória"),
+        novaSenha: z.string().min(6, "Nova senha deve ter no mínimo 6 caracteres"),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const bcrypt = await import("bcryptjs");
+        const { getDb } = await import("./db");
+        const db = await getDb();
+        
+        if (!db) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Banco de dados não disponível",
+          });
+        }
+
+        const { users } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
+
+        // Buscar usuário
+        const result = await db
+          .select()
+          .from(users)
+          .where(eq(users.id, ctx.user.id))
+          .limit(1);
+
+        if (result.length === 0) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Usuário não encontrado",
+          });
+        }
+
+        const user = result[0];
+
+        // Verificar senha atual
+        if (!user.passwordHash) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Esta conta não possui senha configurada",
+          });
+        }
+
+        const senhaValida = await bcrypt.default.compare(input.senhaAtual, user.passwordHash);
+        
+        if (!senhaValida) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Senha atual incorreta",
+          });
+        }
+
+        // Gerar hash da nova senha
+        const novoHash = await bcrypt.default.hash(input.novaSenha, 10);
+
+        // Atualizar senha
+        await db
+          .update(users)
+          .set({ passwordHash: novoHash })
+          .where(eq(users.id, ctx.user.id));
+
+        return { success: true };
+      }),
+    
+    /**
+     * Editar perfil do usuário logado
+     */
+    editarPerfil: protectedProcedure
+      .input(z.object({
+        nome: z.string().optional(),
+        whatsapp: z.string().optional(),
+        chavePix: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { getDb } = await import("./db");
+        const db = await getDb();
+        
+        if (!db) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Banco de dados não disponível",
+          });
+        }
+
+        const { users } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
+
+        const updateData: any = {};
+        
+        if (input.nome !== undefined) updateData.name = input.nome;
+        if (input.whatsapp !== undefined) updateData.whatsapp = input.whatsapp;
+        if (input.chavePix !== undefined) updateData.chavePix = input.chavePix;
+
+        await db
+          .update(users)
+          .set(updateData)
+          .where(eq(users.id, ctx.user.id));
+
         return { success: true };
       }),
   }),

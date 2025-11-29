@@ -1,0 +1,34 @@
+{
+  "query": "SELECT id, email, name, role, LENGTH(passwordHash) as hash_len, passwordHash IS NULL as is_null FROM users WHERE email = 'financeiro@suasaudevital.com.br';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT id, email, name, role, LENGTH(passwordHash) as hash_len, passwordHash IS NULL as is_null FROM users WHERE email = 'financeiro@suasaudevital.com.br';",
+  "rows": [
+    {
+      "id": "750008",
+      "email": "financeiro@suasaudevital.com.br",
+      "name": "Pedro",
+      "role": "vendedor",
+      "hash_len": "NULL",
+      "is_null": "1"
+    },
+    {
+      "id": "750018",
+      "email": "financeiro@suasaudevital.com.br",
+      "name": "financeiro",
+      "role": "admin",
+      "hash_len": "10",
+      "is_null": "0"
+    },
+    {
+      "id": "2520001",
+      "email": "financeiro@suasaudevital.com.br",
+      "name": "Financeiro Sua Saúde Vital",
+      "role": "admin",
+      "hash_len": "60",
+      "is_null": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\trole\thash_len\tis_null\n750008\tfinanceiro@suasaudevital.com.br\tPedro\tvendedor\tNULL\t1\n750018\tfinanceiro@suasaudevital.com.br\tfinanceiro\tadmin\t10\t0\n2520001\tfinanceiro@suasaudevital.com.br\tFinanceiro Sua Saúde Vital\tadmin\t60\t0\n",
+  "stderr": "",
+  "execution_time_ms": 2400
+}

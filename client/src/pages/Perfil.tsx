@@ -14,6 +14,9 @@ import { Link } from "wouter";
 export default function Perfil() {
   const { user, loading, logout } = useAuth();
   const [chavePix, setChavePix] = useState(user?.chavePix || "");
+  const [senhaAtual, setSenhaAtual] = useState("");
+  const [novaSenha, setNovaSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
   const utils = trpc.useUtils();
 
   const updatePixMutation = trpc.auth.updateChavePix.useMutation({
@@ -26,12 +29,43 @@ export default function Perfil() {
     },
   });
 
+  const alterarSenhaMutation = trpc.auth.alterarSenha.useMutation({
+    onSuccess: () => {
+      toast.success("Senha alterada com sucesso!");
+      setSenhaAtual("");
+      setNovaSenha("");
+      setConfirmarSenha("");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erro ao alterar senha");
+    },
+  });
+
   const handleSave = () => {
     if (!chavePix.trim()) {
       toast.error("Por favor, insira uma chave PIX válida");
       return;
     }
     updatePixMutation.mutate({ chavePix });
+  };
+
+  const handleAlterarSenha = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (novaSenha !== confirmarSenha) {
+      toast.error("As senhas não coincidem");
+      return;
+    }
+    
+    if (novaSenha.length < 6) {
+      toast.error("A nova senha deve ter no mínimo 6 caracteres");
+      return;
+    }
+    
+    alterarSenhaMutation.mutate({
+      senhaAtual,
+      novaSenha,
+    });
   };
 
   if (loading) {
@@ -145,6 +179,70 @@ export default function Perfil() {
                   </>
                 )}
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Alterar Senha */}
+          <Card className="bg-card/80 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle>Segurança</CardTitle>
+              <CardDescription>
+                Altere sua senha para manter sua conta segura
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleAlterarSenha} className="space-y-4">
+                <div>
+                  <Label htmlFor="senhaAtual">Senha Atual *</Label>
+                  <Input
+                    id="senhaAtual"
+                    type="password"
+                    value={senhaAtual}
+                    onChange={(e) => setSenhaAtual(e.target.value)}
+                    placeholder="Digite sua senha atual"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="novaSenha">Nova Senha *</Label>
+                  <Input
+                    id="novaSenha"
+                    type="password"
+                    value={novaSenha}
+                    onChange={(e) => setNovaSenha(e.target.value)}
+                    placeholder="Digite sua nova senha (mínimo 6 caracteres)"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="confirmarSenha">Confirmar Nova Senha *</Label>
+                  <Input
+                    id="confirmarSenha"
+                    type="password"
+                    value={confirmarSenha}
+                    onChange={(e) => setConfirmarSenha(e.target.value)}
+                    placeholder="Digite novamente a nova senha"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={alterarSenhaMutation.isPending}
+                >
+                  {alterarSenhaMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Alterando...
+                    </>
+                  ) : (
+                    "Alterar Senha"
+                  )}
+                </Button>
+              </form>
             </CardContent>
           </Card>
         </div>

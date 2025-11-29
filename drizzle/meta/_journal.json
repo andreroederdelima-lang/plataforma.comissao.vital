@@ -120,6 +120,20 @@
       "when": 1764057347815,
       "tag": "0016_nervous_whistler",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1764377033787,
+      "tag": "0017_rainy_franklin_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1764414219056,
+      "tag": "0018_narrow_yellowjacket",
+      "breakpoints": true
     }
   ]
 }
