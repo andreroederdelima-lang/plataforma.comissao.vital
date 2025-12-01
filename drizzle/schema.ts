@@ -16,7 +16,7 @@ export const users = mysqlTable("users", {
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin", "vendedor", "comercial"]).default("user").notNull(),
+  role: mysqlEnum("role", ["promotor", "comercial", "admin"]).default("promotor").notNull(),
   /** Permissão para deletar indicações (true para admin completo, false para admin comercial) */
   canDelete: int("canDelete").default(1).notNull(),
   /** Status do usuário (1 = ativo, 0 = desativado) */
@@ -209,3 +209,61 @@ export const configuracaoComissoes = mysqlTable("configuracao_comissoes", {
 
 export type ConfiguracaoComissao = typeof configuracaoComissoes.$inferSelect;
 export type InsertConfiguracaoComissao = typeof configuracaoComissoes.$inferInsert;
+
+/**
+ * Tabela de materiais de divulgação gerais
+ * Armazena conteúdos editáveis por admin/comercial
+ */
+export const materiaisDivulgacao = mysqlTable("materiais_divulgacao", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Central de Argumentos - textos de vendas e argumentos */
+  centralArgumentos: text("centralArgumentos"),
+  /** Promoção Vigente - informações sobre promoções atuais */
+  promocaoVigente: text("promocaoVigente"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MateriaisDivulgacao = typeof materiaisDivulgacao.$inferSelect;
+export type InsertMateriaisDivulgacao = typeof materiaisDivulgacao.$inferInsert;
+
+/**
+ * Tabela de materiais diversos (PDFs, links, imagens)
+ * Gerenciados por admin/comercial
+ */
+export const materiaisDiversos = mysqlTable("materiais_diversos", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Título do material */
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  /** Descrição do material */
+  descricao: text("descricao"),
+  /** Tipo: "link", "pdf", "imagem", "video", "texto" */
+  tipo: varchar("tipo", { length: 50 }).notNull(),
+  /** Conteúdo (URL ou texto) */
+  conteudo: text("conteudo").notNull(),
+  /** Ordem de exibição */
+  ordem: int("ordem").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MaterialDiverso = typeof materiaisDiversos.$inferSelect;
+export type InsertMaterialDiverso = typeof materiaisDiversos.$inferInsert;
+
+/**
+ * Tabela de materiais personalizados dos promotores
+ * Cada promotor pode criar seus próprios materiais
+ */
+export const materiaisPromotores = mysqlTable("materiais_promotores", {
+  id: int("id").autoincrement().primaryKey(),
+  /** ID do promotor dono do material */
+  promotorId: int("promotorId").notNull(),
+  /** Título do material */
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  /** Conteúdo do material (texto, script, argumento) */
+  conteudo: text("conteudo").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MaterialPromotor = typeof materiaisPromotores.$inferSelect;
+export type InsertMaterialPromotor = typeof materiaisPromotores.$inferInsert;

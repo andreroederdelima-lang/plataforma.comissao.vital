@@ -1,6 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes } from "../drizzle/schema";
+import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes, materiaisDivulgacao, materiaisDiversos, materiaisPromotores } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -640,4 +640,176 @@ export async function classificarLead(
     .update(indicacoes)
     .set(updateData)
     .where(eq(indicacoes.id, indicacaoId));
+}
+
+
+// ==================== MATERIAIS DE DIVULGAÇÃO ====================
+
+export async function getMateriais() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.select().from(materiaisDivulgacao).limit(1);
+  return result[0] || { id: 0, centralArgumentos: "", promocaoVigente: "", updatedAt: new Date() };
+}
+
+export async function updateCentralArgumentos(conteudo: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Verificar se existe registro
+  const existing = await db.select().from(materiaisDivulgacao).limit(1);
+  
+  if (existing.length === 0) {
+    await db.insert(materiaisDivulgacao).values({
+      centralArgumentos: conteudo,
+      promocaoVigente: "",
+    });
+  } else {
+    await db
+      .update(materiaisDivulgacao)
+      .set({ centralArgumentos: conteudo })
+      .where(eq(materiaisDivulgacao.id, existing[0].id));
+  }
+}
+
+export async function updatePromocaoVigente(conteudo: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Verificar se existe registro
+  const existing = await db.select().from(materiaisDivulgacao).limit(1);
+  
+  if (existing.length === 0) {
+    await db.insert(materiaisDivulgacao).values({
+      centralArgumentos: "",
+      promocaoVigente: conteudo,
+    });
+  } else {
+    await db
+      .update(materiaisDivulgacao)
+      .set({ promocaoVigente: conteudo })
+      .where(eq(materiaisDivulgacao.id, existing[0].id));
+  }
+}
+
+export async function listMateriaisDiversos() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db
+    .select()
+    .from(materiaisDiversos)
+    .orderBy(materiaisDiversos.ordem, materiaisDiversos.createdAt);
+}
+
+export async function createMaterialDiverso(data: {
+  titulo: string;
+  descricao?: string;
+  tipo: string;
+  conteudo: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.insert(materiaisDiversos).values(data);
+}
+
+export async function updateMaterialDiverso(data: {
+  id: number;
+  titulo: string;
+  descricao?: string;
+  tipo: string;
+  conteudo: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .update(materiaisDiversos)
+    .set({
+      titulo: data.titulo,
+      descricao: data.descricao,
+      tipo: data.tipo,
+      conteudo: data.conteudo,
+    })
+    .where(eq(materiaisDiversos.id, data.id));
+}
+
+export async function deleteMaterialDiverso(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.delete(materiaisDiversos).where(eq(materiaisDiversos.id, id));
+}
+
+export async function listMeusMateriaisPromotores(promotorId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db
+    .select()
+    .from(materiaisPromotores)
+    .where(eq(materiaisPromotores.promotorId, promotorId))
+    .orderBy(materiaisPromotores.createdAt);
+}
+
+export async function createMaterialPromotor(data: {
+  promotorId: number;
+  titulo: string;
+  conteudo: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.insert(materiaisPromotores).values(data);
+}
+
+export async function updateMaterialPromotor(
+  data: {
+    id: number;
+    titulo: string;
+    conteudo: string;
+  },
+  promotorId: number
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Verificar se o material pertence ao promotor
+  const material = await db
+    .select()
+    .from(materiaisPromotores)
+    .where(eq(materiaisPromotores.id, data.id))
+    .limit(1);
+
+  if (material.length === 0 || material[0].promotorId !== promotorId) {
+    throw new Error("Material não encontrado ou sem permissão");
+  }
+
+  await db
+    .update(materiaisPromotores)
+    .set({
+      titulo: data.titulo,
+      conteudo: data.conteudo,
+    })
+    .where(eq(materiaisPromotores.id, data.id));
+}
+
+export async function deleteMaterialPromotor(id: number, promotorId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Verificar se o material pertence ao promotor
+  const material = await db
+    .select()
+    .from(materiaisPromotores)
+    .where(eq(materiaisPromotores.id, id))
+    .limit(1);
+
+  if (material.length === 0 || material[0].promotorId !== promotorId) {
+    throw new Error("Material não encontrado ou sem permissão");
+  }
+
+  await db.delete(materiaisPromotores).where(eq(materiaisPromotores.id, id));
 }

@@ -525,3 +525,32 @@
 - [ ] Testar fluxo completo de recuperação de senha
 - [ ] Testar login do administrativo
 - [ ] Salvar checkpoint final
+
+## Reestruturação de Roles e Materiais de Divulgação
+
+### Reestruturação de Roles
+- [x] Atualizar schema: alterar enum role para apenas 3 valores (promotor, comercial, admin)
+- [ ] Migrar dados: vendedor → promotor, vendedor_interno → comercial
+- [ ] Atualizar todas as verificações de permissão no backend
+- [ ] Renomear "Indicador" para "Promotor" em TODOS os arquivos do frontend
+- [ ] Renomear "Vendedor" para "Promotor" onde aplicável
+- [ ] Atualizar página de gestão de usuários (apenas 3 roles)
+- [ ] Atualizar permissões: Comercial pode qualificar indicações
+- [ ] Atualizar permissões: Comercial NÃO pode deletar sem autorização
+
+### Sistema de Materiais de Divulgação
+- [x] Criar tabela materiaisDivulgacao no schema
+- [x] Criar tabela materiaisPromotores no schema
+- [x] Criar procedures para Central de Argumentos (get/update)
+- [x] Criar procedures para Promoção Vigente (get/update)
+- [x] Criar procedures para Materiais Diversos (list/create/update/delete)
+- [x] Criar procedures para Meus Materiais Personalizados (list/create/update/delete)
+- [ ] Criar página MateriaisDivulgacao.tsx completa
+- [ ] Implementar seção Central de Argumentos (editável por admin/comercial)
+- [ ] Implementar seção Promoção Vigente (editável por admin/comercial)
+- [ ] Implementar seção Materiais Diversos (editável por admin/comercial)
+- [ ] Implementar seção Meus Materiais Personalizados (editável por promotor)
+- [ ] Adicionar botões "Copiar" em todos os textos
+- [ ] Adicionar explicação para promotores sobre uso da seção pessoal
+- [ ] Testar todas as funcionalidades
+- [ ] Salvar checkpoint final

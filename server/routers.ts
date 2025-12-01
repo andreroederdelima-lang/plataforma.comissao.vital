@@ -10,6 +10,7 @@ import { TRPCError } from "@trpc/server";
 import { materiaisRouter } from "./routers/materiais";
 import { authIndicadoresRouter } from "./routers/authIndicadores";
 import { comissoesRouter } from "./routers/comissoes";
+import { materiaisDivulgacaoRouter } from "./routers/materiaisDivulgacao";
 
 export const appRouter = router({
   system: systemRouter,
@@ -804,6 +805,7 @@ export const appRouter = router({
    * Router de materiais de divulgação
    */
   materiais: materiaisRouter,
+  materiaisDivulgacao: materiaisDivulgacaoRouter,
 });
 
 export type AppRouter = typeof appRouter;
