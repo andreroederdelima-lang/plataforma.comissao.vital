@@ -4,8 +4,8 @@ import { APP_LOGO } from "@/const";
 import { useLocation } from "wouter";
 
 /**
- * Página de boas-vindas para promotores e vendedores
- * Explica os papéis e direciona para login
+ * Página de boas-vindas para promotores
+ * Explica as modalidades (indicação e venda completa) e direciona para login
  */
 export default function BoasVindasIndicadores() {
   const [, setLocation] = useLocation();
@@ -31,17 +31,16 @@ export default function BoasVindasIndicadores() {
         <Card className="w-full max-w-2xl">
           <CardContent className="pt-8 pb-8 text-center space-y-6">
             <h2 className="text-3xl font-bold" style={{ color: '#2B9C9C' }}>
-              Indicar a Vital é simples, seguro e agora recompensa você.
+              Ser um Promotor Vital é simples, seguro e gera recompensas reais.
             </h2>
             
             <div className="space-y-4 text-left">
               <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                Se você já conhece a qualidade do <strong>Hospital Censit</strong>, o atendimento da <strong>equipe Vital</strong> e a tranquilidade de ter <strong>saúde acessível 24h</strong>, por que não compartilhar essa experiência com quem você gosta?
+                Se você já conhece a qualidade do <strong>Hospital Censit</strong>, o atendimento da <strong>equipe Vital</strong> e a tranquilidade de ter <strong>saúde acessível 24h</strong>, por que não compartilhar essa experiência com quem você gosta e ganhar uma comissão por sua indicação ou venda?
               </p>
 
               <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                Com o <strong style={{ color: '#2B9C9C' }}>Programa de Indicação das Assinaturas Vital</strong>, cada pessoa indicada e confirmada como assinante gera <strong>benefícios reais</strong> para você.
-                É a forma que encontramos de agradecer pela <strong>confiança</strong> e por nos ajudar a fortalecer o ecossistema de saúde do Vale do Itajaí.
+                Com o <strong style={{ color: '#2B9C9C' }}>Programa de Comissões das Assinaturas Vital</strong>, cada pessoa indicada e confirmada como assinante gera <strong>benefícios reais</strong> para você. E mais: se você optar por realizar a venda por completo, sua comissão é ainda maior! É a forma que encontramos de agradecer pela <strong>confiança</strong> e por nos ajudar a fortalecer o ecossistema de saúde do Vale do Itajaí.
               </p>
 
               <div className="bg-gradient-to-r from-[#2B9C9C]/10 to-[#D4C5A0]/10 p-6 rounded-lg space-y-3">
@@ -52,30 +51,34 @@ export default function BoasVindasIndicadores() {
                 <ul className="space-y-2 text-sm md:text-base text-gray-700">
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>Você envia a indicação pela <strong>plataforma oficial de indicações</strong> (somente indicações cadastradas por aqui são válidas)</span>
+                    <span>Você envia a indicação ou realiza a venda, por esta <strong>plataforma oficial</strong> (somente indicações ou vendas cadastradas por aqui são válidas).</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>Nossa equipe entra em contato de forma <strong>profissional e acolhedora</strong></span>
+                    <span>No caso de <strong>indicação</strong>, nossa equipe comercial entra em contato de forma <strong>profissional e acolhedora</strong> com quem você indicar!</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>Acompanhamos a pessoa indicada durante todo o processo — explicação, dúvidas, assinatura</span>
+                    <span>Acompanhamos a pessoa indicada durante todo o processo — explicação, dúvidas, assinatura.</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>Após a confirmação da compra, registramos sua <strong>bonificação</strong></span>
+                    <span>Após a confirmação da compra e término do período de cancelamento gratuito, registramos sua bonificação.</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>Você recebe sua comissão de forma <strong>organizada e transparente</strong> até o <strong>quinto dia útil do próximo mês</strong></span>
+                    <span>No caso de você fazer a <strong>venda completa</strong>, também após o término do período de cancelamento, iremos atualizar as informações na sua área do promotor, e você:</span>
+                  </li>
+                  <li className="flex items-start ml-6">
+                    <span className="mr-2">•</span>
+                    <span>Recebe sua comissão de forma <strong>organizada e transparente</strong>.</span>
                   </li>
                 </ul>
               </div>
 
               <div className="text-center py-4">
                 <p className="text-lg md:text-xl font-semibold" style={{ color: '#2B9C9C' }}>
-                  Indique. Compartilhe cuidado. Vamos juntos levar saúde de qualidade a preço acessível a cada vez mais pessoas!
+                  Venda, indique! Seja um PROMOTOR VITAL! Compartilhe cuidado. Vamos juntos levar saúde de qualidade a preço acessível a cada vez mais pessoas!
                 </p>
                 <p className="text-base md:text-lg font-semibold text-gray-800 mt-2">
                   Ganhe com isso — de forma <strong>justa, transparente e oficial</strong>.

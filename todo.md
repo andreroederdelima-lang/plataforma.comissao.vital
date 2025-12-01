@@ -620,4 +620,13 @@
 - [x] Substituir "Indicador" por "Promotor" em mensagens e textos explicativos
 - [x] Substituir "Indicador" por "Promotor" em botões e links
 - [x] Verificar mudanças no navegador
+- [x] Salvar checkpoint
+
+## Atualização da Página Inicial com Nomenclatura de Promotor
+
+- [x] Atualizar título principal de "Indicar a Vital" para "Ser um Promotor Vital"
+- [x] Atualizar texto explicativo para mencionar indicação E venda completa
+- [x] Ajustar seção "Como funciona?" para incluir ambas modalidades
+- [x] Atualizar CTA final para "Venda, indique! Seja um PROMOTOR VITAL!"
+- [x] Verificar mudanças no navegador
 - [ ] Salvar checkpoint
