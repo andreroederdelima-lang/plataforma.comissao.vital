@@ -23,6 +23,31 @@ export default function AdminConfiguracoes() {
   const [percentualFrioIndicador, setPercentualFrioIndicador] = useState("30");
   const [percentualFrioVendedor, setPercentualFrioVendedor] = useState("70");
   
+  // Estados para configurações gerais
+  const [linkCheckoutBase, setLinkCheckoutBase] = useState("");
+  const [diasCancelamento, setDiasCancelamento] = useState("7");
+  
+  const { data: configsGerais } = trpc.configuracoesGerais.get.useQuery();
+  const atualizarLinkMutation = trpc.configuracoesGerais.atualizarLinkCheckoutBase.useMutation({
+    onSuccess: () => {
+      toast.success("Link de checkout atualizado!");
+      trpc.useUtils().configuracoesGerais.get.invalidate();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erro ao atualizar link");
+    },
+  });
+  
+  const atualizarDiasMutation = trpc.configuracoesGerais.atualizarDiasCancelamento.useMutation({
+    onSuccess: () => {
+      toast.success("Período de cancelamento atualizado!");
+      trpc.useUtils().configuracoesGerais.get.invalidate();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erro ao atualizar período");
+    },
+  });
+  
   const { data: configsComissao } = trpc.comissoes.listarConfiguracoes.useQuery();
   const atualizarConfigMutation = trpc.comissoes.atualizarConfiguracao.useMutation({
     onSuccess: () => {
@@ -44,6 +69,14 @@ export default function AdminConfiguracoes() {
     },
   });
 
+  // Carregar configurações gerais
+  useEffect(() => {
+    if (configsGerais) {
+      setLinkCheckoutBase(configsGerais.linkCheckoutBase || "");
+      setDiasCancelamento(String(configsGerais.diasCancelamentoGratuito));
+    }
+  }, [configsGerais]);
+  
   // Carregar percentuais de comissão
   useEffect(() => {
     if (configsComissao) {
@@ -169,6 +202,89 @@ export default function AdminConfiguracoes() {
               Defina os valores de comissão para cada combinação de plano. Os valores serão aplicados automaticamente às novas indicações.
             </p>
           </div>
+
+          {/* Configurações Gerais */}
+          <Card className="border-2 border-primary/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-2xl">⚙️</span>
+                Configurações Gerais
+              </CardTitle>
+              <CardDescription>
+                Configure o link base de checkout e o período de cancelamento gratuito
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Link Base de Checkout */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🔗</span>
+                  <h3 className="font-semibold text-lg">Link Base de Checkout</h3>
+                </div>
+                <div className="space-y-2">
+                  <Label>URL Base (sem o código do promotor)</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="url"
+                      placeholder="https://checkout.exemplo.com/planos"
+                      value={linkCheckoutBase}
+                      onChange={(e) => setLinkCheckoutBase(e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button
+                      onClick={() => atualizarLinkMutation.mutate({ linkBase: linkCheckoutBase || null })}
+                      disabled={atualizarLinkMutation.isPending}
+                    >
+                      {atualizarLinkMutation.isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Save className="h-4 w-4" />
+                      )}
+                      <span className="ml-2">Salvar</span>
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    O código do promotor será adicionado automaticamente como parâmetro ?ref=CODIGO
+                  </p>
+                </div>
+              </div>
+
+              {/* Período de Cancelamento Gratuito */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">📅</span>
+                  <h3 className="font-semibold text-lg">Período de Cancelamento Gratuito</h3>
+                </div>
+                <div className="space-y-2">
+                  <Label>Dias de Cancelamento Gratuito</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      min="0"
+                      max="365"
+                      value={diasCancelamento}
+                      onChange={(e) => setDiasCancelamento(e.target.value)}
+                      className="w-32"
+                    />
+                    <Button
+                      onClick={() => atualizarDiasMutation.mutate({ dias: parseInt(diasCancelamento) })}
+                      disabled={atualizarDiasMutation.isPending}
+                    >
+                      {atualizarDiasMutation.isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Save className="h-4 w-4" />
+                      )}
+                      <span className="ml-2">Salvar</span>
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Após esse período, a comissão é considerada confirmada e pode ser paga
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Percentuais de Divisão de Comissão */}
           <Card className="border-2 border-primary/30">

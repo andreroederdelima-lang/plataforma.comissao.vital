@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `configuracoes_gerais` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `linkCheckoutBase` varchar(500),\n  `diasCancelamentoGratuito` int NOT NULL DEFAULT 7,\n  `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `configuracoes_gerais_id` PRIMARY KEY(`id`)\n);\n\nALTER TABLE `users` ADD COLUMN `linkCheckoutPersonalizado` varchar(100);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute CREATE TABLE IF NOT EXISTS `configuracoes_gerais` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `linkCheckoutBase` varchar(500),\n  `diasCancelamentoGratuito` int NOT NULL DEFAULT 7,\n  `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `configuracoes_gerais_id` PRIMARY KEY(`id`)\n);\n\nALTER TABLE `users` ADD COLUMN `linkCheckoutPersonalizado` varchar(100);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2146
+}

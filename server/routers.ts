@@ -11,11 +11,13 @@ import { materiaisRouter } from "./routers/materiais";
 import { authIndicadoresRouter } from "./routers/authIndicadores";
 import { comissoesRouter } from "./routers/comissoes";
 import { materiaisDivulgacaoRouter } from "./routers/materiaisDivulgacao";
+import { configuracoesGeraisRouter } from "./routers/configuracoesGerais";
 
 export const appRouter = router({
   system: systemRouter,
   authIndicadores: authIndicadoresRouter,
   comissoes: comissoesRouter,
+  configuracoesGerais: configuracoesGeraisRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     

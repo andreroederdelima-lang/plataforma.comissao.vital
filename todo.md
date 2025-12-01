@@ -629,4 +629,41 @@
 - [x] Ajustar seção "Como funciona?" para incluir ambas modalidades
 - [x] Atualizar CTA final para "Venda, indique! Seja um PROMOTOR VITAL!"
 - [x] Verificar mudanças no navegador
+- [x] Salvar checkpoint
+
+## Sistema de Links de Checkout Personalizados e Área do Promotor
+
+### Schema e Backend
+- [x] Adicionar tabela `configuracoes` com campos linkCheckoutBase e diasCancelamentoGratuito
+- [x] Adicionar campo `linkCheckoutPersonalizado` na tabela users
+- [x] Criar procedure para gerar link único para cada promotor/vendedor
+- [x] Criar procedures para gerenciar configurações (getLinkCheckoutBase, atualizarLinkCheckoutBase, getDiasCancelamento, atualizarDiasCancelamento)
+- [x] Criar procedure para obter link personalizado do promotor
+
+### Área Admin
+- [x] Adicionar seção de Configurações Gerais em AdminConfiguracoes.tsx
+- [x] Adicionar campo editável para Link Base de Checkout
+- [x] Adicionar campo editável para Dias de Cancelamento Gratuito
+- [ ] Testar edição de configurações
+
+### Área de Materiais de Divulgação
+- [x] Adicionar seção "Meu Link de Checkout Personalizado" em MateriaisDivulgacao.tsx
+- [x] Exibir link completo com código do promotor
+- [x] Adicionar botão de copiar link
+- [x] Adicionar explicação sobre uso do link
+
+### Dashboard do Promotor
+- [ ] Criar página DashboardPromotor.tsx
+- [ ] Adicionar escolha de modalidade: "Indicar" ou "Vender"
+- [ ] Exibir link de checkout personalizado
+- [ ] Criar seção de acompanhamento de comissões (indicações e vendas)
+- [ ] Mostrar estatísticas: total de indicações, vendas, comissões pendentes, comissões pagas
+- [ ] Adicionar filtros por período e status
+- [ ] Adicionar rota /painel-promotor no App.tsx
+
+### Testes e Finalização
+- [x] Testar geração de links personalizados
+- [x] Testar edição de configurações pelo Admin
+- [x] Testar cópia de link na área de Materiais
+- [ ] Testar dashboard do Promotor
 - [ ] Salvar checkpoint

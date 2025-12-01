@@ -1,6 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes, materiaisDivulgacao, materiaisDiversos, materiaisPromotores } from "../drizzle/schema";
+import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes, materiaisDivulgacao, materiaisDiversos, materiaisPromotores, configuracoesGerais } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -812,4 +812,114 @@ export async function deleteMaterialPromotor(id: number, promotorId: number) {
   }
 
   await db.delete(materiaisPromotores).where(eq(materiaisPromotores.id, id));
+}
+
+
+// ============================================================================
+// Configurações Gerais
+// ============================================================================
+
+/**
+ * Obter configurações gerais do sistema
+ * Cria registro padrão se não existir
+ */
+export async function getConfiguracoesGerais() {
+  const db = await getDb();
+  if (!db) return null;
+
+  const configs = await db.select().from(configuracoesGerais).limit(1);
+  
+  if (configs.length === 0) {
+    // Criar configuração padrão
+    await db.insert(configuracoesGerais).values({
+      linkCheckoutBase: null,
+      diasCancelamentoGratuito: 7,
+    });
+    return {
+      id: 1,
+      linkCheckoutBase: null,
+      diasCancelamentoGratuito: 7,
+      updatedAt: new Date(),
+    };
+  }
+  
+  return configs[0];
+}
+
+/**
+ * Atualizar link base de checkout
+ */
+export async function atualizarLinkCheckoutBase(linkBase: string | null) {
+  const db = await getDb();
+  if (!db) return false;
+
+  const config = await getConfiguracoesGerais();
+  if (!config) return false;
+
+  await db.update(configuracoesGerais)
+    .set({ linkCheckoutBase: linkBase })
+    .where(eq(configuracoesGerais.id, config.id));
+  
+  return true;
+}
+
+/**
+ * Atualizar dias de cancelamento gratuito
+ */
+export async function atualizarDiasCancelamento(dias: number) {
+  const db = await getDb();
+  if (!db) return false;
+
+  const config = await getConfiguracoesGerais();
+  if (!config) return false;
+
+  await db.update(configuracoesGerais)
+    .set({ diasCancelamentoGratuito: dias })
+    .where(eq(configuracoesGerais.id, config.id));
+  
+  return true;
+}
+
+/**
+ * Gerar link de checkout personalizado para um usuário
+ * Formato: código único de 8 caracteres alfanuméricos
+ */
+export async function gerarLinkCheckoutPersonalizado(userId: number): Promise<string> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Gerar código único
+  const codigo = Math.random().toString(36).substring(2, 10).toUpperCase();
+  
+  // Atualizar usuário com o código
+  await db.update(users)
+    .set({ linkCheckoutPersonalizado: codigo })
+    .where(eq(users.id, userId));
+  
+  return codigo;
+}
+
+/**
+ * Obter link completo de checkout de um usuário
+ */
+export async function getLinkCheckoutCompleto(userId: number): Promise<string | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  if (user.length === 0) return null;
+
+  const config = await getConfiguracoesGerais();
+  if (!config || !config.linkCheckoutBase) return null;
+
+  // Se usuário não tem código, gerar um
+  let codigo = user[0].linkCheckoutPersonalizado;
+  if (!codigo) {
+    codigo = await gerarLinkCheckoutPersonalizado(userId);
+  }
+
+  // Montar link completo
+  const linkBase = config.linkCheckoutBase;
+  const separador = linkBase.includes('?') ? '&' : '?';
+  return `${linkBase}${separador}ref=${codigo}`;
 }

@@ -23,6 +23,8 @@ export const users = mysqlTable("users", {
   isActive: int("isActive").default(1).notNull(),
   /** Chave PIX do parceiro para recebimento de comissões */
   chavePix: varchar("chavePix", { length: 255 }),
+  /** Link de checkout personalizado do promotor/vendedor (código único) */
+  linkCheckoutPersonalizado: varchar("linkCheckoutPersonalizado", { length: 100 }),
   /** Hash da senha para indicadores (bcrypt) - null para usuários OAuth */
   passwordHash: varchar("passwordHash", { length: 255 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -267,3 +269,19 @@ export const materiaisPromotores = mysqlTable("materiais_promotores", {
 
 export type MaterialPromotor = typeof materiaisPromotores.$inferSelect;
 export type InsertMaterialPromotor = typeof materiaisPromotores.$inferInsert;
+
+/**
+ * Tabela de configurações gerais do sistema
+ * Armazena configurações globais editáveis pelo admin
+ */
+export const configuracoesGerais = mysqlTable("configuracoes_gerais", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Link base de checkout (sem o código do promotor) */
+  linkCheckoutBase: varchar("linkCheckoutBase", { length: 500 }),
+  /** Dias de período de cancelamento gratuito */
+  diasCancelamentoGratuito: int("diasCancelamentoGratuito").default(7).notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ConfiguracaoGeral = typeof configuracoesGerais.$inferSelect;
+export type InsertConfiguracaoGeral = typeof configuracoesGerais.$inferInsert;
