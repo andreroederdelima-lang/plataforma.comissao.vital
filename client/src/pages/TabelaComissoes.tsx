@@ -173,8 +173,8 @@ export default function TabelaComissoes() {
             <CardContent className="pt-6">
               <p className="text-sm text-gray-700">
                 <strong>⚠️ Observação importante:</strong> Em casos de lead frio ou com múltiplas objeções, 
-                as porcentagens de comissão (indicador x vendedor) são invertidas. O vendedor recebe {configFrio?.percentualVendedor}% 
-                e o indicador {configFrio?.percentualIndicador}% devido ao trabalho adicional necessário para fechar a venda.
+                as porcentagens de comissão (promotor x comercial) são invertidas. O comercial recebe {configFrio?.percentualVendedor}% 
+                e o promotor {configFrio?.percentualIndicador}% devido ao trabalho adicional necessário para fechar a venda.
               </p>
             </CardContent>
           </Card>

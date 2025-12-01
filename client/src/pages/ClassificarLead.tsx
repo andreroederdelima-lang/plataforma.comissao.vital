@@ -186,7 +186,7 @@ export default function ClassificarLead() {
 
             {indicacao.observacoes && (
               <div>
-                <Label>Observações do Indicador</Label>
+                <Label>Observações do Promotor</Label>
                 <p className="text-sm text-muted-foreground">{indicacao.observacoes}</p>
               </div>
             )}
@@ -211,7 +211,7 @@ export default function ClassificarLead() {
                       Cliente interessado, com orçamento, pronto para comprar. Processo de venda simples.
                     </p>
                     <p className="text-xs text-orange-600 font-medium mt-2">
-                      Comissão: Indicador 70% / Vendedor 30%
+                      Comissão: Promotor 70% / Comercial 30%
                     </p>
                   </div>
                 </div>
@@ -227,7 +227,7 @@ export default function ClassificarLead() {
                       Cliente com objeções, sem conhecimento prévio, processo de venda complexo.
                     </p>
                     <p className="text-xs text-blue-600 font-medium mt-2">
-                      Comissão: Indicador 30% / Vendedor 70%
+                      Comissão: Promotor 30% / Comercial 70%
                     </p>
                   </div>
                 </div>
@@ -276,7 +276,7 @@ export default function ClassificarLead() {
             {/* Aviso */}
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <p className="text-xs text-gray-700">
-                <strong>⚠️ Atenção:</strong> A classificação do lead define automaticamente como a comissão será dividida entre você e o indicador. Esta ação não pode ser desfeita.
+                <strong>⚠️ Atenção:</strong> A classificação do lead define automaticamente como a comissão será dividida entre você e o promotor. Esta ação não pode ser desfeita.
               </p>
             </div>
           </CardContent>

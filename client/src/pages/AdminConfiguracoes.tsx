@@ -178,7 +178,7 @@ export default function AdminConfiguracoes() {
                 Percentuais de Divisão de Comissão
               </CardTitle>
               <CardDescription>
-                Configure como a comissão é dividida entre indicador e vendedor para leads quentes e frios
+                Configure como a comissão é dividida entre promotor e comercial para leads quentes e frios
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -190,7 +190,7 @@ export default function AdminConfiguracoes() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Indicador (%)</Label>
+                    <Label>Promotor (%)</Label>
                     <Input
                       type="number"
                       min="0"
@@ -242,7 +242,7 @@ export default function AdminConfiguracoes() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Indicador (%)</Label>
+                    <Label>Promotor (%)</Label>
                     <Input
                       type="number"
                       min="0"

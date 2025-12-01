@@ -374,7 +374,7 @@
 - [ ] Testar upload de materiais
 - [ ] Testar listagem pública
 - [ ] Testar CRUD completo
-- [ ] Salvar checkpoint
+- [x] Salvar checkpoint
 
 ## Sistema de Upload de Materiais (Admin)
 
@@ -490,14 +490,14 @@
 - [ ] Atualizar frontend para usar login unificado
 - [ ] Remover referências ao OAuth do código
 - [ ] Testar login de todos os perfis (promotor, vendedor, comercial, admin)
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
 
 ## Correção de Sistema de Sessão
 
 - [ ] Adaptar sistema de sessão para funcionar sem OAuth
 - [ ] Testar login admin com e-mail/senha
 - [ ] Adicionar botão "Painel Administrativo" na página inicial
-- [ ] Salvar checkpoint
+- [x] Salvar checkpoint
 
 ## Sistema de Sessão Completo e Área de Perfil do Usuário
 
@@ -513,7 +513,7 @@
 - [ ] Testar login promotor com sessão persistente
 - [ ] Testar alteração de senha
 - [ ] Testar edição de perfil
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
 
 ## Correções Urgentes de Autenticação
 
@@ -524,7 +524,7 @@
 - [ ] Adicionar botão "Área Administrativa" destacado na página inicial
 - [ ] Testar fluxo completo de recuperação de senha
 - [ ] Testar login do administrativo
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
 
 ## Reestruturação de Roles e Materiais de Divulgação
 
@@ -553,7 +553,7 @@
 - [ ] Adicionar botões "Copiar" em todos os textos
 - [ ] Adicionar explicação para promotores sobre uso da seção pessoal
 - [ ] Testar todas as funcionalidades
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
 
 ## Reestruturação do Sistema de Roles (3 Tipos de Usuário)
 
@@ -610,4 +610,14 @@
 - [x] Testar permissões (Admin/Comercial pode editar, Promotor só visualiza)
 - [x] Testar botões de copiar
 - [x] Testar adição e exclusão de materiais
+- [x] Salvar checkpoint
+
+## Renomeação de "Indicador" para "Promotor" na Interface
+
+- [x] Identificar todos os arquivos do frontend que contêm "Indicador"
+- [x] Substituir "Indicador" por "Promotor" em títulos de páginas
+- [x] Substituir "Indicador" por "Promotor" em labels de formulários
+- [x] Substituir "Indicador" por "Promotor" em mensagens e textos explicativos
+- [x] Substituir "Indicador" por "Promotor" em botões e links
+- [x] Verificar mudanças no navegador
 - [ ] Salvar checkpoint

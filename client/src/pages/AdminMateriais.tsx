@@ -140,7 +140,7 @@ export default function AdminMateriais() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Gerenciar Materiais</h1>
           <p className="text-muted-foreground mt-1">
-            Faça upload de banners, flyers, logos e PDFs para os indicadores
+            Faça upload de banners, flyers, logos e PDFs para os promotores
           </p>
         </div>
 

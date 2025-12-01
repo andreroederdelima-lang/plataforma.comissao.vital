@@ -82,7 +82,7 @@ export default function CadastroIndicador() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Cadastro de Indicador</CardTitle>
+            <CardTitle>Cadastro de Promotor</CardTitle>
             <CardDescription>Preencha seus dados para começar a indicar</CardDescription>
           </CardHeader>
           <CardContent>
