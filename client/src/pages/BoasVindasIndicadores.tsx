@@ -100,13 +100,23 @@ export default function BoasVindasIndicadores() {
               </div>
             </div>
 
-            {/* Botão de Login */}
-            <Button
-              onClick={() => setLocation("/login-indicador")}
-              className="bg-[#1e9d9f] hover:bg-[#178a8c] text-white px-8 py-6 text-lg"
-            >
-              Fazer Login
-            </Button>
+            {/* Botões de Acesso */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                onClick={() => setLocation("/login-indicador")}
+                className="bg-[#1e9d9f] hover:bg-[#178a8c] text-white px-8 py-6 text-lg"
+              >
+                Fazer Login
+              </Button>
+              
+              <Button
+                onClick={() => setLocation("/admin")}
+                variant="outline"
+                className="border-2 border-[#1e9d9f] text-[#1e9d9f] hover:bg-[#1e9d9f] hover:text-white px-8 py-6 text-lg"
+              >
+                📊 Área Administrativa
+              </Button>
+            </div>
 
             {/* Link para Cadastro */}
             <div className="pt-4">

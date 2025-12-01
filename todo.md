@@ -514,3 +514,14 @@
 - [ ] Testar alteração de senha
 - [ ] Testar edição de perfil
 - [ ] Salvar checkpoint final
+
+## Correções Urgentes de Autenticação
+
+- [ ] Criar página de redefinição de senha (RedefinirSenha.tsx) para link do e-mail
+- [ ] Configurar rota /redefinir-senha/:token no App.tsx
+- [ ] Implementar procedure tRPC para validar token e alterar senha
+- [ ] Investigar erro de login do administrativo@suasaudevital.com.br
+- [ ] Adicionar botão "Área Administrativa" destacado na página inicial
+- [ ] Testar fluxo completo de recuperação de senha
+- [ ] Testar login do administrativo
+- [ ] Salvar checkpoint final

@@ -1,0 +1,19 @@
+{
+  "query": "SELECT id, email, name, role, passwordHash IS NOT NULL as temSenha, openId, createdAt FROM users WHERE email = 'administrativo@suasaudevital.com.br';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT id, email, name, role, passwordHash IS NOT NULL as temSenha, openId, createdAt FROM users WHERE email = 'administrativo@suasaudevital.com.br';",
+  "rows": [
+    {
+      "id": "2580001",
+      "email": "administrativo@suasaudevital.com.br",
+      "name": "Administrativo Sua Saúde Vital",
+      "role": "user",
+      "temSenha": "0",
+      "openId": "B9yfGvNFUrDEqiS63T6Dd2",
+      "createdAt": "2025-12-01 11:57:14"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\trole\ttemSenha\topenId\tcreatedAt\n2580001\tadministrativo@suasaudevital.com.br\tAdministrativo Sua Saúde Vital\tuser\t0\tB9yfGvNFUrDEqiS63T6Dd2\t2025-12-01 11:57:14\n",
+  "stderr": "",
+  "execution_time_ms": 2786
+}
