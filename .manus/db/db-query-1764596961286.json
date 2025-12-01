@@ -1,0 +1,22 @@
+{
+  "query": "SHOW TABLES LIKE 'materiais%'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SHOW TABLES LIKE 'materiais%'",
+  "rows": [
+    {
+      "Tables_in_GWvTVfETvjk8Ur5xNZ6mEk (materiais%)": "materiais"
+    },
+    {
+      "Tables_in_GWvTVfETvjk8Ur5xNZ6mEk (materiais%)": "materiais_diversos"
+    },
+    {
+      "Tables_in_GWvTVfETvjk8Ur5xNZ6mEk (materiais%)": "materiais_divulgacao"
+    },
+    {
+      "Tables_in_GWvTVfETvjk8Ur5xNZ6mEk (materiais%)": "materiais_promotores"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_GWvTVfETvjk8Ur5xNZ6mEk (materiais%)\nmateriais\nmateriais_diversos\nmateriais_divulgacao\nmateriais_promotores\n",
+  "stderr": "",
+  "execution_time_ms": 1881
+}

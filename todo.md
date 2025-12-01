@@ -592,3 +592,22 @@
 - [ ] Implementar sistema de permissões para Comercial (não pode deletar sem autorização)
 - [ ] Renomear "Indicador" para "Promotor" em todo o frontend (textos de UI)
 - [ ] Testar fluxo completo com os 3 tipos de usuário
+
+## Página de Materiais de Divulgação
+
+- [x] Criar página MateriaisDivulgacao.tsx
+- [x] Implementar seção Central de Argumentos (editável por Admin/Comercial, read-only para Promotor)
+- [x] Implementar seção Promoção Vigente (editável por Admin/Comercial)
+- [x] Implementar seção Materiais Diversos (lista gerenciada por Admin/Comercial)
+- [x] Implementar seção Meus Materiais Personalizados (cada Promotor adiciona seus próprios)
+- [x] Adicionar botões de copiar texto em todas as seções
+- [x] Implementar modal de edição para Central de Argumentos
+- [x] Implementar modal de edição para Promoção Vigente
+- [x] Implementar modal de adição de Materiais Diversos
+- [x] Implementar modal de adição de Materiais Personalizados
+- [x] Adicionar rota /materiais-divulgacao no App.tsx
+- [x] Adicionar link no menu de navegação (AdminLayout ou PainelVendedorLayout)
+- [x] Testar permissões (Admin/Comercial pode editar, Promotor só visualiza)
+- [x] Testar botões de copiar
+- [x] Testar adição e exclusão de materiais
+- [ ] Salvar checkpoint
