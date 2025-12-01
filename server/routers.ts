@@ -20,7 +20,7 @@ export const appRouter = router({
     me: publicProcedure.query(opts => opts.ctx.user),
     
     /**
-     * Login unificado para todos os usuários (promotores, vendedores, admins)
+     * Login unificado para todos os usuários (promotores, comerciais, admins)
      */
     login: publicProcedure
       .input(z.object({
@@ -308,10 +308,10 @@ export const appRouter = router({
         status: z.enum(["aguardando_contato", "em_negociacao", "venda_com_objecoes", "venda_fechada", "nao_comprou", "cliente_sem_interesse"]),
       }))
       .mutation(async ({ ctx, input }) => {
-        if (ctx.user.role !== "admin" && ctx.user.role !== "vendedor") {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "comercial") {
           throw new TRPCError({
             code: "FORBIDDEN",
-            message: "Apenas administradores e vendedores podem atualizar o status",
+            message: "Apenas administradores e comerciais podem atualizar o status",
           });
         }
 
@@ -342,7 +342,7 @@ export const appRouter = router({
           
           // Verificar se é venda fechada
           if (input.status === "venda_fechada") {
-            // Notificar vendedor sobre venda fechada com valor de comissão
+            // Notificar promotor sobre venda fechada com valor de comissão
             await notifyVendaFechada({
               nomeIndicado: indicacao.indicacao.nomeIndicado,
               nomeParceiro: indicacao.parceiro?.name || "Parceiro",
@@ -440,7 +440,7 @@ export const appRouter = router({
         nome: user.name,
         email: user.email,
         chavePix: user.chavePix,
-        tipo: user.role === "vendedor" || user.role === "comercial" ? "vendedor" : "promotor",
+        tipo: user.role === "comercial" ? "comercial" : "promotor",
         codigoIndicacao: `IND${user.id.toString().padStart(6, "0")}`,
         estatisticas: {
           totalIndicacoes,
@@ -453,15 +453,15 @@ export const appRouter = router({
     }),
 
     /**
-     * Buscar indicação por ID (vendedor ou admin)
+     * Buscar indicação por ID (comercial ou admin)
      */
     getById: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ ctx, input }) => {
-        if (ctx.user.role !== "admin" && ctx.user.role !== "vendedor") {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "comercial") {
           throw new TRPCError({
             code: "FORBIDDEN",
-            message: "Apenas administradores e vendedores podem visualizar indicações",
+            message: "Apenas administradores e comerciais podem visualizar indicações",
           });
         }
 
@@ -479,7 +479,7 @@ export const appRouter = router({
       }),
 
     /**
-     * Classificar lead como quente ou frio (vendedor ou admin)
+     * Classificar lead como quente ou frio (comercial ou admin)
      */
     classificarLead: protectedProcedure
       .input(z.object({
@@ -488,10 +488,10 @@ export const appRouter = router({
         observacoes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        if (ctx.user.role !== "admin" && ctx.user.role !== "vendedor") {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "comercial") {
           throw new TRPCError({
             code: "FORBIDDEN",
-            message: "Apenas administradores e vendedores podem classificar leads",
+            message: "Apenas administradores e comerciais podem classificar leads",
           });
         }
 
@@ -618,7 +618,7 @@ export const appRouter = router({
     }),
 
     /**
-     * Criar novo vendedor
+     * Criar novo usuário
      */
     create: protectedProcedure
       .input(z.object({
@@ -746,7 +746,7 @@ export const appRouter = router({
     updateRole: protectedProcedure
       .input(z.object({
         userId: z.number(),
-        role: z.enum(["user", "admin", "vendedor", "comercial"]),
+        role: z.enum(["promotor", "admin", "comercial"]),
       }))
       .mutation(async ({ ctx, input }) => {
         if (ctx.user.role !== "admin") {

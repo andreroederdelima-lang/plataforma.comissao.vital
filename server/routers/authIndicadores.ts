@@ -64,7 +64,7 @@ export const authIndicadoresRouter = router({
           passwordHash,
           chavePix: input.chavePix,
           loginMethod: "email_password",
-          role: "vendedor", // Indicadores são vendedores por padrão
+          role: "promotor", // Indicadores são promotores por padrão
           isActive: 1,
         });
 

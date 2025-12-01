@@ -26,7 +26,7 @@ export default function LoginIndicador() {
       toast.success(`Bem-vindo, ${data.user.nome}!`);
       // Recarregar página para atualizar contexto de autenticação
       // Redirecionar baseado no role
-      if (data.user.role === 'admin' || data.user.role === 'comercial' || data.user.role === 'vendedor') {
+      if (data.user.role === 'admin' || data.user.role === 'comercial' || data.user.role === 'promotor') {
         window.location.href = "/admin";
       } else {
         window.location.href = "/materiais-divulgacao";

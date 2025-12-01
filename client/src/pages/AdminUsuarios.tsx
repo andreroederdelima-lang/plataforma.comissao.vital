@@ -157,7 +157,7 @@ export default function AdminUsuarios() {
   const stats = {
     total: usuarios?.length || 0,
     admins: usuarios?.filter(u => u.role === "admin").length || 0,
-    vendedores: usuarios?.filter(u => u.role === "vendedor").length || 0,
+    vendedores: usuarios?.filter(u => u.role === "promotor" || u.role === "comercial").length || 0,
     ativos: usuarios?.filter(u => u.isActive === 1).length || 0,
   };
 

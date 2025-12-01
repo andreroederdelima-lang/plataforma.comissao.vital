@@ -64,14 +64,14 @@ export default function ClassificarLead() {
     );
   }
 
-  if (!user || (user.role !== "vendedor" && user.role !== "admin")) {
+  if (!user || (user.role !== "comercial" && user.role !== "admin")) {
     return (
       <AdminLayout>
         <div className="flex items-center justify-center h-full">
           <Card className="max-w-md">
             <CardContent className="pt-6">
               <p className="text-center text-muted-foreground">
-                Acesso restrito a vendedores e administradores
+                Acesso restrito a comerciais e administradores
               </p>
             </CardContent>
           </Card>

@@ -554,3 +554,41 @@
 - [ ] Adicionar explicação para promotores sobre uso da seção pessoal
 - [ ] Testar todas as funcionalidades
 - [ ] Salvar checkpoint final
+
+## Reestruturação do Sistema de Roles (3 Tipos de Usuário)
+
+- [x] Atualizar schema do banco de dados: enum role de 4 valores para 3 valores (promotor, comercial, admin)
+- [x] Remover roles antigos: "user" e "vendedor"
+- [x] Adicionar novo role: "promotor" (substitui "vendedor" e "indicador")
+- [x] Criar tabelas de materiais de divulgação:
+  - materiaisDivulgacao (Central de Argumentos, Promoção Vigente)
+  - materiaisDiversos (materiais gerais gerenciados por Admin/Comercial)
+  - materiaisPromotores (materiais personalizados de cada promotor)
+- [x] Criar router tRPC materiaisDivulgacaoRouter com procedures CRUD
+- [x] Implementar procedures para Central de Argumentos
+- [x] Implementar procedures para Promoção Vigente
+- [x] Implementar procedures para Materiais Diversos
+- [x] Implementar procedures para Materiais Personalizados dos Promotores
+- [x] Atualizar enum do banco de dados via SQL: ALTER TABLE users MODIFY COLUMN role
+- [x] Corrigir todas as referências a "vendedor" no código do servidor:
+  - server/routers.ts (comentários e verificações de role)
+  - server/db.ts (comentários e nomes de função)
+  - server/routers/authIndicadores.ts (role padrão no cadastro)
+  - server/_core/email.ts (comentários)
+  - server/email.ts (templates de e-mail)
+- [x] Corrigir todas as referências a "vendedor" no código do frontend:
+  - client/src/pages/Home.tsx (verificação de role)
+  - client/src/pages/Admin.tsx (verificação de role)
+  - client/src/pages/Vendedor.tsx (verificação de role)
+  - client/src/pages/AdminUsuarios.tsx (filtro de estatísticas)
+  - client/src/pages/ClassificarLead.tsx (verificação de role e mensagem)
+  - client/src/pages/LoginIndicador.tsx (redirecionamento por role)
+- [x] Criar migração SQL manual para atualizar enum no banco de dados
+- [x] Adicionar migração ao journal de migrações
+- [x] Aplicar migração ao banco de dados
+- [x] Verificar que TypeScript não reporta mais erros
+- [x] Testar servidor após todas as correções
+- [ ] Criar página de Materiais de Divulgação (próximo passo)
+- [ ] Implementar sistema de permissões para Comercial (não pode deletar sem autorização)
+- [ ] Renomear "Indicador" para "Promotor" em todo o frontend (textos de UI)
+- [ ] Testar fluxo completo com os 3 tipos de usuário

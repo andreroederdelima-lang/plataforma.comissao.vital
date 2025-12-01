@@ -89,7 +89,7 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-export async function updateUserRole(userId: number, role: "user" | "admin" | "vendedor" | "comercial") {
+export async function updateUserRole(userId: number, role: "promotor" | "admin" | "comercial") {
   const db = await getDb();
   if (!db) {
     console.warn("[Database] Cannot update user role: database not available");
@@ -408,7 +408,7 @@ export async function getAllUsers() {
 }
 
 /**
- * Criar novo vendedor
+ * Criar novo usuário (promotor ou comercial)
  */
 export async function createVendedor(name: string, email: string, chavePix?: string) {
   const db = await getDb();
@@ -417,13 +417,13 @@ export async function createVendedor(name: string, email: string, chavePix?: str
   }
 
   // Gerar openId temporário baseado no email
-  const openId = `vendedor_${email.replace(/[@.]/g, "_")}_${Date.now()}`;
+  const openId = `user_${email.replace(/[@.]/g, "_")}_${Date.now()}`;
 
   await db.insert(users).values({
     openId,
     name,
     email,
-    role: "vendedor",
+    role: "promotor",
     chavePix: chavePix || null,
     loginMethod: "email",
     isActive: 1,
@@ -627,12 +627,12 @@ export async function classificarLead(
     valorComissao: valorComissaoIndicador,
   };
 
-  // Se houver observações do vendedor, adicionar às observações existentes
+  // Se houver observações do comercial, adicionar às observações existentes
   if (observacoesVendedor) {
     const obsAntigas = indicacao.observacoes || "";
     const obsNovas = obsAntigas
-      ? `${obsAntigas}\n\n[Vendedor]: ${observacoesVendedor}`
-      : `[Vendedor]: ${observacoesVendedor}`;
+      ? `${obsAntigas}\n\n[Comercial]: ${observacoesVendedor}`
+      : `[Comercial]: ${observacoesVendedor}`;
     updateData.observacoes = obsNovas;
   }
 

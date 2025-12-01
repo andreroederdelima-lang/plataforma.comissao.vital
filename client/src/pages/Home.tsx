@@ -110,7 +110,7 @@ export default function Home() {
                     </Button>
                   </Link>
                 )}
-                {(user.role === "vendedor" || user.role === "comercial") && (
+                {(user.role === "promotor" || user.role === "comercial") && (
                   <Link href="/admin">
                     <Button variant="default" size="sm">
                       Painel

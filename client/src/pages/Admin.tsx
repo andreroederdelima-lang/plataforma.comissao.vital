@@ -155,8 +155,8 @@ export default function Admin() {
     );
   }
 
-  // Verificar se é admin, vendedor ou comercial
-  if (!user || (user.role !== "admin" && user.role !== "vendedor" && user.role !== "comercial")) {
+  // Verificar se é admin, promotor ou comercial
+  if (!user || (user.role !== "admin" && user.role !== "promotor" && user.role !== "comercial")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/5">
         <Card className="max-w-md">
