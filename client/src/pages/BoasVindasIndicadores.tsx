@@ -19,7 +19,7 @@ export default function BoasVindasIndicadores() {
             <img src={APP_LOGO} alt="Vital" className="h-20" />
             <div className="text-center">
               <h1 className="text-2xl md:text-3xl font-bold text-[#1e9d9f]">
-                Sistema de Indicações
+                Plataforma de Comissionamento
               </h1>
             </div>
           </div>

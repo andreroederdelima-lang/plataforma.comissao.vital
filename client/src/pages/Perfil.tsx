@@ -250,7 +250,7 @@ export default function Perfil() {
 
       <footer className="border-t border-gray-200 bg-white/50 backdrop-blur-sm py-6 mt-12">
         <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-          © 2024 Sua Saúde Vital - Sistema de Indicações de Parceiros
+          © 2024 Sua Saúde Vital - Plataforma de Comissionamento
         </div>
       </footer>
     </div>

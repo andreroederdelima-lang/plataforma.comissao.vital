@@ -131,7 +131,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-foreground">Sua Saúde Vital</h1>
-              <p className="text-sm text-muted-foreground">Sistema de Indicações</p>
+              <p className="text-sm text-muted-foreground">Plataforma de Comissionamento</p>
             </div>
             <NotificationBadge />
           </div>

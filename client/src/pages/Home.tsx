@@ -79,7 +79,7 @@ export default function Home() {
               <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-12 md:h-16 flex-shrink-0" />
               <div className="hidden sm:block">
                 <h1 className="text-base md:text-xl font-bold text-foreground">Sua Saúde Vital</h1>
-                <p className="text-xs md:text-sm text-muted-foreground">Sistema de Indicações</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Plataforma de Comissionamento</p>
               </div>
             </div>
             
@@ -327,7 +327,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-background/80 backdrop-blur-sm border-t border-border mt-12">
         <div className="container py-6 text-center text-sm text-muted-foreground">
-          <p>© 2024 Sua Saúde Vital - Sistema de Indicações de Parceiros</p>
+          <p>© 2024 Sua Saúde Vital - Plataforma de Comissionamento</p>
         </div>
       </footer>
     </div>

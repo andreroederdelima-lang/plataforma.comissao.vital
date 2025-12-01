@@ -666,4 +666,31 @@
 - [x] Testar edição de configurações pelo Admin
 - [x] Testar cópia de link na área de Materiais
 - [ ] Testar dashboard do Promotor
+- [x] Salvar checkpoint
+
+
+## Dashboard do Promotor e Atualização de Título
+
+### Atualização de Título
+- [x] Atualizar título no header (Home.tsx) de "Sistema de Indicações" para "Plataforma de Comissionamento"
+- [x] Atualizar meta tags e título da página
+- [x] Atualizar referências em outros componentes
+
+### Página Dashboard do Promotor
+- [x] Criar página DashboardPromotor.tsx
+- [x] Adicionar seção de escolha de modalidade (Indicar ou Vender)
+- [x] Implementar cards de estatísticas (Total Acumulado, Pendentes, Pagas)
+- [x] Criar tabela de indicações/vendas com status
+- [x] Adicionar gráfico de conversão
+- [ ] Implementar seção de ranking de performance
+
+### Backend - Procedures
+- [x] Criar procedure para obter estatísticas de comissões do promotor (já existe: listarIndicacoes)
+- [x] Criar procedure para listar indicações/vendas do promotor (já existe: listarIndicacoes)
+- [ ] Criar procedure para obter dados de ranking
+
+### Integração
+- [x] Adicionar rota /painel-promotor no App.tsx
+- [x] Adicionar link no menu PainelVendedorLayout
+- [x] Testar todas as funcionalidades
 - [ ] Salvar checkpoint

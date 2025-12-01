@@ -4,7 +4,7 @@ import { APP_LOGO } from "@/const";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { FileText, BarChart3, DollarSign, LogOut, User, Image, Plus, Bell } from "lucide-react";
+import { FileText, BarChart3, DollarSign, LogOut, User, Image, Plus, Bell, LayoutDashboard } from "lucide-react";
 import { toast } from "sonner";
 
 interface PainelVendedorLayoutProps {
@@ -43,6 +43,11 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
   }).length;
 
   const menuItems = [
+    {
+      icon: LayoutDashboard,
+      label: "Dashboard",
+      path: "/painel-promotor",
+    },
     {
       icon: FileText,
       label: "Indicações",
@@ -86,7 +91,7 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
               <img src={APP_LOGO} alt="Vital" className="h-16" />
               <div>
                 <h1 className="text-xl font-bold text-[#1e9d9f]">Sua Saúde Vital</h1>
-                <p className="text-sm text-gray-600">Sistema de Indicações</p>
+                <p className="text-sm text-gray-600">Plataforma de Comissionamento</p>
               </div>
             </div>
             <div className="flex items-center gap-4">

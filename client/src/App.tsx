@@ -24,6 +24,7 @@ import EsqueciSenha from "./pages/EsqueciSenha";
 import RecuperarSenha from "./pages/RecuperarSenha";
 import TabelaComissoes from "./pages/TabelaComissoes";
 import ClassificarLead from "./pages/ClassificarLead";
+import DashboardPromotor from "./pages/DashboardPromotor";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -32,6 +33,7 @@ function Router() {
       <Route path={"/"} component={BoasVindasIndicadores} />
       <Route path={"/indicar"} component={Home} />
       <Route path={"/minhas-indicacoes"} component={MinhasIndicacoes} />
+      <Route path={"/painel-promotor"} component={DashboardPromotor} />
       <Route path={"/admin"} component={Admin} />
       <Route path={"/admin/usuarios"} component={AdminUsuarios} />
       <Route path={"/admin/configuracoes"} component={AdminConfiguracoes} />
