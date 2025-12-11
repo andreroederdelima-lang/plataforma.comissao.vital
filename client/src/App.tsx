@@ -25,6 +25,8 @@ import RecuperarSenha from "./pages/RecuperarSenha";
 import TabelaComissoes from "./pages/TabelaComissoes";
 import ClassificarLead from "./pages/ClassificarLead";
 import DashboardPromotor from "./pages/DashboardPromotor";
+import AdminMateriaisApoio from "./pages/AdminMateriaisApoio";
+import MateriaisApoio from "./pages/MateriaisApoio";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -38,12 +40,14 @@ function Router() {
       <Route path={"/admin/usuarios"} component={AdminUsuarios} />
       <Route path={"/admin/configuracoes"} component={AdminConfiguracoes} />
       <Route path={"/admin/materiais"} component={AdminMateriais} />
+      <Route path={"/admin/materiais-apoio"} component={AdminMateriaisApoio} />
       <Route path={"/notificacoes"} component={Notificacoes} />
       <Route path={"/vendedor"} component={Vendedor} />
       <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/perfil"} component={Perfil} />
       <Route path={"/comissoes"} component={Comissoes} />
       <Route path={"/materiais-divulgacao"} component={MateriaisDivulgacao} />
+      <Route path={"/materiais-apoio"} component={MateriaisApoio} />
       <Route path={"/qr-codes"} component={QRCodes} />
       <Route path={"/boas-vindas-indicadores"} component={BoasVindasIndicadores} />
       <Route path={"/tabela-comissoes"} component={TabelaComissoes} />

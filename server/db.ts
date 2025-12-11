@@ -1,6 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes, materiaisDivulgacao, materiaisDiversos, materiaisPromotores, configuracoesGerais } from "../drizzle/schema";
+import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes, materiaisDivulgacao, materiaisDiversos, materiaisPromotores, configuracoesGerais, materiaisApoio, InsertMaterialApoio } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -922,4 +922,49 @@ export async function getLinkCheckoutCompleto(userId: number): Promise<string | 
   const linkBase = config.linkCheckoutBase;
   const separador = linkBase.includes('?') ? '&' : '?';
   return `${linkBase}${separador}ref=${codigo}`;
+}
+
+
+// ==================== MATERIAIS DE APOIO ====================
+
+/**
+ * Listar todos os materiais de apoio (banners e vídeos)
+ */
+export async function listarMateriaisApoio() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(materiaisApoio).orderBy(desc(materiaisApoio.ordem), desc(materiaisApoio.createdAt));
+}
+
+/**
+ * Adicionar novo material de apoio
+ */
+export async function adicionarMaterialApoio(material: InsertMaterialApoio) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(materiaisApoio).values(material);
+  return result;
+}
+
+/**
+ * Deletar material de apoio
+ */
+export async function deletarMaterialApoio(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(materiaisApoio).where(eq(materiaisApoio.id, id));
+}
+
+/**
+ * Obter material de apoio por ID
+ */
+export async function getMaterialApoioById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.select().from(materiaisApoio).where(eq(materiaisApoio.id, id)).limit(1);
+  return result.length > 0 ? result[0] : null;
 }

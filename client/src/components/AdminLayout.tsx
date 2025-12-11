@@ -65,6 +65,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       adminOnly: false,
     },
     {
+      path: "/admin/materiais-apoio",
+      label: "Materiais de Apoio",
+      icon: FileText,
+      adminOnly: true,
+    },
+    {
       path: "/qr-codes",
       label: "QR Codes",
       icon: QrCode,

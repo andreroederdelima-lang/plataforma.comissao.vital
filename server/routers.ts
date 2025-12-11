@@ -11,6 +11,7 @@ import { materiaisRouter } from "./routers/materiais";
 import { authIndicadoresRouter } from "./routers/authIndicadores";
 import { comissoesRouter } from "./routers/comissoes";
 import { materiaisDivulgacaoRouter } from "./routers/materiaisDivulgacao";
+import { materiaisApoioRouter } from "./routers/materiaisApoio";
 
 
 export const appRouter = router({
@@ -808,6 +809,11 @@ export const appRouter = router({
    */
   materiais: materiaisRouter,
   materiaisDivulgacao: materiaisDivulgacaoRouter,
+  
+  /**
+   * Router de materiais de apoio (banners e vídeos)
+   */
+  materiaisApoio: materiaisApoioRouter,
 });
 
 export type AppRouter = typeof appRouter;

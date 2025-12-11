@@ -724,3 +724,37 @@
 - [ ] Testar fluxo completo end-to-end
 - [ ] Documentar credenciais de acesso
 - [ ] Salvar checkpoint
+
+
+## Materiais de Apoio (Banners e Vídeos)
+
+### Schema e Backend
+- [x] Criar tabela `materiaisApoio` no schema
+- [x] Adicionar campos: id, tipo (banner/video), titulo, descricao, categoria, urlArquivo, thumbnailUrl, tamanhoBytes, createdAt
+- [x] Aplicar migração do schema
+- [x] Criar procedures para listar materiais
+- [x] Criar procedures para adicionar material (Admin)
+- [x] Criar procedures para deletar material (Admin)
+
+### Página Admin
+- [x] Criar página AdminMateriaisApoio.tsx
+- [x] Implementar upload de banners (imagens)
+- [x] Implementar upload de vídeos
+- [x] Adicionar categorização (Redes Sociais, Explicativos, Institucionais)
+- [x] Implementar preview de materiais
+- [x] Implementar exclusão de materiais
+
+### Página Promotor
+- [x] Criar página MateriaisApoio.tsx
+- [x] Implementar seção de Banners com grid de imagens
+- [x] Implementar seção de Vídeos com thumbnails
+- [x] Adicionar filtro por categoria
+- [x] Implementar preview e download de materiais
+- [x] Adicionar rota /materiais-apoio no App.tsx
+- [x] Adicionar link no menu PainelVendedorLayout
+
+### Testes
+- [ ] Testar upload de banner pelo Admin
+- [ ] Testar upload de vídeo pelo Admin
+- [ ] Testar visualização e download pelo Promotor
+- [ ] Salvar checkpoint

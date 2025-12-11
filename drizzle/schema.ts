@@ -285,3 +285,32 @@ export const configuracoesGerais = mysqlTable("configuracoes_gerais", {
 
 export type ConfiguracaoGeral = typeof configuracoesGerais.$inferSelect;
 export type InsertConfiguracaoGeral = typeof configuracoesGerais.$inferInsert;
+
+/**
+ * Tabela de materiais de apoio (banners e vídeos)
+ * Gerenciados por admin para download pelos promotores
+ */
+export const materiaisApoio = mysqlTable("materiais_apoio", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Tipo do material: "banner" ou "video" */
+  tipo: varchar("tipo", { length: 20 }).notNull(),
+  /** Título do material */
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  /** Descrição do material */
+  descricao: text("descricao"),
+  /** Categoria: "redes_sociais", "explicativo", "institucional" */
+  categoria: varchar("categoria", { length: 50 }).notNull(),
+  /** URL do arquivo no S3 */
+  urlArquivo: varchar("urlArquivo", { length: 500 }).notNull(),
+  /** URL da thumbnail (para vídeos) */
+  thumbnailUrl: varchar("thumbnailUrl", { length: 500 }),
+  /** Tamanho do arquivo em bytes */
+  tamanhoBytes: int("tamanhoBytes"),
+  /** Ordem de exibição */
+  ordem: int("ordem").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MaterialApoio = typeof materiaisApoio.$inferSelect;
+export type InsertMaterialApoio = typeof materiaisApoio.$inferInsert;

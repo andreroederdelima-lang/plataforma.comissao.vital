@@ -68,6 +68,11 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
       label: "Materiais de Divulgação",
       path: "/materiais-divulgacao",
     },
+    {
+      icon: Image,
+      label: "Materiais de Apoio",
+      path: "/materiais-apoio",
+    },
   ];
 
   const actionButtons = [
