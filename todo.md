@@ -758,3 +758,36 @@
 - [ ] Testar upload de vídeo pelo Admin
 - [ ] Testar visualização e download pelo Promotor
 - [ ] Salvar checkpoint
+
+
+## Auditoria Completa do Sistema
+
+### Área do Promotor
+- [ ] Testar login com usuário promotor
+- [ ] Verificar Dashboard do Promotor (estatísticas, escolha de modalidade)
+- [ ] Testar registro de nova indicação
+- [ ] Verificar lista de indicações e status
+- [ ] Testar página de Materiais de Divulgação
+- [ ] Testar página de Materiais de Apoio
+- [ ] Verificar clareza de valores de comissão
+- [ ] Testar página de Comissões
+
+### Área Admin
+- [ ] Testar login com usuário admin (admin@vital.com)
+- [ ] Verificar página de Indicações
+- [ ] Testar gerenciamento de Usuários
+- [ ] Verificar Configurações (comissões, link checkout, período cancelamento)
+- [ ] Testar página de Materiais de Apoio (upload)
+- [ ] Verificar página de Estatísticas
+- [ ] Testar classificação de leads
+
+### Clareza e Transparência
+- [ ] Verificar se valores de comissão estão claros em todas as telas
+- [ ] Verificar se status das indicações está claro
+- [ ] Verificar se fluxo de pagamento está explicado
+- [ ] Verificar se tabela de comissões é acessível
+
+### Problemas Identificados
+- [ ] Listar todos os problemas encontrados
+- [ ] Corrigir problemas críticos
+- [ ] Documentar problemas não-críticos para futuro
