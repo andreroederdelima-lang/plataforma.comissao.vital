@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO users (openId, name, email, senha, whatsapp, chavePix, role, loginMethod, createdAt, updatedAt, lastSignedIn) \nVALUES ('admin-test-001', 'Administrador Teste', 'admin@vital.com', '$2b$10$CttIq/32Umqc5MNjvBI9i.c2dJM8vIwj.PJlC6I6iEic21dXRWpPa', '(47) 99999-9999', 'admin@vital.com', 'admin', 'senha', NOW(), NOW(), NOW())\nON DUPLICATE KEY UPDATE role='admin';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute INSERT INTO users (openId, name, email, senha, whatsapp, chavePix, role, loginMethod, createdAt, updatedAt, lastSignedIn) \nVALUES ('admin-test-001', 'Administrador Teste', 'admin@vital.com', '$2b$10$CttIq/32Umqc5MNjvBI9i.c2dJM8vIwj.PJlC6I6iEic21dXRWpPa', '(47) 99999-9999', 'admin@vital.com', 'admin', 'senha', NOW(), NOW(), NOW())\nON DUPLICATE KEY UPDATE role='admin';",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'senha' in 'field list'"
+  ]
+}

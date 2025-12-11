@@ -693,4 +693,34 @@
 - [x] Adicionar rota /painel-promotor no App.tsx
 - [x] Adicionar link no menu PainelVendedorLayout
 - [x] Testar todas as funcionalidades
+- [x] Salvar checkpoint
+
+
+## Revisão Completa e Correção de Acessos
+
+### Problemas Identificados
+- [ ] Sistema de login não está funcionando
+- [ ] Área Admin não está acessível
+- [ ] Fluxos de navegação precisam ser revisados
+
+### Correções de Autenticação
+- [ ] Verificar e corrigir sistema de login atual
+- [ ] Simplificar autenticação (usar sistema mais confiável)
+- [ ] Garantir acesso à área Admin
+- [ ] Criar usuários de teste funcionais
+
+### Revisão de Navegação
+- [x] Testar página inicial e todos os botões
+- [x] Testar fluxo de cadastro de promotor (formulário funcionando)
+- [x] Testar fluxo de login (página de login funcionando)
+- [x] Testar proteção de acesso à área Admin (acesso negado sem autenticação)
+- [ ] Criar usuário admin de teste
+- [ ] Testar área do promotor (dashboard, indicações, materiais)
+- [ ] Testar área Admin (todas as páginas e funcionalidades)
+- [ ] Testar registro de indicações
+- [ ] Testar registro de vendas
+
+### Validação Final
+- [ ] Testar fluxo completo end-to-end
+- [ ] Documentar credenciais de acesso
 - [ ] Salvar checkpoint

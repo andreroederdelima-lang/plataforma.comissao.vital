@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO users (openId, name, email, passwordHash, chavePix, role, loginMethod, createdAt, updatedAt, lastSignedIn, lastRoleChange) \nVALUES ('admin-test-001', 'Administrador Teste', 'admin@vital.com', '$2b$10$CttIq/32Umqc5MNjvBI9i.c2dJM8vIwj.PJlC6I6iEic21dXRWpPa', 'admin@vital.com', 'admin', 'senha', NOW(), NOW(), NOW(), NOW())\nON DUPLICATE KEY UPDATE role='admin', passwordHash='$2b$10$CttIq/32Umqc5MNjvBI9i.c2dJM8vIwj.PJlC6I6iEic21dXRWpPa';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute INSERT INTO users (openId, name, email, passwordHash, chavePix, role, loginMethod, createdAt, updatedAt, lastSignedIn, lastRoleChange) \nVALUES ('admin-test-001', 'Administrador Teste', 'admin@vital.com', '$2b$10$CttIq/32Umqc5MNjvBI9i.c2dJM8vIwj.PJlC6I6iEic21dXRWpPa', 'admin@vital.com', 'admin', 'senha', NOW(), NOW(), NOW(), NOW())\nON DUPLICATE KEY UPDATE role='admin', passwordHash='$2b$10$CttIq/32Umqc5MNjvBI9i.c2dJM8vIwj.PJlC6I6iEic21dXRWpPa';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1764
+}
