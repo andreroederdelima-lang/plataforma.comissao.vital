@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO comissaoConfig (nomePlano, tipoPlano, categoria, valorComissao) VALUES\n('essencial', 'individual', 'pessoa_fisica', 5000),\n('essencial', 'familiar', 'pessoa_fisica', 8000),\n('essencial', 'individual', 'empresarial', 6000),\n('essencial', 'familiar', 'empresarial', 10000),\n('premium', 'individual', 'pessoa_fisica', 8000),\n('premium', 'familiar', 'pessoa_fisica', 12000),\n('premium', 'individual', 'empresarial', 9000),\n('premium', 'familiar', 'empresarial', 15000)\nON DUPLICATE KEY UPDATE valorComissao = VALUES(valorComissao);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute INSERT INTO comissaoConfig (nomePlano, tipoPlano, categoria, valorComissao) VALUES\n('essencial', 'individual', 'pessoa_fisica', 5000),\n('essencial', 'familiar', 'pessoa_fisica', 8000),\n('essencial', 'individual', 'empresarial', 6000),\n('essencial', 'familiar', 'empresarial', 10000),\n('premium', 'individual', 'pessoa_fisica', 8000),\n('premium', 'familiar', 'pessoa_fisica', 12000),\n('premium', 'individual', 'empresarial', 9000),\n('premium', 'familiar', 'empresarial', 15000)\nON DUPLICATE KEY UPDATE valorComissao = VALUES(valorComissao);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 65
+}

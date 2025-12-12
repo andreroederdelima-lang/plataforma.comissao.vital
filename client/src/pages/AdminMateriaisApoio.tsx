@@ -144,7 +144,9 @@ export default function AdminMateriaisApoio() {
                   id="titulo"
                   value={titulo}
                   onChange={(e) => setTitulo(e.target.value)}
-                  placeholder="Ex: Banner Instagram - Promoção Verão"
+                  placeholder={tipo === "banner" 
+                    ? "Sugestões: Banner Instagram Stories | Banner Feed | Banner WhatsApp Status | Banner Facebook | Banner LinkedIn"
+                    : "Sugestões: Vídeo Institucional | Como Funciona | Depoimentos | Tutorial de Vendas | FAQ"}
                   required
                 />
               </div>

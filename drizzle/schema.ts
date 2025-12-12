@@ -27,6 +27,12 @@ export const users = mysqlTable("users", {
   linkCheckoutPersonalizado: varchar("linkCheckoutPersonalizado", { length: 100 }),
   /** Hash da senha para indicadores (bcrypt) - null para usuários OAuth */
   passwordHash: varchar("passwordHash", { length: 255 }),
+  /** Apresentação pessoal do promotor (editável pelo próprio) */
+  apresentacaoPersonal: text("apresentacaoPersonal"),
+  /** Diferenciais do promotor (editável pelo próprio) */
+  diferenciais: text("diferenciais"),
+  /** Oferta especial do promotor (editável pelo próprio) */
+  ofertaEspecial: text("ofertaEspecial"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),

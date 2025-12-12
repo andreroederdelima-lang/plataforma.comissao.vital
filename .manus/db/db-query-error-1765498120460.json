@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO comissaoConfig (tipoPlano, categoria, tipoAssinatura, valorCentavos) VALUES\n('Essencial', 'Individual', 'Pessoa Física', 5000),\n('Essencial', 'Familiar', 'Pessoa Física', 8000),\n('Essencial', 'Individual', 'Empresarial', 6000),\n('Essencial', 'Familiar', 'Empresarial', 10000),\n('Premium', 'Individual', 'Pessoa Física', 8000),\n('Premium', 'Familiar', 'Pessoa Física', 12000),\n('Premium', 'Individual', 'Empresarial', 9000),\n('Premium', 'Familiar', 'Empresarial', 15000)\nON DUPLICATE KEY UPDATE valorCentavos = VALUES(valorCentavos);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute INSERT INTO comissaoConfig (tipoPlano, categoria, tipoAssinatura, valorCentavos) VALUES\n('Essencial', 'Individual', 'Pessoa Física', 5000),\n('Essencial', 'Familiar', 'Pessoa Física', 8000),\n('Essencial', 'Individual', 'Empresarial', 6000),\n('Essencial', 'Familiar', 'Empresarial', 10000),\n('Premium', 'Individual', 'Pessoa Física', 8000),\n('Premium', 'Familiar', 'Pessoa Física', 12000),\n('Premium', 'Individual', 'Empresarial', 9000),\n('Premium', 'Familiar', 'Empresarial', 15000)\nON DUPLICATE KEY UPDATE valorCentavos = VALUES(valorCentavos);",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'tipoAssinatura' in 'field list'"
+  ]
+}

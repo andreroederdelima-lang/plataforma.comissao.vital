@@ -791,3 +791,38 @@
 - [ ] Listar todos os problemas encontrados
 - [ ] Corrigir problemas críticos
 - [ ] Documentar problemas não-críticos para futuro
+
+
+## Transformação em Plataforma White Label
+
+### Valores Pré-configurados
+- [x] Inserir valores de comissão padrão para Plano Essencial (Individual PF: R$ 50, Familiar PF: R$ 80, Individual Empresarial: R$ 60, Familiar Empresarial: R$ 100)
+- [x] Inserir valores de comissão padrão para Plano Premium (Individual PF: R$ 80, Familiar PF: R$ 120, Individual Empresarial: R$ 90, Familiar Empresarial: R$ 150)
+- [x] Configurar link de checkout padrão editável
+- [x] Configurar período de cancelamento padrão (7 dias)
+
+### Estrutura de Materiais de Apoio
+- [x] Criar categorias pré-definidas (Redes Sociais, Explicativo, Institucional)
+- [x] Adicionar títulos sugeridos para Banners (Instagram Stories, Feed, WhatsApp Status, Facebook, LinkedIn)
+- [x] Adicionar títulos sugeridos para Vídeos (Institucional, Como Funciona, Depoimentos, Tutorial, FAQ)
+- [x] Preparar interface para Admin fazer upload depois
+
+### Área Personalizável do Promotor
+- [ ] Adicionar schema para campos personalizados do promotor (apresentacao, diferenciais, ofertaEspecial)
+- [ ] Criar procedures para salvar/editar campos personalizados
+- [ ] Adicionar seção "Minha Apresentação Pessoal" editável pelo promotor
+- [ ] Adicionar seção "Meus Diferenciais" editável pelo promotor
+- [ ] Adicionar seção "Minha Oferta Especial" editável pelo promotor
+- [ ] Adicionar área para links personalizados do promotor
+
+### Conteúdo Inicial Editável
+- [ ] Preencher Central de Argumentos com template inicial
+- [ ] Preencher Promoção Vigente com template inicial
+- [ ] Garantir que Admin pode editar completamente
+- [ ] Testar edição e visualização
+
+### Testes e Finalização
+- [ ] Testar configuração completa pelo Admin
+- [ ] Testar personalização pelo Promotor
+- [ ] Verificar que tudo está pronto para uso White Label
+- [ ] Salvar checkpoint final

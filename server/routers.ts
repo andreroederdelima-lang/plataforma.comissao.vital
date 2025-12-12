@@ -128,6 +128,41 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+
+    /**
+     * Atualizar campos personalizáveis do promotor
+     */
+    atualizarCamposPersonalizados: protectedProcedure
+      .input(z.object({
+        apresentacaoPersonal: z.string().optional(),
+        diferenciais: z.string().optional(),
+        ofertaEspecial: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { getDb } = await import("./db");
+        const db = await getDb();
+        
+        if (!db) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Banco de dados não disponível",
+          });
+        }
+
+        const { users } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
+
+        await db
+          .update(users)
+          .set({
+            apresentacaoPersonal: input.apresentacaoPersonal,
+            diferenciais: input.diferenciais,
+            ofertaEspecial: input.ofertaEspecial,
+          })
+          .where(eq(users.id, ctx.user.id));
+
+        return { success: true };
+      }),
     updateChavePix: protectedProcedure
       .input(z.object({
         chavePix: z.string().min(1, "Chave PIX é obrigatória"),
