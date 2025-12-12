@@ -826,3 +826,36 @@
 - [ ] Testar personalização pelo Promotor
 - [ ] Verificar que tudo está pronto para uso White Label
 - [ ] Salvar checkpoint final
+
+
+## Biblioteca de Recursos (Renomeação e Expansão)
+
+### Renomeação
+- [x] Renomear "Materiais de Divulgação" para "Biblioteca de Recursos" em todos os arquivos
+- [x] Atualizar títulos de páginas
+- [x] Atualizar links de menu (AdminLayout e PainelVendedorLayout)
+- [ ] Atualizar rotas no App.tsx (manter /materiais-divulgacao por compatibilidade)
+
+### Expansão de Funcionalidades
+- [ ] Adicionar suporte para upload de PDFs
+- [ ] Adicionar suporte para upload de vídeos diretos
+- [ ] Adicionar campo para links externos
+- [ ] Adicionar seção de textos padrão editáveis
+- [ ] Manter seção de Promoção Vigente
+- [ ] Criar categorização por tipo de conteúdo (Vídeo, PDF, Link, Texto, Promoção)
+
+## Página de QR Codes
+
+- [ ] Verificar se página existe e está funcional
+- [ ] Adicionar campo para inserir link de destino do QR Code
+- [ ] Implementar geração automática de QR Code
+- [ ] Permitir download do QR Code gerado
+- [ ] Adicionar preview do QR Code
+
+## Validação de Links Individualizados
+
+- [ ] Verificar se cada vendedor/promotor tem código único gerado
+- [ ] Testar link personalizado de checkout
+- [ ] Validar que parâmetro 'ref' está sendo passado corretamente
+- [ ] Confirmar que Admin pode identificar vendas por link
+- [ ] Documentar como rastrear vendas por promotor

@@ -65,7 +65,7 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
     },
     {
       icon: Image,
-      label: "Materiais de Divulgação",
+      label: "Biblioteca de Recursos",
       path: "/materiais-divulgacao",
     },
     {

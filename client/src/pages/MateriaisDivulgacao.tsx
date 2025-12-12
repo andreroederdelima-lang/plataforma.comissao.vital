@@ -43,27 +43,29 @@ export default function MateriaisDivulgacao() {
 
   const [textoCentral, setTextoCentral] = useState("");
   const [textoPromocao, setTextoPromocao] = useState("");
-  const [novoMaterialDiverso, setNovoMaterialDiverso] = useState({ titulo: "", conteudo: "" });
+  const [novoMaterialDiverso, setNovoMaterialDiverso] = useState<{ titulo: string; conteudo: string; tipo: "link" | "pdf" | "imagem" | "video" | "texto" }>({ titulo: "", conteudo: "", tipo: "texto" });
   const [novoMaterialPersonalizado, setNovoMaterialPersonalizado] = useState({ titulo: "", conteudo: "" });
 
   // Queries
-  const { data: centralArgumentos, isLoading: loadingCentral, refetch: refetchCentral } = 
-    trpc.materiaisDivulgacao.getCentralArgumentos.useQuery();
+  const { data: materiaisData, isLoading: loadingCentral, refetch: refetchCentral } = 
+    trpc.materiaisDivulgacao.getMateriais.useQuery();
   
-  const { data: promocaoVigente, isLoading: loadingPromocao, refetch: refetchPromocao } = 
-    trpc.materiaisDivulgacao.getPromocaoVigente.useQuery();
+  const centralArgumentos = materiaisData?.centralArgumentos || "";
+  const promocaoVigente = materiaisData?.promocaoVigente || "";
+  
+  // Dados de promoção já vêm do getMateriais acima
   
   const { data: materiaisDiversos, isLoading: loadingDiversos, refetch: refetchDiversos } = 
-    trpc.materiaisDivulgacao.getMateriaisDiversos.useQuery();
+    trpc.materiaisDivulgacao.listMateriaisDiversos.useQuery();
   
   const { data: meusMateriaisPersonalizados, isLoading: loadingPersonalizados, refetch: refetchPersonalizados } = 
-    trpc.materiaisDivulgacao.getMeusMateriaisPersonalizados.useQuery();
+    trpc.materiaisDivulgacao.listMeusMateriais.useQuery();
   
   // Link de checkout personalizado
   const { data: linkCheckoutData } = trpc.configuracoesGerais.getMeuLinkCheckout.useQuery();
 
   // Mutations
-  const atualizarCentralMutation = trpc.materiaisDivulgacao.atualizarCentralArgumentos.useMutation({
+  const atualizarCentralMutation = trpc.materiaisDivulgacao.updateCentralArgumentos.useMutation({
     onSuccess: () => {
       toast.success("Central de Argumentos atualizada com sucesso!");
       refetchCentral();
@@ -74,10 +76,10 @@ export default function MateriaisDivulgacao() {
     },
   });
 
-  const atualizarPromocaoMutation = trpc.materiaisDivulgacao.atualizarPromocaoVigente.useMutation({
+  const atualizarPromocaoMutation = trpc.materiaisDivulgacao.updatePromocaoVigente.useMutation({
     onSuccess: () => {
       toast.success("Promoção Vigente atualizada com sucesso!");
-      refetchPromocao();
+      refetchCentral();
       setEditandoPromocao(false);
     },
     onError: (error) => {
@@ -85,19 +87,19 @@ export default function MateriaisDivulgacao() {
     },
   });
 
-  const adicionarDiversoMutation = trpc.materiaisDivulgacao.adicionarMaterialDiverso.useMutation({
+  const adicionarDiversoMutation = trpc.materiaisDivulgacao.createMaterialDiverso.useMutation({
     onSuccess: () => {
       toast.success("Material adicionado com sucesso!");
       refetchDiversos();
       setAdicionandoDiverso(false);
-      setNovoMaterialDiverso({ titulo: "", conteudo: "" });
+      setNovoMaterialDiverso({ titulo: "", conteudo: "", tipo: "texto" });
     },
     onError: (error) => {
       toast.error(error.message || "Erro ao adicionar material");
     },
   });
 
-  const excluirDiversoMutation = trpc.materiaisDivulgacao.excluirMaterialDiverso.useMutation({
+  const excluirDiversoMutation = trpc.materiaisDivulgacao.deleteMaterialDiverso.useMutation({
     onSuccess: () => {
       toast.success("Material excluído com sucesso!");
       refetchDiversos();
@@ -107,7 +109,7 @@ export default function MateriaisDivulgacao() {
     },
   });
 
-  const adicionarPersonalizadoMutation = trpc.materiaisDivulgacao.adicionarMaterialPersonalizado.useMutation({
+  const adicionarPersonalizadoMutation = trpc.materiaisDivulgacao.createMeuMaterial.useMutation({
     onSuccess: () => {
       toast.success("Material personalizado adicionado com sucesso!");
       refetchPersonalizados();
@@ -119,7 +121,7 @@ export default function MateriaisDivulgacao() {
     },
   });
 
-  const excluirPersonalizadoMutation = trpc.materiaisDivulgacao.excluirMaterialPersonalizado.useMutation({
+  const excluirPersonalizadoMutation = trpc.materiaisDivulgacao.deleteMeuMaterial.useMutation({
     onSuccess: () => {
       toast.success("Material personalizado excluído com sucesso!");
       refetchPersonalizados();
@@ -144,7 +146,7 @@ export default function MateriaisDivulgacao() {
   const podeEditar = user?.role === "admin" || user?.role === "comercial";
 
   // Mostrar loading enquanto verifica autenticação
-  if (loading || loadingCentral || loadingPromocao || loadingDiversos || loadingPersonalizados) {
+  if (loading || loadingCentral || loadingDiversos || loadingPersonalizados) {
     return (
       <PainelVendedorLayout>
         <div className="flex items-center justify-center h-64">
@@ -164,7 +166,7 @@ export default function MateriaisDivulgacao() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Materiais de Divulgação</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Biblioteca de Recursos</h1>
           <p className="text-muted-foreground mt-1">
             Recursos para promover as assinaturas Vital
           </p>
@@ -243,7 +245,7 @@ export default function MateriaisDivulgacao() {
                       variant="outline"
                       size="sm"
                       onClick={() => {
-                        setTextoCentral(centralArgumentos?.conteudo || "");
+                        setTextoCentral(centralArgumentos || "");
                         setEditandoCentral(true);
                       }}
                     >
@@ -255,8 +257,8 @@ export default function MateriaisDivulgacao() {
                     variant="default"
                     size="sm"
                     style={{ backgroundColor: VITAL_COLORS.turquoise }}
-                    onClick={() => copiarTexto(centralArgumentos?.conteudo || "", "Central de Argumentos")}
-                    disabled={!centralArgumentos?.conteudo}
+                    onClick={() => copiarTexto(centralArgumentos || "", "Central de Argumentos")}
+                    disabled={!centralArgumentos}
                   >
                     <Copy className="h-4 w-4 mr-2" />
                     Copiar
@@ -265,9 +267,9 @@ export default function MateriaisDivulgacao() {
               </div>
             </CardHeader>
             <CardContent>
-              {centralArgumentos?.conteudo ? (
+              {centralArgumentos ? (
                 <div className="whitespace-pre-wrap text-sm bg-muted/50 p-4 rounded-md">
-                  {centralArgumentos.conteudo}
+                  {centralArgumentos}
                 </div>
               ) : (
                 <p className="text-muted-foreground text-sm italic">
@@ -293,7 +295,7 @@ export default function MateriaisDivulgacao() {
                       variant="outline"
                       size="sm"
                       onClick={() => {
-                        setTextoPromocao(promocaoVigente?.conteudo || "");
+                        setTextoPromocao(promocaoVigente || "");
                         setEditandoPromocao(true);
                       }}
                     >
@@ -305,8 +307,8 @@ export default function MateriaisDivulgacao() {
                     variant="default"
                     size="sm"
                     style={{ backgroundColor: VITAL_COLORS.turquoise }}
-                    onClick={() => copiarTexto(promocaoVigente?.conteudo || "", "Promoção Vigente")}
-                    disabled={!promocaoVigente?.conteudo}
+                    onClick={() => copiarTexto(promocaoVigente || "", "Promoção Vigente")}
+                    disabled={!promocaoVigente}
                   >
                     <Copy className="h-4 w-4 mr-2" />
                     Copiar
@@ -315,9 +317,9 @@ export default function MateriaisDivulgacao() {
               </div>
             </CardHeader>
             <CardContent>
-              {promocaoVigente?.conteudo ? (
+              {promocaoVigente ? (
                 <div className="whitespace-pre-wrap text-sm bg-muted/50 p-4 rounded-md">
-                  {promocaoVigente.conteudo}
+                  {promocaoVigente}
                 </div>
               ) : (
                 <p className="text-muted-foreground text-sm italic">

@@ -27,11 +27,11 @@ export default function AdminConfiguracoes() {
   const [linkCheckoutBase, setLinkCheckoutBase] = useState("");
   const [diasCancelamento, setDiasCancelamento] = useState("7");
   
-  const { data: configsGerais } = trpc.configuracoesGerais.get.useQuery();
-  const atualizarLinkMutation = trpc.configuracoesGerais.atualizarLinkCheckoutBase.useMutation({
+  const { data: configsGerais } = trpc.configuracoesGerais.getConfiguracoes.useQuery();
+  const atualizarLinkMutation = trpc.configuracoesGerais.atualizarLinkBase.useMutation({
     onSuccess: () => {
       toast.success("Link de checkout atualizado!");
-      trpc.useUtils().configuracoesGerais.get.invalidate();
+      trpc.useUtils().configuracoesGerais.getConfiguracoes.invalidate();
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao atualizar link");
@@ -41,7 +41,7 @@ export default function AdminConfiguracoes() {
   const atualizarDiasMutation = trpc.configuracoesGerais.atualizarDiasCancelamento.useMutation({
     onSuccess: () => {
       toast.success("Período de cancelamento atualizado!");
-      trpc.useUtils().configuracoesGerais.get.invalidate();
+      trpc.useUtils().configuracoesGerais.getConfiguracoes.invalidate();
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao atualizar período");
@@ -232,7 +232,7 @@ export default function AdminConfiguracoes() {
                       className="flex-1"
                     />
                     <Button
-                      onClick={() => atualizarLinkMutation.mutate({ linkBase: linkCheckoutBase || null })}
+                      onClick={() => atualizarLinkMutation.mutate({ linkBase: linkCheckoutBase || "" })}
                       disabled={atualizarLinkMutation.isPending}
                     >
                       {atualizarLinkMutation.isPending ? (
