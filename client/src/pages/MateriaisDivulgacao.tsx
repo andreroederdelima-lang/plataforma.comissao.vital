@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { 
   Mic, 
   MessageSquare, 
@@ -19,7 +21,13 @@ import {
   Plus,
   Trash2,
   Loader2,
-  FileText
+  FileText,
+  Link as LinkIcon,
+  Image as ImageIcon,
+  Video as VideoIcon,
+  FileType,
+  Upload,
+  Download
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -43,7 +51,10 @@ export default function MateriaisDivulgacao() {
 
   const [textoCentral, setTextoCentral] = useState("");
   const [textoPromocao, setTextoPromocao] = useState("");
-  const [novoMaterialDiverso, setNovoMaterialDiverso] = useState<{ titulo: string; conteudo: string; tipo: "link" | "pdf" | "imagem" | "video" | "texto" }>({ titulo: "", conteudo: "", tipo: "texto" });
+  const [novoMaterialDiverso, setNovoMaterialDiverso] = useState<{ titulo: string; conteudo: string; tipo: "link" | "pdf" | "imagem" | "video" | "texto"; descricao?: string }>({ titulo: "", conteudo: "", tipo: "texto", descricao: "" });
+  const [arquivoUpload, setArquivoUpload] = useState<File | null>(null);
+  const [uploadando, setUploadando] = useState(false);
+  const [filtroTipo, setFiltroTipo] = useState<string>("todos");
   const [novoMaterialPersonalizado, setNovoMaterialPersonalizado] = useState({ titulo: "", conteudo: "" });
 
   // Queries
@@ -141,6 +152,53 @@ export default function MateriaisDivulgacao() {
   const copiarTexto = (texto: string, nome?: string) => {
     navigator.clipboard.writeText(texto);
     toast.success(nome ? `${nome} copiado!` : "Texto copiado!");
+  };
+
+  const handleUploadArquivo = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao fazer upload do arquivo');
+      }
+
+      const data = await response.json();
+      return data.url;
+    } catch (error) {
+      console.error('Erro no upload:', error);
+      throw error;
+    }
+  };
+
+  const handleAdicionarMaterial = async () => {
+    try {
+      setUploadando(true);
+      let conteudoFinal = novoMaterialDiverso.conteudo;
+
+      // Se for arquivo (pdf, imagem, video) e tem arquivo selecionado, fazer upload
+      if ((novoMaterialDiverso.tipo === 'pdf' || novoMaterialDiverso.tipo === 'imagem' || novoMaterialDiverso.tipo === 'video') && arquivoUpload) {
+        conteudoFinal = await handleUploadArquivo(arquivoUpload);
+      }
+
+      await adicionarDiversoMutation.mutateAsync({
+        ...novoMaterialDiverso,
+        conteudo: conteudoFinal,
+      });
+
+      // Limpar formulário
+      setNovoMaterialDiverso({ titulo: "", conteudo: "", tipo: "texto", descricao: "" });
+      setArquivoUpload(null);
+    } catch (error) {
+      toast.error('Erro ao adicionar material');
+    } finally {
+      setUploadando(false);
+    }
   };
 
   const podeEditar = user?.role === "admin" || user?.role === "comercial";
@@ -332,7 +390,7 @@ export default function MateriaisDivulgacao() {
           {/* Materiais Diversos */}
           <Card className="mb-4">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-4">
                 <div>
                   <CardTitle>Materiais Diversos</CardTitle>
                   <CardDescription>
@@ -350,42 +408,199 @@ export default function MateriaisDivulgacao() {
                   </Button>
                 )}
               </div>
+              {/* Filtros */}
+              <div className="flex gap-2 flex-wrap">
+                <Button
+                  variant={filtroTipo === "todos" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFiltroTipo("todos")}
+                  style={filtroTipo === "todos" ? { backgroundColor: VITAL_COLORS.turquoise } : {}}
+                >
+                  Todos
+                </Button>
+                <Button
+                  variant={filtroTipo === "texto" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFiltroTipo("texto")}
+                  style={filtroTipo === "texto" ? { backgroundColor: VITAL_COLORS.turquoise } : {}}
+                >
+                  <FileText className="h-4 w-4 mr-1" />
+                  Textos
+                </Button>
+                <Button
+                  variant={filtroTipo === "link" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFiltroTipo("link")}
+                  style={filtroTipo === "link" ? { backgroundColor: VITAL_COLORS.turquoise } : {}}
+                >
+                  <LinkIcon className="h-4 w-4 mr-1" />
+                  Links
+                </Button>
+                <Button
+                  variant={filtroTipo === "imagem" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFiltroTipo("imagem")}
+                  style={filtroTipo === "imagem" ? { backgroundColor: VITAL_COLORS.turquoise } : {}}
+                >
+                  <ImageIcon className="h-4 w-4 mr-1" />
+                  Imagens
+                </Button>
+                <Button
+                  variant={filtroTipo === "video" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFiltroTipo("video")}
+                  style={filtroTipo === "video" ? { backgroundColor: VITAL_COLORS.turquoise } : {}}
+                >
+                  <VideoIcon className="h-4 w-4 mr-1" />
+                  Vídeos
+                </Button>
+                <Button
+                  variant={filtroTipo === "pdf" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFiltroTipo("pdf")}
+                  style={filtroTipo === "pdf" ? { backgroundColor: VITAL_COLORS.turquoise } : {}}
+                >
+                  <FileType className="h-4 w-4 mr-1" />
+                  PDFs
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               {materiaisDiversos && materiaisDiversos.length > 0 ? (
                 <div className="space-y-4">
-                  {materiaisDiversos.map((material) => (
-                    <div key={material.id} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-semibold">{material.titulo}</h3>
-                        <div className="flex gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => copiarTexto(material.conteudo, material.titulo)}
-                          >
-                            <Copy className="h-4 w-4" />
-                          </Button>
-                          {podeEditar && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                if (confirm("Deseja realmente excluir este material?")) {
-                                  excluirDiversoMutation.mutate({ id: material.id });
-                                }
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          )}
+                  {materiaisDiversos
+                    .filter(material => filtroTipo === "todos" || material.tipo === filtroTipo)
+                    .map((material) => {
+                    // Determinar ícone baseado no tipo
+                    const TipoIcon = material.tipo === "link" ? LinkIcon :
+                                    material.tipo === "pdf" ? FileType :
+                                    material.tipo === "imagem" ? ImageIcon :
+                                    material.tipo === "video" ? VideoIcon :
+                                    FileText;
+
+                    return (
+                      <div key={material.id} className="border rounded-lg p-4">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <TipoIcon className="h-5 w-5 text-muted-foreground" />
+                            <div>
+                              <h3 className="font-semibold">{material.titulo}</h3>
+                              {material.descricao && (
+                                <p className="text-xs text-muted-foreground">{material.descricao}</p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            {/* Botões específicos por tipo */}
+                            {material.tipo === "link" && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => window.open(material.conteudo, "_blank")}
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                              </Button>
+                            )}
+                            {material.tipo === "pdf" && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => window.open(material.conteudo, "_blank")}
+                              >
+                                <Download className="h-4 w-4" />
+                              </Button>
+                            )}
+                            {material.tipo === "video" && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => window.open(material.conteudo, "_blank")}
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                              </Button>
+                            )}
+                            {material.tipo === "texto" && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copiarTexto(material.conteudo, material.titulo)}
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                            )}
+                            {podeEditar && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  if (confirm("Deseja realmente excluir este material?")) {
+                                    excluirDiversoMutation.mutate({ id: material.id });
+                                  }
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              </Button>
+                            )}
+                          </div>
                         </div>
+
+                        {/* Visualização do conteúdo baseado no tipo */}
+                        {material.tipo === "texto" && (
+                          <div className="whitespace-pre-wrap text-sm bg-muted/50 p-3 rounded-md">
+                            {material.conteudo}
+                          </div>
+                        )}
+                        {material.tipo === "imagem" && (
+                          <div className="mt-3">
+                            <img
+                              src={material.conteudo}
+                              alt={material.titulo}
+                              className="max-w-full h-auto rounded-md border"
+                              style={{ maxHeight: "400px" }}
+                            />
+                          </div>
+                        )}
+                        {material.tipo === "link" && (
+                          <div className="mt-2">
+                            <a
+                              href={material.conteudo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm text-primary hover:underline break-all"
+                            >
+                              {material.conteudo}
+                            </a>
+                          </div>
+                        )}
+                        {material.tipo === "video" && (
+                          <div className="mt-2">
+                            <a
+                              href={material.conteudo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm text-primary hover:underline break-all flex items-center gap-1"
+                            >
+                              <VideoIcon className="h-4 w-4" />
+                              {material.conteudo}
+                            </a>
+                          </div>
+                        )}
+                        {material.tipo === "pdf" && (
+                          <div className="mt-2">
+                            <a
+                              href={material.conteudo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm text-primary hover:underline flex items-center gap-1"
+                            >
+                              <FileType className="h-4 w-4" />
+                              Abrir PDF
+                            </a>
+                          </div>
+                        )}
                       </div>
-                      <div className="whitespace-pre-wrap text-sm bg-muted/50 p-3 rounded-md">
-                        {material.conteudo}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-muted-foreground text-sm italic">
@@ -816,7 +1031,7 @@ export default function MateriaisDivulgacao() {
 
       {/* Modal Adicionar Material Diverso */}
       <Dialog open={adicionandoDiverso} onOpenChange={setAdicionandoDiverso}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Adicionar Material Diverso</DialogTitle>
             <DialogDescription>
@@ -824,8 +1039,58 @@ export default function MateriaisDivulgacao() {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
+            {/* Tipo de Material */}
             <div>
-              <Label htmlFor="titulo-diverso">Título</Label>
+              <Label>Tipo de Material</Label>
+              <RadioGroup
+                value={novoMaterialDiverso.tipo}
+                onValueChange={(value) => {
+                  setNovoMaterialDiverso({ ...novoMaterialDiverso, tipo: value as any, conteudo: "" });
+                  setArquivoUpload(null);
+                }}
+                className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-2"
+              >
+                <div className="flex items-center space-x-2 border rounded-lg p-3 cursor-pointer hover:bg-accent" onClick={() => setNovoMaterialDiverso({ ...novoMaterialDiverso, tipo: "texto", conteudo: "" })}>
+                  <RadioGroupItem value="texto" id="tipo-texto" />
+                  <Label htmlFor="tipo-texto" className="flex items-center gap-2 cursor-pointer">
+                    <FileText className="h-4 w-4" />
+                    Texto
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 cursor-pointer hover:bg-accent" onClick={() => setNovoMaterialDiverso({ ...novoMaterialDiverso, tipo: "link", conteudo: "" })}>
+                  <RadioGroupItem value="link" id="tipo-link" />
+                  <Label htmlFor="tipo-link" className="flex items-center gap-2 cursor-pointer">
+                    <LinkIcon className="h-4 w-4" />
+                    Link
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 cursor-pointer hover:bg-accent" onClick={() => setNovoMaterialDiverso({ ...novoMaterialDiverso, tipo: "imagem", conteudo: "" })}>
+                  <RadioGroupItem value="imagem" id="tipo-imagem" />
+                  <Label htmlFor="tipo-imagem" className="flex items-center gap-2 cursor-pointer">
+                    <ImageIcon className="h-4 w-4" />
+                    Imagem
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 cursor-pointer hover:bg-accent" onClick={() => setNovoMaterialDiverso({ ...novoMaterialDiverso, tipo: "video", conteudo: "" })}>
+                  <RadioGroupItem value="video" id="tipo-video" />
+                  <Label htmlFor="tipo-video" className="flex items-center gap-2 cursor-pointer">
+                    <VideoIcon className="h-4 w-4" />
+                    Vídeo
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 cursor-pointer hover:bg-accent" onClick={() => setNovoMaterialDiverso({ ...novoMaterialDiverso, tipo: "pdf", conteudo: "" })}>
+                  <RadioGroupItem value="pdf" id="tipo-pdf" />
+                  <Label htmlFor="tipo-pdf" className="flex items-center gap-2 cursor-pointer">
+                    <FileType className="h-4 w-4" />
+                    PDF
+                  </Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {/* Título */}
+            <div>
+              <Label htmlFor="titulo-diverso">Título *</Label>
               <Input
                 id="titulo-diverso"
                 value={novoMaterialDiverso.titulo}
@@ -833,27 +1098,106 @@ export default function MateriaisDivulgacao() {
                 placeholder="Ex: Benefícios da Assinatura Vital"
               />
             </div>
+
+            {/* Descrição */}
             <div>
-              <Label htmlFor="conteudo-diverso">Conteúdo</Label>
-              <Textarea
-                id="conteudo-diverso"
-                value={novoMaterialDiverso.conteudo}
-                onChange={(e) => setNovoMaterialDiverso({ ...novoMaterialDiverso, conteudo: e.target.value })}
-                rows={10}
-                placeholder="Digite o conteúdo do material..."
+              <Label htmlFor="descricao-diverso">Descrição (opcional)</Label>
+              <Input
+                id="descricao-diverso"
+                value={novoMaterialDiverso.descricao || ""}
+                onChange={(e) => setNovoMaterialDiverso({ ...novoMaterialDiverso, descricao: e.target.value })}
+                placeholder="Breve descrição do material"
               />
             </div>
+
+            {/* Campo dinâmico baseado no tipo */}
+            {novoMaterialDiverso.tipo === "texto" && (
+              <div>
+                <Label htmlFor="conteudo-diverso">Conteúdo *</Label>
+                <Textarea
+                  id="conteudo-diverso"
+                  value={novoMaterialDiverso.conteudo}
+                  onChange={(e) => setNovoMaterialDiverso({ ...novoMaterialDiverso, conteudo: e.target.value })}
+                  rows={10}
+                  placeholder="Digite o conteúdo do material..."
+                />
+              </div>
+            )}
+
+            {novoMaterialDiverso.tipo === "link" && (
+              <div>
+                <Label htmlFor="url-link">URL do Link *</Label>
+                <Input
+                  id="url-link"
+                  type="url"
+                  value={novoMaterialDiverso.conteudo}
+                  onChange={(e) => setNovoMaterialDiverso({ ...novoMaterialDiverso, conteudo: e.target.value })}
+                  placeholder="https://exemplo.com"
+                />
+              </div>
+            )}
+
+            {novoMaterialDiverso.tipo === "video" && (
+              <div>
+                <Label htmlFor="url-video">URL do Vídeo *</Label>
+                <Input
+                  id="url-video"
+                  type="url"
+                  value={novoMaterialDiverso.conteudo}
+                  onChange={(e) => setNovoMaterialDiverso({ ...novoMaterialDiverso, conteudo: e.target.value })}
+                  placeholder="https://youtube.com/watch?v=... ou https://vimeo.com/..."
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Cole o link do YouTube, Vimeo ou outro serviço de vídeo
+                </p>
+              </div>
+            )}
+
+            {(novoMaterialDiverso.tipo === "imagem" || novoMaterialDiverso.tipo === "pdf") && (
+              <div>
+                <Label htmlFor="arquivo-upload">
+                  {novoMaterialDiverso.tipo === "imagem" ? "Imagem" : "Arquivo PDF"} *
+                </Label>
+                <div className="mt-2">
+                  <Input
+                    id="arquivo-upload"
+                    type="file"
+                    accept={novoMaterialDiverso.tipo === "imagem" ? "image/*" : ".pdf"}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setArquivoUpload(file);
+                      }
+                    }}
+                  />
+                  {arquivoUpload && (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Arquivo selecionado: {arquivoUpload.name}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setAdicionandoDiverso(false)}>
+            <Button variant="outline" onClick={() => {
+              setAdicionandoDiverso(false);
+              setNovoMaterialDiverso({ titulo: "", conteudo: "", tipo: "texto", descricao: "" });
+              setArquivoUpload(null);
+            }}>
               Cancelar
             </Button>
             <Button
-              onClick={() => adicionarDiversoMutation.mutate(novoMaterialDiverso)}
-              disabled={adicionarDiversoMutation.isPending || !novoMaterialDiverso.titulo || !novoMaterialDiverso.conteudo}
+              onClick={handleAdicionarMaterial}
+              disabled={uploadando || !novoMaterialDiverso.titulo || 
+                (novoMaterialDiverso.tipo === "texto" && !novoMaterialDiverso.conteudo) ||
+                (novoMaterialDiverso.tipo === "link" && !novoMaterialDiverso.conteudo) ||
+                (novoMaterialDiverso.tipo === "video" && !novoMaterialDiverso.conteudo) ||
+                ((novoMaterialDiverso.tipo === "imagem" || novoMaterialDiverso.tipo === "pdf") && !arquivoUpload)
+              }
             >
-              {adicionarDiversoMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              Adicionar
+              {uploadando && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+              {uploadando ? "Enviando..." : "Adicionar"}
             </Button>
           </DialogFooter>
         </DialogContent>

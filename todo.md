@@ -834,19 +834,29 @@
 - [x] Renomear "Materiais de Divulgação" para "Biblioteca de Recursos" em todos os arquivos
 - [x] Atualizar títulos de páginas
 - [x] Atualizar links de menu (AdminLayout e PainelVendedorLayout)
-- [ ] Atualizar rotas no App.tsx (manter /materiais-divulgacao por compatibilidade)
+- [x] Atualizar rotas no App.tsx (manter /materiais-divulgacao por compatibilidade)
 
-### Expansão de Funcionalidades
-- [ ] Adicionar suporte para upload de PDFs
-- [ ] Adicionar suporte para upload de vídeos diretos
-- [ ] Adicionar campo para links externos
-- [ ] Adicionar seção de textos padrão editáveis
-- [ ] Manter seção de Promoção Vigente
-- [ ] Criar categorização por tipo de conteúdo (Vídeo, PDF, Link, Texto, Promoção)
+### Expansão de Funcionalidades - Upload Completo
+- [x] Adicionar seletor de tipo no modal de adicionar material (link, pdf, imagem, video, texto)
+- [x] Implementar upload de arquivos para PDFs via S3
+- [x] Implementar upload de arquivos para imagens via S3
+- [x] Implementar upload de arquivos para vídeos via S3
+- [x] Adicionar campo específico para URLs quando tipo for "link"
+- [x] Adicionar campo específico para URLs quando tipo for "video" (YouTube, Vimeo)
+- [x] Implementar visualização diferenciada por tipo:
+  - [x] Ícones específicos para cada tipo (FileText, Link, Image, Video, FileType)
+  - [x] Preview de imagens inline
+  - [x] Botão "Abrir" para links externos
+  - [x] Player de vídeo ou link para vídeo
+  - [x] Botão "Baixar" para PDFs
+- [x] Adicionar filtros de busca por tipo de material
+- [x] Implementar campo de descrição opcional para materiais
+- [x] Testar upload de cada tipo (texto, link, PDF, imagem, vídeo)
+- [ ] Salvar checkpoint com upload completo
 
 ## Página de QR Codes
 
-- [ ] Verificar se página existe e está funcional
+- [x] Verificar se página existe e está funcional
 - [ ] Adicionar campo para inserir link de destino do QR Code
 - [ ] Implementar geração automática de QR Code
 - [ ] Permitir download do QR Code gerado
@@ -854,8 +864,8 @@
 
 ## Validação de Links Individualizados
 
-- [ ] Verificar se cada vendedor/promotor tem código único gerado
-- [ ] Testar link personalizado de checkout
-- [ ] Validar que parâmetro 'ref' está sendo passado corretamente
-- [ ] Confirmar que Admin pode identificar vendas por link
-- [ ] Documentar como rastrear vendas por promotor
+- [x] Verificar se cada vendedor/promotor tem código único gerado
+- [x] Testar link personalizado de checkout
+- [x] Validar que parâmetro 'ref' está sendo passado corretamente
+- [x] Confirmar que Admin pode identificar vendas por link
+- [x] Documentar como rastrear vendas por promotor
