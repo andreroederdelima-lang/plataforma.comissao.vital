@@ -45,14 +45,87 @@ export default function TabelaComissoes() {
       </header>
 
       <div className="container mx-auto px-4 py-12">
+        {/* Banner Destaque: Promotor Pode Vender ou Indicar */}
+        <div className="max-w-5xl mx-auto mb-8">
+          <Card className="border-4 border-primary shadow-2xl bg-gradient-to-r from-teal-50 to-blue-50">
+            <CardContent className="pt-8 pb-8">
+              <div className="text-center mb-6">
+                <h2 className="text-4xl font-bold text-primary mb-3">
+                  🎯 Como Promotor, Você Pode Escolher!
+                </h2>
+                <p className="text-xl text-gray-700 font-semibold">
+                  Você decide como quer ganhar: <span className="text-orange-600">indicando</span> ou <span className="text-green-600 font-bold">vendendo</span>
+                </p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                {/* Opção 1: Apenas Indicar */}
+                <div className="bg-white p-6 rounded-lg border-2 border-orange-300 shadow-md">
+                  <div className="text-center mb-4">
+                    <div className="text-5xl mb-2">👥</div>
+                    <h3 className="text-2xl font-bold text-orange-600 mb-2">Apenas Indicar</h3>
+                    <p className="text-sm text-gray-600">Você passa o contato, o comercial fecha</p>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <p className="flex items-start gap-2">
+                      <span className="text-orange-500 font-bold">•</span>
+                      <span>Menos trabalho</span>
+                    </p>
+                    <p className="flex items-start gap-2">
+                      <span className="text-orange-500 font-bold">•</span>
+                      <span>Comissão dividida com comercial</span>
+                    </p>
+                    <p className="flex items-start gap-2">
+                      <span className="text-orange-500 font-bold">•</span>
+                      <span className="font-semibold text-orange-600">Você ganha 30% a 70% da comissão</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Opção 2: Vender Diretamente */}
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border-4 border-green-500 shadow-lg relative">
+                  <div className="absolute -top-3 -right-3 bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full text-xs font-bold shadow-md">
+                    🔥 MAIS LUCRATIVO!
+                  </div>
+                  <div className="text-center mb-4">
+                    <div className="text-5xl mb-2">💰</div>
+                    <h3 className="text-2xl font-bold text-green-600 mb-2">Vender Diretamente</h3>
+                    <p className="text-sm text-gray-600">Você fecha a venda sozinho</p>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <p className="flex items-start gap-2">
+                      <span className="text-green-600 font-bold">✓</span>
+                      <span>Cliente finaliza no checkout</span>
+                    </p>
+                    <p className="flex items-start gap-2">
+                      <span className="text-green-600 font-bold">✓</span>
+                      <span>Sem intermediação</span>
+                    </p>
+                    <p className="flex items-start gap-2">
+                      <span className="text-green-600 font-bold">✓</span>
+                      <span className="font-bold text-green-700 text-lg">Você ganha 100% da comissão! 🎉</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 text-center">
+                <p className="text-lg text-gray-700">
+                  <strong className="text-primary">Dica de Ouro:</strong> Quanto mais você se envolver no processo de venda, 
+                  <span className="text-green-600 font-bold"> maior será sua comissão!</span>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Introdução Motivadora */}
         <div className="max-w-4xl mx-auto mb-12 text-center">
-          <h2 className="text-4xl font-bold text-primary mb-4">
-            💰 Ganhe Comissões Indicando Saúde de Qualidade!
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            📈 Entenda os 3 Cenários de Comissionamento
           </h2>
-          <p className="text-lg text-gray-700 mb-6">
-            Quanto mais você se envolver no processo de venda, maior será sua comissão.
-            Você pode ganhar até <strong className="text-primary">100% da comissão</strong> fechando a venda sozinho!
+          <p className="text-lg text-gray-600">
+            Veja abaixo quanto você pode ganhar em cada situação
           </p>
         </div>
 
@@ -186,35 +259,75 @@ export default function TabelaComissoes() {
           
           <div className="overflow-x-auto">
             <table className="w-full bg-white rounded-lg shadow-lg">
-              <thead className="bg-primary text-white">
+              <thead className="bg-gradient-to-r from-teal-600 to-blue-600 text-white">
                 <tr>
-                  <th className="px-4 py-3 text-left">Plano</th>
-                  <th className="px-4 py-3 text-right">Preço Mensal</th>
-                  <th className="px-4 py-3 text-right">Venda Direta (100%)</th>
-                  <th className="px-4 py-3 text-right">Lead Quente (Você {configQuente?.percentualIndicador}%)</th>
-                  <th className="px-4 py-3 text-right">Lead Frio (Você {configFrio?.percentualIndicador}%)</th>
+                  <th className="px-4 py-4 text-left">Plano</th>
+                  <th className="px-4 py-4 text-right">Preço Mensal</th>
+                  <th className="px-4 py-4 text-right bg-green-600">
+                    <div className="flex flex-col items-end">
+                      <span className="font-bold text-lg">🔥 Venda Direta</span>
+                      <span className="text-xs font-normal">(100% para você)</span>
+                    </div>
+                  </th>
+                  <th className="px-4 py-4 text-right">
+                    <div className="flex flex-col items-end">
+                      <span>Lead Quente</span>
+                      <span className="text-xs font-normal">(Você {configQuente?.percentualIndicador}%)</span>
+                    </div>
+                  </th>
+                  <th className="px-4 py-4 text-right">
+                    <div className="flex flex-col items-end">
+                      <span>Lead Frio</span>
+                      <span className="text-xs font-normal">(Você {configFrio?.percentualIndicador}%)</span>
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {planos?.map((plano: any, index: number) => (
                   <tr key={plano.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                    <td className="px-4 py-3 font-medium">{plano.nome}</td>
-                    <td className="px-4 py-3 text-right text-gray-600">
+                    <td className="px-4 py-4 font-medium text-gray-900">{plano.nome}</td>
+                    <td className="px-4 py-4 text-right text-gray-600">
                       {formatarDinheiro(plano.precoMensal)}
                     </td>
-                    <td className="px-4 py-3 text-right font-bold text-green-600">
-                      {formatarDinheiro(plano.bonificacaoPadrao)}
+                    <td className="px-4 py-4 text-right bg-green-50 border-l-4 border-green-500">
+                      <div className="flex flex-col items-end">
+                        <span className="text-2xl font-bold text-green-600">
+                          {formatarDinheiro(plano.bonificacaoPadrao)}
+                        </span>
+                        <span className="text-xs text-green-700 font-semibold">⭐ MELHOR GANHO</span>
+                      </div>
                     </td>
-                    <td className="px-4 py-3 text-right font-bold text-orange-600">
-                      {calcularComissao(plano.bonificacaoPadrao, configQuente?.percentualIndicador || 70)}
+                    <td className="px-4 py-4 text-right">
+                      <span className="text-lg font-bold text-orange-600">
+                        {calcularComissao(plano.bonificacaoPadrao, configQuente?.percentualIndicador || 70)}
+                      </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-bold text-blue-600">
-                      {calcularComissao(plano.bonificacaoPadrao, configFrio?.percentualIndicador || 30)}
+                    <td className="px-4 py-4 text-right">
+                      <span className="text-lg font-bold text-blue-600">
+                        {calcularComissao(plano.bonificacaoPadrao, configFrio?.percentualIndicador || 30)}
+                      </span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+          
+          {/* Legenda Visual */}
+          <div className="mt-6 flex justify-center gap-6 flex-wrap">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-green-500 rounded"></div>
+              <span className="text-sm text-gray-700"><strong>Verde:</strong> Você vende = 100% da comissão</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-orange-500 rounded"></div>
+              <span className="text-sm text-gray-700"><strong>Laranja:</strong> Lead quente = até 70%</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-blue-500 rounded"></div>
+              <span className="text-sm text-gray-700"><strong>Azul:</strong> Lead frio = 30%</span>
+            </div>
           </div>
         </div>
 

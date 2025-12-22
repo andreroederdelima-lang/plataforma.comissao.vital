@@ -852,7 +852,7 @@
 - [x] Adicionar filtros de busca por tipo de material
 - [x] Implementar campo de descrição opcional para materiais
 - [x] Testar upload de cada tipo (texto, link, PDF, imagem, vídeo)
-- [ ] Salvar checkpoint com upload completo
+- [x] Salvar checkpoint com upload completo
 
 ## Página de QR Codes
 
@@ -869,3 +869,12 @@
 - [x] Validar que parâmetro 'ref' está sendo passado corretamente
 - [x] Confirmar que Admin pode identificar vendas por link
 - [x] Documentar como rastrear vendas por promotor
+
+
+## Melhorias na Página de Tabela de Comissões
+
+- [x] Adicionar banner destacado explicando diferença entre vender e indicar
+- [x] Destacar que vender é mais lucrativo que apenas indicar
+- [x] Melhorar visualização da tabela com cores diferentes para venda vs indicação
+- [x] Adicionar ícones ou badges para diferenciar tipos de comissão
+- [ ] Salvar checkpoint
