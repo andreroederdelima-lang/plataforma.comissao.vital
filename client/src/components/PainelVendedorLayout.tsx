@@ -50,7 +50,7 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
     },
     {
       icon: FileText,
-      label: "Indicações",
+      label: "Vendas e Indicações",
       path: "/minhas-indicacoes",
     },
     {
@@ -78,7 +78,7 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
   const actionButtons = [
     {
       icon: Plus,
-      label: "Nova Indicação",
+      label: "Cadastrar Venda/Indicação",
       path: "/indicar",
       action: "create",
     },

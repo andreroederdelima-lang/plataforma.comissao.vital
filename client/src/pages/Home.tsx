@@ -97,7 +97,7 @@ export default function Home() {
                 <NotificationBadge />
                 <div className="hidden md:flex items-center gap-2">
                   <Link href="/minhas-indicacoes">
-                    <Button variant="ghost" size="sm">Minhas Indicações</Button>
+                    <Button variant="ghost" size="sm">Vendas e Indicações</Button>
                   </Link>
                   <Link href="/perfil">
                     <Button variant="ghost" size="sm">Meu Perfil</Button>
@@ -135,7 +135,7 @@ export default function Home() {
           <div className="container py-4 space-y-2">
             <Link href="/minhas-indicacoes">
               <Button variant="ghost" className="w-full justify-start" onClick={() => setMobileMenuOpen(false)}>
-                Minhas Indicações
+                Vendas e Indicações
               </Button>
             </Link>
             <Link href="/perfil">
@@ -176,9 +176,10 @@ export default function Home() {
             {/* Hero Section */}
             <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
               <CardHeader className="text-center">
-                <CardTitle className="text-3xl">Registrar Nova Indicação</CardTitle>
-                <CardDescription className="text-base">
-                  Preencha os dados da pessoa que você está indicando as assinaturas Vital
+                <CardTitle className="text-3xl">Cadastrar Venda ou Indicação</CardTitle>
+                <CardDescription className="text-base space-y-2">
+                  <p className="font-semibold text-green-600">💰 VENDA DIRETA: Ganhe 100% da comissão fechando a venda completa!</p>
+                  <p className="text-sm">Ou apenas indique e ganhe 50% quando nossa equipe fechar a venda</p>
                 </CardDescription>
               </CardHeader>
             </Card>
