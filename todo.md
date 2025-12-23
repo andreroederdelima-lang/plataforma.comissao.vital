@@ -919,3 +919,20 @@
 - [ ] Melhorar responsividade no celular
 - [ ] Otimizar performance mobile
 - [ ] Salvar checkpoint após todas as correções
+
+
+## Botões Separados para Venda e Indicação
+
+- [x] Criar dois botões distintos no painel do vendedor
+- [x] Botão "🎯 Cadastrar VENDA" (verde, grande, destaque)
+- [x] Botão "📝 Cadastrar Indicação" (cinza, menor, secundário)
+- [x] Implementar rotas com parâmetros ?tipo=venda e ?tipo=indicacao
+- [x] Testar navegação
+
+## Melhorias Mobile
+
+- [x] Testar navegação completa no celular (layout OK)
+- [ ] Corrigir problema de páginas voltando para início (não reproduzível sem login real)
+- [ ] Corrigir problema de admin ficando preso (não reproduzível sem login real)
+- [x] Melhorar responsividade geral (OK)
+- [ ] Salvar checkpoint

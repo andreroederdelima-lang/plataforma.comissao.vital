@@ -78,9 +78,17 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
   const actionButtons = [
     {
       icon: Plus,
-      label: "Cadastrar Venda/Indicação",
-      path: "/indicar",
+      label: "🎯 Cadastrar VENDA",
+      path: "/indicar?tipo=venda",
       action: "create",
+      variant: "primary" as const,
+    },
+    {
+      icon: Plus,
+      label: "📝 Cadastrar Indicação",
+      path: "/indicar?tipo=indicacao",
+      action: "create",
+      variant: "secondary" as const,
     },
   ];
 
@@ -155,15 +163,20 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
             })}
           </nav>
 
-          {/* Botão de Ação Rápida */}
-          <div className="mt-6 pt-6 border-t">
+          {/* Botões de Ação Rápida */}
+          <div className="mt-6 pt-6 border-t space-y-3">
             {actionButtons.map((btn) => {
               const Icon = btn.icon;
+              const isPrimary = btn.variant === "primary";
               return (
                 <Button
                   key={btn.label}
                   onClick={() => setLocation(btn.path)}
-                  className="w-full bg-[#1e9d9f] hover:bg-[#178789] text-white"
+                  className={`w-full ${
+                    isPrimary
+                      ? "bg-green-600 hover:bg-green-700 text-white text-base py-6"
+                      : "bg-gray-400 hover:bg-gray-500 text-white text-sm py-4"
+                  }`}
                 >
                   <Icon className="h-5 w-5 mr-2" />
                   {btn.label}
