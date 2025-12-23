@@ -51,7 +51,7 @@ export default function LoginIndicador() {
             <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-20 mx-auto cursor-pointer" />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-4">Login</h1>
-          <p className="text-muted-foreground mt-1">Programa de Indicações Vital</p>
+          <p className="text-muted-foreground mt-1">Programa de Vendedores Vital</p>
         </div>
 
         <Card>

@@ -77,13 +77,13 @@ export default function CadastroIndicador() {
             <img src={APP_LOGO} alt="Sua Saúde Vital" className="h-20 mx-auto cursor-pointer" />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-4">Criar Conta</h1>
-          <p className="text-muted-foreground mt-1">Programa de Indicações Vital</p>
+          <p className="text-muted-foreground mt-1">Programa de Vendedores Vital</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Cadastro de Promotor</CardTitle>
-            <CardDescription>Preencha seus dados para começar a indicar</CardDescription>
+            <CardTitle>Cadastro de Vendedor</CardTitle>
+            <CardDescription>Preencha seus dados para começar a vender e ganhar comissões</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">

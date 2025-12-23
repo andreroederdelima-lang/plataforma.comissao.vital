@@ -877,4 +877,45 @@
 - [x] Destacar que vender é mais lucrativo que apenas indicar
 - [x] Melhorar visualização da tabela com cores diferentes para venda vs indicação
 - [x] Adicionar ícones ou badges para diferenciar tipos de comissão
-- [ ] Salvar checkpoint
+- [x] Salvar checkpoint
+
+
+## 🚨 PROBLEMAS CRÍTICOS - Página Tabela de Comissões
+
+- [ ] Investigar por que mudanças na TabelaComissoes.tsx não aparecem no site publicado
+- [ ] Verificar se há cache ou problema de build
+- [ ] Corrigir problema de novos usuários virando admin automaticamente
+- [ ] Testar e corrigir navegação (botões levando para lugares errados)
+- [ ] Verificar fluxo completo de cadastro
+- [ ] Salvar checkpoint após correções
+
+
+## 🚨 PRIORIDADE 1: ADMIN NÃO FUNCIONA
+
+- [ ] Investigar quais páginas do admin estão quebradas
+- [ ] Corrigir link de recuperação de senha (direciona para página que não existe)
+- [ ] Testar todas as rotas do admin (/admin, /admin/usuarios, /admin/configuracoes, etc)
+- [ ] Verificar permissões e autenticação
+- [ ] Corrigir erros de carregamento
+
+## 🚨 PRIORIDADE 2: MUDAR FOCO PARA VENDEDOR
+
+### Renomear Indicador → Promotor
+- [ ] Mudar "Indicador" para "Promotor" em TODOS os textos
+- [ ] Atualizar rotas (/cadastro-indicador → /cadastro-promotor, etc)
+- [ ] Atualizar banco de dados se necessário
+- [ ] Deixar claro: PROMOTOR = Vendedor e/ou Indicador
+
+### Destacar VENDAS (não só indicações)
+- [ ] Mudar foco principal para VENDAS DIRETAS
+- [ ] Indicar deve ser opção secundária
+- [ ] Ajustar textos: "Venda e ganhe 100%" (destaque) + "Ou apenas indique" (secundário)
+- [ ] Atualizar dashboard do promotor para focar em vendas
+- [ ] Adicionar seção "Minhas Vendas" separada de "Minhas Indicações"
+
+## 🔧 Melhorias Futuras (após prioridades)
+
+- [ ] Corrigir problemas mobile (páginas voltam, admin preso)
+- [ ] Melhorar responsividade no celular
+- [ ] Otimizar performance mobile
+- [ ] Salvar checkpoint após todas as correções

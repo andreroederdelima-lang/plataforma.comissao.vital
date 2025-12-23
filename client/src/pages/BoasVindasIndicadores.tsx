@@ -4,8 +4,8 @@ import { APP_LOGO } from "@/const";
 import { useLocation } from "wouter";
 
 /**
- * Página de boas-vindas para promotores
- * Explica as modalidades (indicação e venda completa) e direciona para login
+ * Página de boas-vindas para vendedores/promotores
+ * Explica as modalidades (venda direta e indicação) e direciona para login
  */
 export default function BoasVindasIndicadores() {
   const [, setLocation] = useLocation();
