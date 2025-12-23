@@ -293,8 +293,18 @@ export const appRouter = router({
         tipoPlano: z.enum(["familiar", "individual"]),
         categoria: z.enum(["empresarial", "pessoa_fisica"]),
         observacoes: z.string().optional(),
+        // Campos específicos para vendas
+        dataVenda: z.string().optional(),
+        valorPlano: z.string().optional(),
+        formaPagamento: z.enum(["pix", "cartao", "boleto"]).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
+        // Converter dataVenda string para Date se fornecida
+        const dataVendaDate = input.dataVenda ? new Date(input.dataVenda) : null;
+        
+        // Converter valorPlano string para centavos se fornecido
+        const valorPlanoInt = input.valorPlano ? Math.round(parseFloat(input.valorPlano) * 100) : null;
+        
         const result = await createIndicacao({
           parceiroId: ctx.user.id,
           nomeIndicado: input.nomeIndicado,
@@ -303,6 +313,9 @@ export const appRouter = router({
           tipoPlano: input.tipoPlano,
           categoria: input.categoria,
           observacoes: input.observacoes || null,
+          dataVenda: dataVendaDate,
+          valorPlano: valorPlanoInt,
+          formaPagamento: input.formaPagamento || null,
         });
 
         // Notificar o proprietário e equipe sobre a nova indicação

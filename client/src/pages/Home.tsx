@@ -9,13 +9,14 @@ import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Loader2, LogOut, Menu, UserCircle, X } from "lucide-react";
 import { NotificationBadge } from "@/components/NotificationBadge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, useSearch } from "wouter";
 
 export default function Home() {
   const { user, loading, isAuthenticated, logout } = useAuth();
   const [, setLocation] = useLocation();
+  const searchParams = useSearch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [nomeIndicado, setNomeIndicado] = useState("");
   const [whatsappIndicado, setWhatsappIndicado] = useState("");
@@ -23,6 +24,15 @@ export default function Home() {
   const [tipoPlano, setTipoPlano] = useState<"familiar" | "individual">("individual");
   const [categoria, setCategoria] = useState<"empresarial" | "pessoa_fisica">("pessoa_fisica");
   const [observacoes, setObservacoes] = useState("");
+  
+  // Campos específicos para venda
+  const [dataVenda, setDataVenda] = useState("");
+  const [valorPlano, setValorPlano] = useState("");
+  const [formaPagamento, setFormaPagamento] = useState<"pix" | "cartao" | "boleto">("pix");
+  
+  // Detectar tipo de cadastro (venda ou indicação)
+  const tipoParam = new URLSearchParams(searchParams).get("tipo");
+  const isVenda = tipoParam === "venda";
 
   const utils = trpc.useUtils();
   const createMutation = trpc.indicacoes.create.useMutation({
@@ -49,6 +59,12 @@ export default function Home() {
       toast.error("Por favor, preencha todos os campos obrigatórios");
       return;
     }
+    
+    // Validar campos de venda se for venda
+    if (isVenda && (!dataVenda || !valorPlano)) {
+      toast.error("Por favor, preencha data e valor da venda");
+      return;
+    }
 
     createMutation.mutate({
       nomeIndicado,
@@ -57,6 +73,12 @@ export default function Home() {
       tipoPlano,
       categoria,
       observacoes,
+      // Enviar campos de venda se for venda
+      ...(isVenda && {
+        dataVenda,
+        valorPlano,
+        formaPagamento,
+      }),
     });
   };
 
@@ -184,6 +206,21 @@ export default function Home() {
               </CardHeader>
             </Card>
 
+            {/* Banner de Venda */}
+            {isVenda && (
+              <Card className="bg-green-50 border-green-500 border-2">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-3">
+                    <div className="text-4xl">🎯</div>
+                    <div>
+                      <h3 className="text-xl font-bold text-green-700">💰 Você está cadastrando uma VENDA</h3>
+                      <p className="text-green-600">Ganhe 100% da comissão! Preencha os dados da venda fechada.</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Form */}
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardContent className="pt-6">
@@ -287,26 +324,93 @@ export default function Home() {
                     </RadioGroup>
                   </div>
 
-                  {/* Observações */}
-                  <div className="space-y-2">
-                    <Label htmlFor="observacoes" className="text-base font-semibold">
-                      Observações
-                    </Label>
-                    <Textarea
-                      id="observacoes"
-                      value={observacoes}
-                      onChange={(e) => setObservacoes(e.target.value)}
-                      placeholder="Exemplos: Tem 5 filhos pequenos e um marido | Quer dar para empregada doméstica e avó | Tem mãe acamada | Nome da empresa (se empresarial)"
-                      rows={4}
-                      className="text-base resize-none"
-                    />
-                  </div>
+                  {/* Campos específicos para VENDA */}
+                  {isVenda && (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="dataVenda" className="text-base font-semibold">
+                          Data da Venda *
+                        </Label>
+                        <Input
+                          id="dataVenda"
+                          type="date"
+                          value={dataVenda}
+                          onChange={(e) => setDataVenda(e.target.value)}
+                          required={isVenda}
+                          className="text-base"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="valorPlano" className="text-base font-semibold">
+                          Valor do Plano (R$) *
+                        </Label>
+                        <Input
+                          id="valorPlano"
+                          type="number"
+                          step="0.01"
+                          value={valorPlano}
+                          onChange={(e) => setValorPlano(e.target.value)}
+                          placeholder="Ex: 199.90"
+                          required={isVenda}
+                          className="text-base"
+                        />
+                      </div>
+
+                      <div className="space-y-3">
+                        <Label className="text-base font-semibold">Forma de Pagamento *</Label>
+                        <RadioGroup
+                          value={formaPagamento}
+                          onValueChange={(value) => setFormaPagamento(value as "pix" | "cartao" | "boleto")}
+                          className="flex gap-4"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="pix" id="pix" />
+                            <Label htmlFor="pix" className="cursor-pointer font-normal">
+                              PIX
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="cartao" id="cartao" />
+                            <Label htmlFor="cartao" className="cursor-pointer font-normal">
+                              Cartão
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="boleto" id="boleto" />
+                            <Label htmlFor="boleto" className="cursor-pointer font-normal">
+                              Boleto
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Observações - apenas para indicações */}
+                  {!isVenda && (
+                    <div className="space-y-2">
+                      <Label htmlFor="observacoes" className="text-base font-semibold">
+                        Observações
+                      </Label>
+                      <Textarea
+                        id="observacoes"
+                        value={observacoes}
+                        onChange={(e) => setObservacoes(e.target.value)}
+                        placeholder="Exemplos: Tem 5 filhos pequenos e um marido | Quer dar para empregada doméstica e avó | Tem mãe acamada | Nome da empresa (se empresarial)"
+                        rows={4}
+                        className="text-base resize-none"
+                      />
+                    </div>
+                  )}
 
                   {/* Submit Button */}
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full text-base"
+                    className={`w-full text-base ${
+                      isVenda ? "bg-green-600 hover:bg-green-700" : ""
+                    }`}
                     disabled={createMutation.isPending}
                   >
                     {createMutation.isPending ? (
@@ -314,8 +418,10 @@ export default function Home() {
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                         Enviando...
                       </>
+                    ) : isVenda ? (
+                      "🎯 Cadastrar Venda"
                     ) : (
-                      "Enviar Indicação"
+                      "📝 Enviar Indicação"
                     )}
                   </Button>
                 </form>

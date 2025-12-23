@@ -936,3 +936,19 @@
 - [ ] Corrigir problema de admin ficando preso (não reproduzível sem login real)
 - [x] Melhorar responsividade geral (OK)
 - [ ] Salvar checkpoint
+
+
+## Formulário Adaptativo para Vendas
+
+- [x] Detectar parâmetro ?tipo=venda na URL
+- [x] Mostrar mensagem destacada "💰 Você está cadastrando uma VENDA (100% comissão)"
+- [x] Banner verde destacado quando ?tipo=venda
+- [x] Adicionar campos específicos para venda:
+  - [x] Data da venda
+  - [x] Valor do plano
+  - [x] Forma de pagamento (PIX, Cartão, Boleto)
+- [x] Ocultar campo de observações quando for venda
+- [x] Adicionar campos ao schema do banco
+- [x] Atualizar backend para aceitar novos campos
+- [x] Testar fluxo completo
+- [ ] Salvar checkpoint
