@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "ef115309-9d60-44dc-98de-6a96463bf268",
-  "prevId": "4110945e-2b47-4009-955d-a2ce889a53ce",
+  "id": "a5479808-024b-4908-8989-fd611c1558ae",
+  "prevId": "ef115309-9d60-44dc-98de-6a96463bf268",
   "tables": {
     "comissaoConfig": {
       "name": "comissaoConfig",
@@ -265,7 +265,7 @@
         },
         "formaPagamento": {
           "name": "formaPagamento",
-          "type": "enum('pix','cartao','boleto')",
+          "type": "enum('pix','cartao')",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

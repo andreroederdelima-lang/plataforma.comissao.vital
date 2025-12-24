@@ -66,7 +66,7 @@ export const indicacoes = mysqlTable("indicacoes", {
   /** Campos específicos para vendas diretas */
   dataVenda: timestamp("dataVenda"),
   valorPlano: int("valorPlano"), // Valor em centavos
-  formaPagamento: mysqlEnum("formaPagamento", ["pix", "cartao", "boleto"]),
+  formaPagamento: mysqlEnum("formaPagamento", ["pix", "cartao"]),
   /** Status da indicação para controle de comissionamento */
   status: mysqlEnum("status", ["aguardando_contato", "em_negociacao", "venda_com_objecoes", "venda_fechada", "nao_comprou", "cliente_sem_interesse"]).default("aguardando_contato").notNull(),
   /** Tipo de comissão: valor fixo ou percentual */

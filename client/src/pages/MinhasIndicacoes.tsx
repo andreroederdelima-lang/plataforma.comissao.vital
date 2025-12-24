@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { APP_LOGO } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Loader2, LogOut, UserCircle } from "lucide-react";
+import { ArrowLeft, Loader2, LogOut, UserCircle, DollarSign, FileText, Calendar, CreditCard } from "lucide-react";
 import { NotificationBadge } from "@/components/NotificationBadge";
 import { Link } from "wouter";
 
@@ -106,9 +106,9 @@ export default function MinhasIndicacoes() {
           {/* Header */}
           <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
             <CardHeader>
-              <CardTitle className="text-2xl">Minhas Indicações</CardTitle>
+              <CardTitle className="text-2xl">Vendas e Indicações</CardTitle>
               <CardDescription>
-                Acompanhe o status de todas as suas indicações
+                Acompanhe suas vendas diretas (💰 100% comissão) e indicações (📝 50% comissão)
               </CardDescription>
             </CardHeader>
           </Card>
@@ -127,16 +127,34 @@ export default function MinhasIndicacoes() {
             </Card>
           ) : (
             <div className="grid gap-4">
-              {indicacoes.map((indicacao) => (
+              {indicacoes.map((indicacao) => {
+                // Verificar se é venda (tem dataVenda preenchida)
+                const isVenda = !!indicacao.dataVenda;
+                const dataVenda = indicacao.dataVenda ? new Date(indicacao.dataVenda) : null;
+                const valorEmReais = indicacao.valorPlano ? (indicacao.valorPlano / 100).toFixed(2) : null;
+                
+                // Calcular dias desde a venda
+                const diasDesdeVenda = dataVenda ? Math.floor((Date.now() - dataVenda.getTime()) / (1000 * 60 * 60 * 24)) : null;
+                const podeAprovar = diasDesdeVenda !== null && diasDesdeVenda >= 7;
+                
+                return (
                 <Card key={indicacao.id} className="bg-card/80 backdrop-blur-sm">
                   <CardContent className="pt-6">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 space-y-3">
-                        <div>
-                          <h3 className="text-lg font-semibold">{indicacao.nomeIndicado}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            WhatsApp: {indicacao.whatsappIndicado}
-                          </p>
+                        {/* Ícone e Título */}
+                        <div className="flex items-center gap-2">
+                          {isVenda ? (
+                            <div className="text-2xl">💰</div>
+                          ) : (
+                            <div className="text-2xl">📝</div>
+                          )}
+                          <div>
+                            <h3 className="text-lg font-semibold">{indicacao.nomeIndicado}</h3>
+                            <p className="text-sm text-muted-foreground">
+                              WhatsApp: {indicacao.whatsappIndicado}
+                            </p>
+                          </div>
                         </div>
 
                         <div className="flex flex-wrap gap-2">
@@ -148,6 +166,46 @@ export default function MinhasIndicacoes() {
                           </Badge>
                         </div>
 
+                        {/* Dados de Venda */}
+                        {isVenda && (
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-3 space-y-2">
+                            <div className="flex items-center gap-2 text-sm">
+                              <Calendar className="h-4 w-4 text-green-600" />
+                              <span className="font-medium">Data da Venda:</span>
+                              <span>{dataVenda?.toLocaleDateString("pt-BR")}</span>
+                              {diasDesdeVenda !== null && (
+                                <Badge variant="outline" className="ml-2">
+                                  {diasDesdeVenda} {diasDesdeVenda === 1 ? "dia" : "dias"} atrás
+                                </Badge>
+                              )}
+                            </div>
+                            {valorEmReais && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <DollarSign className="h-4 w-4 text-green-600" />
+                                <span className="font-medium">Valor:</span>
+                                <span className="text-green-700 font-semibold">R$ {valorEmReais}</span>
+                              </div>
+                            )}
+                            {indicacao.formaPagamento && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <CreditCard className="h-4 w-4 text-green-600" />
+                                <span className="font-medium">Pagamento:</span>
+                                <span>{indicacao.formaPagamento === "pix" ? "PIX" : "Cartão de Crédito"}</span>
+                              </div>
+                            )}
+                            {!podeAprovar && diasDesdeVenda !== null && (
+                              <div className="text-xs text-orange-600 mt-2">
+                                ⚠️ Período de carência: aguarde {7 - diasDesdeVenda} {7 - diasDesdeVenda === 1 ? "dia" : "dias"} para aprovação
+                              </div>
+                            )}
+                            {podeAprovar && indicacao.status !== "venda_fechada" && (
+                              <div className="text-xs text-green-600 mt-2">
+                                ✅ Venda pode ser aprovada pelo admin
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
                         {indicacao.observacoes && (
                           <div className="pt-2">
                             <p className="text-sm text-muted-foreground">
@@ -175,7 +233,8 @@ export default function MinhasIndicacoes() {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

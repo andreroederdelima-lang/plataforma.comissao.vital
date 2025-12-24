@@ -1,0 +1,1 @@
+ALTER TABLE `indicacoes` MODIFY COLUMN `formaPagamento` enum('pix','cartao');

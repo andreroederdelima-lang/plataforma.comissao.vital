@@ -28,7 +28,7 @@ export default function Home() {
   // Campos específicos para venda
   const [dataVenda, setDataVenda] = useState("");
   const [valorPlano, setValorPlano] = useState("");
-  const [formaPagamento, setFormaPagamento] = useState<"pix" | "cartao" | "boleto">("pix");
+  const [formaPagamento, setFormaPagamento] = useState<"pix" | "cartao">("pix");
   
   // Detectar tipo de cadastro (venda ou indicação)
   const tipoParam = new URLSearchParams(searchParams).get("tipo");
@@ -361,7 +361,7 @@ export default function Home() {
                         <Label className="text-base font-semibold">Forma de Pagamento *</Label>
                         <RadioGroup
                           value={formaPagamento}
-                          onValueChange={(value) => setFormaPagamento(value as "pix" | "cartao" | "boleto")}
+                          onValueChange={(value) => setFormaPagamento(value as "pix" | "cartao")}
                           className="flex gap-4"
                         >
                           <div className="flex items-center space-x-2">
@@ -373,13 +373,7 @@ export default function Home() {
                           <div className="flex items-center space-x-2">
                             <RadioGroupItem value="cartao" id="cartao" />
                             <Label htmlFor="cartao" className="cursor-pointer font-normal">
-                              Cartão
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="boleto" id="boleto" />
-                            <Label htmlFor="boleto" className="cursor-pointer font-normal">
-                              Boleto
+                              Cartão de Crédito
                             </Label>
                           </div>
                         </RadioGroup>

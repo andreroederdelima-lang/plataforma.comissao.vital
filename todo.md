@@ -951,4 +951,46 @@
 - [x] Adicionar campos ao schema do banco
 - [x] Atualizar backend para aceitar novos campos
 - [x] Testar fluxo completo
+- [x] Salvar checkpoint
+
+
+## Sistema Completo de Comissões
+
+### Ajustes no Formulário
+- [x] Remover opção "Boleto" (apenas PIX e Cartão)
+- [x] Atualizar enum no schema do banco
+- [x] Atualizar validação no backend
+
+### Lista de Vendas e Indicações
+- [x] Adicionar ícones diferentes (💰 venda vs 📝 indicação)
+- [x] Exibir data da venda quando for venda fechada
+- [x] Exibir valor em R$ quando for venda fechada
+- [x] Exibir forma de pagamento (PIX/Cartão)
+- [x] Mostrar período de carência (7 dias)
+- [x] Indicar se venda já pode ser aprovada
+
+### Sistema de Aprovação e Comissões
+- [ ] Criar campo "dataAprovacao" no schema
+- [ ] Implementar lógica: só pode aprovar após 7 dias da venda
+- [ ] Calcular automaticamente comissão ao aprovar:
+  - [ ] Venda direta: 100% da comissão configurada
+  - [ ] Indicação (cliente pronto): Maior parte para quem indicou
+  - [ ] Indicação (venda difícil): Maior parte para vendedor Vital
+- [ ] Admin pode editar valores de comissão a qualquer momento
+- [ ] Exibir valor da comissão em R$ na lista
+
+### Dashboard com Métricas
+- [ ] Card: Total de vendas fechadas (aprovadas)
+- [ ] Card: Total de indicações pendentes (aguardando vendedor Vital)
+- [ ] Card: Comissões a receber em R$ (aprovadas mas não pagas)
+- [ ] Card: Meta mensal com barra de progresso
+- [ ] Filtro por período (mês atual, últimos 30 dias, etc)
+
+### Regras de Pagamento
+- [ ] Indicar que pagamento é 1x por mês após dia 10
+- [ ] Marcar comissões como "pagas" após pagamento
+- [ ] Histórico de pagamentos
+
+### Salvar Checkpoint
+- [ ] Testar sistema completo
 - [ ] Salvar checkpoint

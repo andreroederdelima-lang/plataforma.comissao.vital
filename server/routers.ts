@@ -296,7 +296,7 @@ export const appRouter = router({
         // Campos específicos para vendas
         dataVenda: z.string().optional(),
         valorPlano: z.string().optional(),
-        formaPagamento: z.enum(["pix", "cartao", "boleto"]).optional(),
+        formaPagamento: z.enum(["pix", "cartao"]).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         // Converter dataVenda string para Date se fornecida
