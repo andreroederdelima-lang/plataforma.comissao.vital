@@ -18,6 +18,8 @@ export default function AdminConfiguracoes() {
   const utils = trpc.useUtils();
   
   const [valores, setValores] = useState<Record<ComissaoKey, string>>({});
+  const [valoresBase, setValoresBase] = useState<Record<ComissaoKey, string>>({});
+  const [percentuais, setPercentuais] = useState<Record<ComissaoKey, string>>({});
   
   // Estados para percentuais de comissão
   const [percentualQuenteIndicador, setPercentualQuenteIndicador] = useState("70");
@@ -136,11 +138,19 @@ export default function AdminConfiguracoes() {
   useEffect(() => {
     if (configs) {
       const novosValores: Record<ComissaoKey, string> = {};
+      const novosValoresBase: Record<ComissaoKey, string> = {};
+      const novosPercentuais: Record<ComissaoKey, string> = {};
+      
       configs.forEach(c => {
         const key: ComissaoKey = `${c.nomePlano}_${c.tipoPlano}_${c.categoria}`;
         novosValores[key] = (c.valorComissao / 100).toFixed(2);
+        novosValoresBase[key] = c.valorBase ? (c.valorBase / 100).toFixed(2) : "0.00";
+        novosPercentuais[key] = c.percentualComissao?.toString() || "0";
       });
+      
       setValores(novosValores);
+      setValoresBase(novosValoresBase);
+      setPercentuais(novosPercentuais);
     }
   }, [configs]);
 
@@ -150,21 +160,29 @@ export default function AdminConfiguracoes() {
     categoria: "empresarial" | "pessoa_fisica"
   ) => {
     const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
-    const valor = valores[key];
+    const valorBase = valoresBase[key];
+    const percentual = percentuais[key];
     
-    if (!valor || parseFloat(valor) <= 0) {
-      toast.error("Digite um valor válido");
+    if (!valorBase || parseFloat(valorBase) <= 0) {
+      toast.error("Digite um valor base válido");
+      return;
+    }
+    
+    if (!percentual || parseFloat(percentual) < 0 || parseFloat(percentual) > 100) {
+      toast.error("Digite um percentual válido (0-100)");
       return;
     }
 
     // Converter de reais para centavos
-    const valorEmCentavos = Math.round(parseFloat(valor) * 100);
+    const valorBaseEmCentavos = Math.round(parseFloat(valorBase) * 100);
+    const percentualNum = parseFloat(percentual);
 
     upsertMutation.mutate({
       nomePlano,
       tipoPlano,
       categoria,
-      valorComissao: valorEmCentavos,
+      valorBase: valorBaseEmCentavos,
+      percentualComissao: percentualNum,
     });
   };
 
@@ -176,6 +194,40 @@ export default function AdminConfiguracoes() {
   const setValor = (nomePlano: string, tipoPlano: string, categoria: string, value: string) => {
     const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
     setValores(prev => ({ ...prev, [key]: value }));
+  };
+  
+  const getValorBase = (nomePlano: string, tipoPlano: string, categoria: string) => {
+    const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
+    return valoresBase[key] || "";
+  };
+
+  const setValorBase = (nomePlano: string, tipoPlano: string, categoria: string, value: string) => {
+    const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
+    setValoresBase(prev => ({ ...prev, [key]: value }));
+  };
+  
+  const getPercentual = (nomePlano: string, tipoPlano: string, categoria: string) => {
+    const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
+    return percentuais[key] || "";
+  };
+
+  const setPercentual = (nomePlano: string, tipoPlano: string, categoria: string, value: string) => {
+    const key: ComissaoKey = `${nomePlano}_${tipoPlano}_${categoria}`;
+    setPercentuais(prev => ({ ...prev, [key]: value }));
+  };
+  
+  const calcularComissao = (nomePlano: string, tipoPlano: string, categoria: string) => {
+    const valorBase = getValorBase(nomePlano, tipoPlano, categoria);
+    const percentual = getPercentual(nomePlano, tipoPlano, categoria);
+    
+    if (!valorBase || !percentual) return "0.00";
+    
+    const base = parseFloat(valorBase);
+    const perc = parseFloat(percentual);
+    
+    if (isNaN(base) || isNaN(perc)) return "0.00";
+    
+    return ((base * perc) / 100).toFixed(2);
   };
 
   if (loading || isLoading) {
@@ -607,12 +659,18 @@ export default function AdminConfiguracoes() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {planoConfig.items.map(item => {
-                    const valor = getValor(planoConfig.nomePlano, item.tipoPlano, item.categoria);
+                    const valorBase = getValorBase(planoConfig.nomePlano, item.tipoPlano, item.categoria);
+                    const percentual = getPercentual(planoConfig.nomePlano, item.tipoPlano, item.categoria);
+                    const comissaoCalculada = calcularComissao(planoConfig.nomePlano, item.tipoPlano, item.categoria);
+                    
                     return (
-                      <div key={`${planoConfig.nomePlano}_${item.tipoPlano}_${item.categoria}`} className="space-y-2 p-4 border rounded-lg">
-                        <Label className="text-sm font-medium">{item.label}</Label>
-                        <div className="flex gap-2">
-                          <div className="relative flex-1">
+                      <div key={`${planoConfig.nomePlano}_${item.tipoPlano}_${item.categoria}`} className="space-y-3 p-4 border rounded-lg bg-card">
+                        <Label className="text-sm font-semibold">{item.label}</Label>
+                        
+                        {/* Valor Base (Mensalidade) */}
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">Valor Base (Mensalidade)</Label>
+                          <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
                               R$
                             </span>
@@ -621,25 +679,63 @@ export default function AdminConfiguracoes() {
                               step="0.01"
                               min="0"
                               placeholder="0,00"
-                              value={valor}
-                              onChange={(e) => setValor(planoConfig.nomePlano, item.tipoPlano, item.categoria, e.target.value)}
+                              value={valorBase}
+                              onChange={(e) => setValorBase(planoConfig.nomePlano, item.tipoPlano, item.categoria, e.target.value)}
                               className="pl-10"
                             />
                           </div>
-                          <Button
-                            size="sm"
-                            onClick={() => handleSave(planoConfig.nomePlano, item.tipoPlano, item.categoria)}
-                            disabled={upsertMutation.isPending}
-                            className="gap-1"
-                          >
-                            {upsertMutation.isPending ? (
-                              <Loader2 className="h-3 w-3 animate-spin" />
-                            ) : (
-                              <Save className="h-3 w-3" />
-                            )}
-                            Salvar
-                          </Button>
                         </div>
+                        
+                        {/* Percentual de Comissão */}
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">Percentual de Comissão</Label>
+                          <div className="relative">
+                            <Input
+                              type="number"
+                              step="1"
+                              min="0"
+                              max="100"
+                              placeholder="0"
+                              value={percentual}
+                              onChange={(e) => setPercentual(planoConfig.nomePlano, item.tipoPlano, item.categoria, e.target.value)}
+                              className="pr-8"
+                            />
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                              %
+                            </span>
+                          </div>
+                        </div>
+                        
+                        {/* Comissão Calculada (Somente Leitura) */}
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">Comissão Resultante</Label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                              R$
+                            </span>
+                            <Input
+                              type="text"
+                              value={comissaoCalculada}
+                              disabled
+                              className="pl-10 bg-muted cursor-not-allowed font-semibold text-green-600"
+                            />
+                          </div>
+                        </div>
+                        
+                        {/* Botão Salvar */}
+                        <Button
+                          size="sm"
+                          onClick={() => handleSave(planoConfig.nomePlano, item.tipoPlano, item.categoria)}
+                          disabled={upsertMutation.isPending}
+                          className="w-full gap-1"
+                        >
+                          {upsertMutation.isPending ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <Save className="h-3 w-3" />
+                          )}
+                          Salvar Configuração
+                        </Button>
                       </div>
                     );
                   })}

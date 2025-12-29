@@ -1310,3 +1310,30 @@
 - [x] Corrigir para usar getLoginUrl() - redireciona para Manus OAuth
 - [x] Testar acesso (FUNCIONANDO - redireciona para login do Manus)
 - [x] Salvar checkpoint
+
+## Melhorias de Interface e Relatórios
+
+### Atualizar Interface de Configurações de Comissão
+- [x] Adaptar AdminConfiguracoes.tsx para mostrar Valor Base (mensalidade)
+- [x] Adicionar campo de Percentual de Comissão
+- [x] Calcular e mostrar Comissão Resultante (somente leitura)
+- [ ] Testar edição de valores
+
+### Exportação PDF de Vendas e Comissões
+- [x] Instalar biblioteca de geração de PDF (jsPDF + jspdf-autotable)
+- [x] Atualizar função de exportação com dados: nomes, PIX, tipos de venda, valores reais
+- [x] Botão "Exportar PDF" já existe na página AdminAprovarComissoes
+- [ ] Testar geração e download do PDF
+
+### Ranking de Promotores
+- [ ] Criar procedure para calcular ranking de vendedores (vendas fechadas)
+- [ ] Criar procedure para calcular ranking de indicadores (indicações convertidas)
+- [ ] Criar página AdminRanking.tsx
+- [ ] Mostrar Top 5 Vendedores com total de comissões
+- [ ] Mostrar Top 5 Indicadores com total de comissões
+- [ ] Adicionar filtro por período (mês atual, últimos 30 dias, trimestre)
+- [ ] Adicionar aba "Ranking" no menu admin
+- [ ] Testar rankings
+
+### Finalização
+- [ ] Salvar checkpoint

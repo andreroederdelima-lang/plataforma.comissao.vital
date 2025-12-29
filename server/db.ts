@@ -1086,3 +1086,66 @@ export async function getMaterialApoioById(id: number) {
   const result = await db.select().from(materiaisApoio).where(eq(materiaisApoio.id, id)).limit(1);
   return result.length > 0 ? result[0] : null;
 }
+
+
+export async function getRankingVendedores(limit: number = 5) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const { sql, isNotNull } = await import("drizzle-orm");
+
+  // Buscar vendas fechadas (dataVenda não nula)
+  const result = await db
+    .select({
+      parceiroId: indicacoes.parceiroId,
+      nome: users.name,
+      email: users.email,
+      totalVendas: sql<number>`COUNT(*)`.as("totalVendas"),
+      totalComissoes: sql<number>`SUM(${indicacoes.valorComissao})`.as("totalComissoes"),
+    })
+    .from(indicacoes)
+    .innerJoin(users, eq(indicacoes.parceiroId, users.id))
+    .where(and(
+      isNotNull(indicacoes.dataVenda),
+      eq(indicacoes.status, "venda_fechada")
+    ))
+    .groupBy(indicacoes.parceiroId, users.name, users.email)
+    .orderBy(sql`totalComissoes DESC`)
+    .limit(limit);
+
+  return result.map(r => ({
+    ...r,
+    totalComissoes: r.totalComissoes || 0,
+  }));
+}
+
+export async function getRankingIndicadores(limit: number = 5) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const { sql, isNull } = await import("drizzle-orm");
+
+  // Buscar indicações convertidas (dataVenda nula mas status = venda_fechada)
+  const result = await db
+    .select({
+      parceiroId: indicacoes.parceiroId,
+      nome: users.name,
+      email: users.email,
+      totalIndicacoes: sql<number>`COUNT(*)`.as("totalIndicacoes"),
+      totalComissoes: sql<number>`SUM(${indicacoes.valorComissao})`.as("totalComissoes"),
+    })
+    .from(indicacoes)
+    .innerJoin(users, eq(indicacoes.parceiroId, users.id))
+    .where(and(
+      isNull(indicacoes.dataVenda),
+      eq(indicacoes.status, "venda_fechada")
+    ))
+    .groupBy(indicacoes.parceiroId, users.name, users.email)
+    .orderBy(sql`totalComissoes DESC`)
+    .limit(limit);
+
+  return result.map(r => ({
+    ...r,
+    totalComissoes: r.totalComissoes || 0,
+  }));
+}

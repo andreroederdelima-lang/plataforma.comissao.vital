@@ -885,6 +885,46 @@ export const appRouter = router({
    * Router de materiais de apoio (banners e vídeos)
    */
   materiaisApoio: materiaisApoioRouter,
+  
+  ranking: router({
+    /**
+     * Obter ranking de vendedores (vendas diretas)
+     */
+    vendedores: protectedProcedure
+      .input(z.object({
+        limit: z.number().min(1).max(20).default(5),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "comercial") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores e comerciais podem ver rankings",
+          });
+        }
+
+        const { getRankingVendedores } = await import("./db");
+        return await getRankingVendedores(input?.limit || 5);
+      }),
+
+    /**
+     * Obter ranking de indicadores (indicações convertidas)
+     */
+    indicadores: protectedProcedure
+      .input(z.object({
+        limit: z.number().min(1).max(20).default(5),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "comercial") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores e comerciais podem ver rankings",
+          });
+        }
+
+        const { getRankingIndicadores } = await import("./db");
+        return await getRankingIndicadores(input?.limit || 5);
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

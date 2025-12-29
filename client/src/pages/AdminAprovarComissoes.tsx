@@ -54,37 +54,47 @@ export default function AdminAprovarComissoes() {
     // Preparar dados da tabela
     const tableData = pendentes.map((indicacao: any) => {
       const isVenda = indicacao.dataVenda !== null;
-      const percentual = isVenda ? 100 : 50;
-      const valorComissao = (indicacao.valorPlano * percentual) / 100;
+      const tipoVenda = isVenda ? "Venda Direta" : "Indicação";
+      
+      // Usar valorComissao real do banco (já calculado com valorBase × percentual)
+      const valorComissao = indicacao.valorComissao ? indicacao.valorComissao / 100 : 0;
+      const nomeProduto = getNomeProdutoCompleto(indicacao.nomePlano, indicacao.tipoPlano, indicacao.categoria);
+      const chavePix = indicacao.parceiro?.chavePix || indicacao.parceiro?.email || "N/A";
       
       return [
         indicacao.parceiro?.name || "N/A",
-        indicacao.parceiro?.email || "N/A",
+        chavePix,
         indicacao.nomeIndicado,
-        isVenda ? "Venda" : "Indicação",
-        `R$ ${indicacao.valorPlano.toFixed(2)}`,
-        `${percentual}%`,
+        nomeProduto,
+        tipoVenda,
         `R$ ${valorComissao.toFixed(2)}`
       ];
     });
 
     // Calcular total
     const totalComissoes = pendentes.reduce((acc: number, ind: any) => {
-      const isVenda = ind.dataVenda !== null;
-      const percentual = isVenda ? 100 : 50;
-      return acc + (ind.valorPlano * percentual) / 100;
+      const valorComissao = ind.valorComissao ? ind.valorComissao / 100 : 0;
+      return acc + valorComissao;
     }, 0);
 
     // Gerar tabela
     autoTable(doc, {
       startY: 42,
-      head: [["Parceiro", "Email/PIX", "Cliente", "Tipo", "Valor Plano", "Comissão", "A Pagar"]],
+      head: [["Promotor", "Chave PIX", "Cliente", "Plano", "Tipo", "Comissão"]],
       body: tableData,
-      foot: [["TOTAL", "", "", "", "", "", `R$ ${totalComissoes.toFixed(2)}`]],
+      foot: [["TOTAL A PAGAR", "", "", "", "", `R$ ${totalComissoes.toFixed(2)}`]],
       theme: "striped",
       headStyles: { fillColor: [43, 156, 156] },
       footStyles: { fillColor: [43, 156, 156], fontStyle: "bold" },
-      styles: { fontSize: 9 },
+      styles: { fontSize: 8 },
+      columnStyles: {
+        0: { cellWidth: 35 },
+        1: { cellWidth: 40 },
+        2: { cellWidth: 35 },
+        3: { cellWidth: 35 },
+        4: { cellWidth: 25 },
+        5: { cellWidth: 25 }
+      }
     });
 
     // Salvar PDF
