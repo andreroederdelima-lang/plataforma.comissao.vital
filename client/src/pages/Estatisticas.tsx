@@ -16,6 +16,7 @@ import { ArrowLeft, Loader2, LogOut, TrendingUp, UserCircle } from "lucide-react
 import { NotificationBadge } from "@/components/NotificationBadge";
 import { Link, useLocation } from "wouter";
 import { useMemo } from "react";
+import PainelVendedorLayout from "@/components/PainelVendedorLayout";
 
 export default function Estatisticas() {
   const { user, loading: authLoading, logout } = useAuth();
@@ -94,10 +95,13 @@ export default function Estatisticas() {
     );
   }
 
-  if (!user || user.role !== "admin") {
+  // Permitir acesso para admin, comercial e promotor
+  if (!user || (user.role !== "admin" && user.role !== "comercial" && user.role !== "promotor")) {
     setLocation("/");
     return null;
   }
+
+  const isAdmin = user.role === "admin" || user.role === "comercial";
 
   if (isLoading) {
     return (
@@ -107,6 +111,82 @@ export default function Estatisticas() {
     );
   }
 
+  // Filtrar estatísticas do promotor se não for admin
+  const estatisticasExibir = isAdmin 
+    ? estatisticasPorParceiro 
+    : estatisticasPorParceiro.filter(stat => stat.parceiro.id === user.id);
+
+  // Se for promotor, usar PainelVendedorLayout
+  if (!isAdmin) {
+    return (
+      <PainelVendedorLayout>
+        <div className="space-y-6">
+          {/* Header */}
+          <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-6 w-6 text-primary" />
+                <div>
+                  <CardTitle className="text-2xl">Minhas Estatísticas</CardTitle>
+                  <CardDescription>
+                    Acompanhe seu desempenho e taxa de conversão
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          {/* Statistics Cards */}
+          {estatisticasExibir && estatisticasExibir.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-primary">{estatisticasExibir[0].total}</div>
+                    <div className="text-sm text-muted-foreground mt-1">Total de Indicações</div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-green-50 border-green-200">
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-green-600">{estatisticasExibir[0].vendaFechada}</div>
+                    <div className="text-sm text-green-700 mt-1 font-medium">Vendas Fechadas</div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-blue-600">{estatisticasExibir[0].falandoComVendedor}</div>
+                    <div className="text-sm text-blue-700 mt-1 font-medium">Em Negociação</div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-purple-50 border-purple-200">
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-purple-600">{estatisticasExibir[0].taxaConversao.toFixed(1)}%</div>
+                    <div className="text-sm text-purple-700 mt-1 font-medium">Taxa de Conversão</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">Você ainda não possui indicações cadastradas.</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </PainelVendedorLayout>
+    );
+  }
+
+  // Layout para Admin/Comercial
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5">
       {/* Header */}

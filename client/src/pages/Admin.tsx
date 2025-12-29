@@ -315,7 +315,7 @@ export default function Admin() {
                               </Badge>
                             ) : (
                               <Badge className="bg-blue-600 text-white hover:bg-blue-700 gap-1">
-                                <span>📝</span> Indicação (50%)
+                                <span>📝</span> Indicação
                               </Badge>
                             )}
                           </TableCell>

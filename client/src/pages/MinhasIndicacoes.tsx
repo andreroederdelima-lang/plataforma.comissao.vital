@@ -82,7 +82,7 @@ export default function MinhasIndicacoes() {
           <CardHeader>
             <CardTitle className="text-2xl">Vendas e Indicações</CardTitle>
             <CardDescription>
-              Acompanhe suas vendas diretas (💰 100% comissão) e indicações (📝 50% comissão)
+              Acompanhe suas vendas diretas (💰 100% comissão) e indicações (📝 comissão conforme plano)
             </CardDescription>
           </CardHeader>
         </Card>
@@ -108,7 +108,6 @@ export default function MinhasIndicacoes() {
                     {indicacoes.filter(i => !i.dataVenda).length}
                   </div>
                   <div className="text-sm text-blue-700 mt-1 font-medium">📝 Indicações</div>
-                  <div className="text-xs text-blue-600 mt-0.5">50% comissão</div>
                 </div>
               </CardContent>
             </Card>
@@ -193,7 +192,7 @@ export default function MinhasIndicacoes() {
                           </Badge>
                         ) : (
                           <Badge className="bg-blue-600 text-white hover:bg-blue-700">
-                            📝 Indicação (50%)
+                            📝 Indicação
                           </Badge>
                         )}
                         <Badge variant="outline" className="text-sm">

@@ -1263,3 +1263,28 @@
 - [x] Testar fluxo completo Home -> Login -> Painel (SUCESSO!)
 - [x] Menu completo de 8 opções visível
 - [ ] Salvar checkpoint
+
+## Remover Texto Incorreto "50% comissão"
+
+- [x] Identificar todas as ocorrências de "50% comissão" ou "50%" relacionado a indicações
+- [x] Remover de MinhasIndicacoes.tsx
+- [x] Remover de Admin.tsx
+- [x] Remover de Home.tsx
+- [ ] Remover de AdminAprovarComissoes.tsx (apenas texto visível)
+- [ ] Corrigir botão Estatísticas que redireciona para home
+- [ ] Testar todos os botões do menu promotor
+- [ ] Testar todos os botões do menu admin
+- [ ] Salvar checkpoint
+
+## Remover Texto Incorreto "50% comissão"
+
+- [x] Identificar todas as ocorrências de "50% comissão" ou "50%" relacionado a indicações
+- [x] Remover de MinhasIndicacoes.tsx
+- [x] Remover de Admin.tsx
+- [x] Remover de Home.tsx
+- [x] Remover de AdminAprovarComissoes.tsx (apenas texto visível)
+- [x] Corrigir botão Estatísticas (adaptado para promotores)
+- [x] Corrigir botão Comissões (adaptado para promotores)
+- [x] Corrigir botão Materiais de Apoio (adicionar PainelVendedorLayout)
+- [x] Testar todos os 8 botões do menu promotor (TODOS FUNCIONANDO!)
+- [x] Salvar checkpoint

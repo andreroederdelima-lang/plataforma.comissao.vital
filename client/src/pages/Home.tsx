@@ -232,7 +232,7 @@ export default function Home() {
                 <CardTitle className="text-3xl">Cadastrar Venda ou Indicação</CardTitle>
                 <CardDescription className="text-base space-y-2">
                   <p className="font-semibold text-green-600">💰 VENDA DIRETA: Ganhe 100% da comissão fechando a venda completa!</p>
-                  <p className="text-sm">Ou apenas indique e ganhe 50% quando nossa equipe fechar a venda</p>
+                  <p className="text-sm">Ou apenas indique e ganhe comissão quando nossa equipe fechar a venda</p>
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -259,7 +259,7 @@ export default function Home() {
                       <div className="text-3xl mb-2">📝</div>
                       <div className="font-semibold">Indicação</div>
                       <div className="text-xs text-center text-muted-foreground mt-1">
-                        Ganhe 50% quando fecharmos
+                        Ganhe comissão quando fecharmos
                       </div>
                     </Label>
                     <Label

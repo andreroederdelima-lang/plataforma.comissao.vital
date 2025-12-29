@@ -315,7 +315,7 @@ export default function AdminAprovarComissoes() {
                     <RadioGroupItem value="50" id="p50" className="mt-1" />
                     <div className="flex-1">
                       <Label htmlFor="p50" className="cursor-pointer font-semibold">
-                        📝 Cliente Pronto - 50%
+                        📝 Cliente Pronto
                       </Label>
                       <p className="text-xs text-muted-foreground mt-1">
                         Cliente veio pronto para comprar

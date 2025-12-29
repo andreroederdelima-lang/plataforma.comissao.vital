@@ -15,6 +15,7 @@ import { trpc } from "@/lib/trpc";
 import { ArrowLeft, DollarSign, Loader2, LogOut } from "lucide-react";
 import { NotificationBadge } from "@/components/NotificationBadge";
 import { Link } from "wouter";
+import PainelVendedorLayout from "@/components/PainelVendedorLayout";
 
 export default function Comissoes() {
   const { user, loading, logout } = useAuth();
@@ -29,19 +30,22 @@ export default function Comissoes() {
     );
   }
 
-  if (!user || user.role !== "admin") {
+  // Permitir acesso para admin, comercial e promotor
+  if (!user || (user.role !== "admin" && user.role !== "comercial" && user.role !== "promotor")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-blue-50">
         <Card className="max-w-md">
           <CardContent className="pt-6">
             <p className="text-center text-muted-foreground">
-              Acesso restrito a administradores
+              Acesso restrito
             </p>
           </CardContent>
         </Card>
       </div>
     );
   }
+
+  const isAdmin = user.role === "admin" || user.role === "comercial";
 
   // Agrupar comissões por parceiro
   const comissoesPorParceiro = comissoes?.reduce((acc: any, item: any) => {
@@ -85,6 +89,111 @@ export default function Comissoes() {
 
   const parceiros = Object.values(comissoesPorParceiro || {}) as any[];
 
+  // Filtrar comissões do promotor se não for admin
+  const parceirosFiltrados = isAdmin 
+    ? parceiros 
+    : parceiros.filter(p => p.parceiro.id === user.id);
+
+  // Se for promotor, usar PainelVendedorLayout
+  if (!isAdmin) {
+    const minhasComissoes = parceirosFiltrados[0];
+    const totalComissao = minhasComissoes?.totalComissao || 0;
+    const indicacoes = minhasComissoes?.indicacoes || [];
+
+    return (
+      <PainelVendedorLayout>
+        <div className="space-y-6">
+          {/* Header */}
+          <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-6 w-6 text-primary" />
+                <div>
+                  <CardTitle className="text-2xl">Minhas Comissões</CardTitle>
+                  <CardDescription>
+                    Acompanhe suas vendas fechadas e comissões
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          {/* Cards de Estatísticas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="bg-green-50 border-green-200">
+              <CardContent className="pt-6">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-green-600">{indicacoes.length}</div>
+                  <div className="text-sm text-green-700 mt-1 font-medium">Vendas Fechadas</div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="bg-blue-50 border-blue-200">
+              <CardContent className="pt-6">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-blue-600">
+                    R$ {totalComissao.toFixed(2)}
+                  </div>
+                  <div className="text-sm text-blue-700 mt-1 font-medium">Total em Comissões</div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Tabela de Comissões */}
+          {indicacoes.length > 0 ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Detalhamento de Comissões</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Cliente</TableHead>
+                        <TableHead>Plano</TableHead>
+                        <TableHead>Data</TableHead>
+                        <TableHead className="text-right">Comissão</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {indicacoes.map((indicacao: any) => (
+                        <TableRow key={indicacao.id}>
+                          <TableCell className="font-medium">{indicacao.nomeCliente}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline">
+                              {indicacao.nomePlano} {indicacao.tipoPlano} - {indicacao.categoria}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {new Date(indicacao.dataVenda).toLocaleDateString('pt-BR')}
+                          </TableCell>
+                          <TableCell className="text-right font-bold text-green-600">
+                            R$ {indicacao.valorComissaoCalculado.toFixed(2)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">Você ainda não possui vendas fechadas.</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </PainelVendedorLayout>
+    );
+  }
+
+  // Layout para Admin/Comercial
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50">
       {/* Header */}
