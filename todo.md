@@ -1212,4 +1212,12 @@
 
 - [x] Atualizar instruções para incluir criação de conta no Manus.im
 - [x] Deixar mais claro o passo a passo
+- [x] Salvar checkpoint
+
+## Corrigir Layout Mobile e Menu Completo
+
+- [x] Corrigir sobreposição de sidebar e conteúdo no mobile
+- [x] Implementar menu hambúrguer funcional
+- [x] Garantir que todas as 8 opções apareçam no menu
+- [x] Testar em mobile
 - [ ] Salvar checkpoint

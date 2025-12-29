@@ -165,7 +165,7 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
       </div>
 
       {/* User Info & Logout */}
-      <div className="mt-auto pt-6 border-t">
+      <div className="mt-6 pt-6 border-t">
         <div className="flex items-center gap-3 px-4 py-3 mb-2">
           <User className="h-5 w-5 text-gray-600" />
           <div className="flex-1 min-w-0">
@@ -261,11 +261,13 @@ export default function PainelVendedorLayout({ children }: PainelVendedorLayoutP
 
         {/* Sidebar Mobile (Drawer) */}
         <aside
-          className={`fixed top-[88px] left-0 bottom-0 w-72 bg-white border-r z-50 p-4 transform transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto ${
+          className={`fixed top-[88px] left-0 bottom-0 w-80 bg-white border-r z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <SidebarContent />
+          <div className="h-full overflow-y-auto p-4 flex flex-col">
+            <SidebarContent />
+          </div>
         </aside>
 
         {/* Main Content */}
