@@ -1302,3 +1302,11 @@
 - [ ] Essencial Individual: R$ 129,00
 - [ ] Premium Individual: R$ 159,90
 - [ ] Salvar checkpoint
+
+## Corrigir Botão Área Admin na Página Inicial
+
+- [x] Identificar botão "Área Admin" na BoasVindasIndicadores.tsx
+- [x] Verificar lógica de navegação/redirecionamento (estava indo para /admin direto)
+- [x] Corrigir para usar getLoginUrl() - redireciona para Manus OAuth
+- [x] Testar acesso (FUNCIONANDO - redireciona para login do Manus)
+- [x] Salvar checkpoint

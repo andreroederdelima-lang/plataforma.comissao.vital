@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { APP_LOGO } from "@/const";
+import { APP_LOGO, getLoginUrl } from "@/const";
 import { useLocation } from "wouter";
 
 /**
@@ -127,7 +127,7 @@ export default function BoasVindasIndicadores() {
                 </Button>
                 
                 <Button
-                  onClick={() => setLocation("/admin")}
+                  onClick={() => window.location.href = getLoginUrl()}
                   variant="outline"
                   className="border-2 border-[#1e9d9f] text-[#1e9d9f] hover:bg-[#1e9d9f] hover:text-white px-8 py-6 text-lg"
                 >
