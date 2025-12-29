@@ -1201,4 +1201,15 @@
 - [x] Verificar se Oticavisttabnu@gmail.com existe no banco
 - [x] Criar/atualizar usuário como admin
 - [x] Criar documento de orientações completo
+- [x] Salvar checkpoint
+
+## Completar Menu do Painel do Vendedor
+
+- [x] Verificar opções atuais no PainelVendedorLayout
+- [x] Todas as opções já estão presentes no menu
+
+## Corrigir Documento de Orientações Admin
+
+- [x] Atualizar instruções para incluir criação de conta no Manus.im
+- [x] Deixar mais claro o passo a passo
 - [ ] Salvar checkpoint
