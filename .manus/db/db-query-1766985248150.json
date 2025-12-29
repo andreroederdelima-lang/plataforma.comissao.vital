@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `cards_recursos` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`secao` varchar(50) NOT NULL,\n\t`titulo` varchar(255) NOT NULL,\n\t`descricao` text,\n\t`link` varchar(500),\n\t`icone` varchar(50),\n\t`ordem` int NOT NULL DEFAULT 0,\n\t`isActive` int NOT NULL DEFAULT 1,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `cards_recursos_id` PRIMARY KEY(`id`)\n)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute CREATE TABLE IF NOT EXISTS `cards_recursos` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`secao` varchar(50) NOT NULL,\n\t`titulo` varchar(255) NOT NULL,\n\t`descricao` text,\n\t`link` varchar(500),\n\t`icone` varchar(50),\n\t`ordem` int NOT NULL DEFAULT 0,\n\t`isActive` int NOT NULL DEFAULT 1,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `cards_recursos_id` PRIMARY KEY(`id`)\n)",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 216
+}

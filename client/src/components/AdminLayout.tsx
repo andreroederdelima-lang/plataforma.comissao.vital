@@ -14,6 +14,7 @@ import {
   FileText,
   QrCode,
   CheckCircle2,
+  LayoutGrid,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { ReactNode } from "react";
@@ -72,9 +73,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       adminOnly: false,
     },
     {
-      path: "/admin/materiais-apoio",
-      label: "Materiais de Apoio",
-      icon: FileText,
+      path: "/admin/gerenciar-cards",
+      label: "Editar Materiais",
+      icon: LayoutGrid,
       adminOnly: true,
     },
     {

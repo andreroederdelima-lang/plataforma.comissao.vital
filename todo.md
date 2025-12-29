@@ -1049,4 +1049,18 @@
 
 ### Testar e Salvar
 - [x] Verificar sistema funcionando sem erros
+- [x] Salvar checkpoint
+
+## Sistema de Gerenciamento de Cards/Menus (Materiais de Divulgação)
+- [x] Criar tabela cards_recursos no banco de dados (id, secao, titulo, descricao, link, icone, ordem, createdAt, updatedAt)
+- [x] Implementar procedures tRPC para CRUD de cards (listar, criar, atualizar, excluir)
+- [x] Criar página AdminGerenciarCards.tsx para gerenciamento completo
+- [x] Adicionar modais de edição e criação de cards
+- [x] Implementar funcionalidade de exclusão com confirmação
+- [x] Atualizar MateriaisDivulgacao.tsx para carregar cards do banco
+- [x] Popular banco com cards existentes (migração de dados)
+- [x] Remover duplicação de menus (unificar Materiais de Apoio e Gerenciar Cards)
+- [x] Implementar permissões corretas (admin edita tudo, vendedor só textos)
+- [x] Adicionar botão de edição rápida de cards na página MateriaisDivulgacao para admin
+- [ ] Testar sistema completo
 - [ ] Salvar checkpoint

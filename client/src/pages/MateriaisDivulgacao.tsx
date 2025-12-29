@@ -74,6 +74,10 @@ export default function MateriaisDivulgacao() {
   
   // Link de checkout personalizado
   const { data: linkCheckoutData } = trpc.configuracoesGerais.getMeuLinkCheckout.useQuery();
+  
+  // Cards dinâmicos de recursos
+  const { data: cardsRecursosAdicionais } = trpc.cardsRecursos.list.useQuery({ secao: "recursos_adicionais" });
+  const { data: cardsLandingPages } = trpc.cardsRecursos.list.useQuery({ secao: "landing_pages" });
 
   // Mutations
   const atualizarCentralMutation = trpc.materiaisDivulgacao.updateCentralArgumentos.useMutation({
@@ -201,7 +205,9 @@ export default function MateriaisDivulgacao() {
     }
   };
 
-  const podeEditar = user?.role === "admin" || user?.role === "comercial";
+  const isAdmin = user?.role === "admin";
+  const podeEditarTextos = user?.role === "admin" || user?.role === "comercial" || user?.role === "promotor"; // Todos podem editar textos
+  const podeEditarCards = user?.role === "admin"; // Apenas admin pode editar cards
 
   // Mostrar loading enquanto verifica autenticação
   if (loading || loadingCentral || loadingDiversos || loadingPersonalizados) {
@@ -298,7 +304,7 @@ export default function MateriaisDivulgacao() {
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
-                  {podeEditar && (
+                  {podeEditarTextos && (
                     <Button
                       variant="outline"
                       size="sm"
@@ -348,7 +354,7 @@ export default function MateriaisDivulgacao() {
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
-                  {podeEditar && (
+                  {podeEditarTextos && (
                     <Button
                       variant="outline"
                       size="sm"
@@ -397,7 +403,7 @@ export default function MateriaisDivulgacao() {
                     Outros materiais de apoio para divulgação
                   </CardDescription>
                 </div>
-                {podeEditar && (
+                {podeEditarTextos && (
                   <Button
                     variant="outline"
                     size="sm"
@@ -528,7 +534,7 @@ export default function MateriaisDivulgacao() {
                                 <Copy className="h-4 w-4" />
                               </Button>
                             )}
-                            {podeEditar && (
+                            {podeEditarTextos && (
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -675,284 +681,126 @@ export default function MateriaisDivulgacao() {
 
         {/* Landing Pages das Assinaturas */}
         <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-4" style={{ color: VITAL_COLORS.turquoise }}>
-            <ExternalLink className="inline mr-2" size={28} />
-            Landing Pages das Assinaturas
-          </h2>
-          <p className="text-sm text-gray-600 mb-4">
-            Compartilhe estes links com seus clientes para apresentar as assinaturas Vital
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-2xl font-bold" style={{ color: VITAL_COLORS.turquoise }}>
+                <ExternalLink className="inline mr-2" size={28} />
+                Landing Pages das Assinaturas
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Compartilhe estes links com seus clientes para apresentar as assinaturas Vital
+              </p>
+            </div>
+            {podeEditarCards && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setLocation('/admin/gerenciar-cards')}
+                className="gap-2"
+              >
+                <Edit className="h-4 w-4" />
+                Gerenciar Cards
+              </Button>
+            )}
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Home (Página Principal)</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Visão geral dos planos e promoção
+            {cardsLandingPages && cardsLandingPages.length > 0 ? (
+              cardsLandingPages.map(card => (
+                <Card key={card.id} className="p-4 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 mb-2">
+                    {card.icone && <span className="text-xl">{card.icone}</span>}
+                    <h3 className="font-semibold text-lg">{card.titulo}</h3>
+                  </div>
+                  {card.descricao && (
+                    <p className="text-sm text-gray-600 mb-3">
+                      {card.descricao}
+                    </p>
+                  )}
+                  {card.link && (
+                    <>
+                      <Button
+                        asChild
+                        className="w-full"
+                        style={{ backgroundColor: VITAL_COLORS.turquoise }}
+                      >
+                        <a href={card.link} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Abrir Página
+                        </a>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full mt-2"
+                        onClick={() => copiarTexto(card.link!)}
+                      >
+                        <Copy className="mr-2 h-4 w-4" />
+                        Copiar Link
+                      </Button>
+                    </>
+                  )}
+                </Card>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500 text-center py-8 col-span-full">
+                Nenhum card cadastrado ainda. Entre em contato com o administrador.
               </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://assinaturas.suasaudevital.com.br" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Abrir Página
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full mt-2"
-                onClick={() => copiarTexto("https://assinaturas.suasaudevital.com.br")}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                Copiar Link
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Pessoa Física</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Planos para famílias e indivíduos
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://assinaturas.suasaudevital.com.br/pessoa-fisica" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Abrir Página
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full mt-2"
-                onClick={() => copiarTexto("https://assinaturas.suasaudevital.com.br/pessoa-fisica")}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                Copiar Link
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Empresarial</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Planos para empresas e funcionários
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://assinaturas.suasaudevital.com.br/empresarial" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Abrir Página
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full mt-2"
-                onClick={() => copiarTexto("https://assinaturas.suasaudevital.com.br/empresarial")}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                Copiar Link
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Planos Completos</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Comparação detalhada dos 4 planos
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://assinaturas.suasaudevital.com.br/planos-completos" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Abrir Página
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full mt-2"
-                onClick={() => copiarTexto("https://assinaturas.suasaudevital.com.br/planos-completos")}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                Copiar Link
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Cadastro de Grupos</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Formar grupos de 4 pessoas e economizar
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://assinaturas.suasaudevital.com.br/grupos" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Abrir Página
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full mt-2"
-                onClick={() => copiarTexto("https://assinaturas.suasaudevital.com.br/grupos")}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                Copiar Link
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">FAQ (Dúvidas Frequentes)</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Respostas para dúvidas comuns
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://assinaturas.suasaudevital.com.br/faq" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Abrir Página
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full mt-2"
-                onClick={() => copiarTexto("https://assinaturas.suasaudevital.com.br/faq")}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                Copiar Link
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Check-out Venda Direta</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Página de checkout para vendas diretas
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://suasaudevital.app.filoo.com.br/checkout?compact=true&team=suasaudevital" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Abrir Página
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full mt-2"
-                onClick={() => copiarTexto("https://suasaudevital.app.filoo.com.br/checkout?compact=true&team=suasaudevital")}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                Copiar Link
-              </Button>
-            </Card>
+            )}
           </div>
         </section>
 
         {/* Recursos Adicionais */}
         <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-4" style={{ color: VITAL_COLORS.turquoise }}>
-            <Share2 className="inline mr-2" size={28} />
-            Recursos Adicionais
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold" style={{ color: VITAL_COLORS.turquoise }}>
+              <Share2 className="inline mr-2" size={28} />
+              Recursos Adicionais
+            </h2>
+            {podeEditarCards && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setLocation('/admin/gerenciar-cards')}
+                className="gap-2"
+              >
+                <Edit className="h-4 w-4" />
+                Gerenciar Cards
+              </Button>
+            )}
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">QR Code WhatsApp Vendas</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                QR Codes para contato direto via WhatsApp
+            {cardsRecursosAdicionais && cardsRecursosAdicionais.length > 0 ? (
+              cardsRecursosAdicionais.map(card => (
+                <Card key={card.id} className="p-4 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 mb-2">
+                    {card.icone && <span className="text-xl">{card.icone}</span>}
+                    <h3 className="font-semibold text-lg">{card.titulo}</h3>
+                  </div>
+                  {card.descricao && (
+                    <p className="text-sm text-gray-600 mb-3">
+                      {card.descricao}
+                    </p>
+                  )}
+                  {card.link && (
+                    <Button
+                      asChild
+                      className="w-full"
+                      style={{ backgroundColor: VITAL_COLORS.turquoise }}
+                    >
+                      <a href={card.link} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Acessar
+                      </a>
+                    </Button>
+                  )}
+                </Card>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500 text-center py-8 col-span-full">
+                Nenhum card cadastrado ainda. Entre em contato com o administrador.
               </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://credenciados.suasaudevital.com.br/qr-codes" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Acessar QR Codes
-                </a>
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Convite de Parceiros</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Página de credenciamento de parceiros
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://credenciados.suasaudevital.com.br/parceiros" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Convidar Parceiros
-                </a>
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Guia do Assinante</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Médicos e serviços credenciados
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://credenciados.suasaudevital.com.br" target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Ver Guia
-                </a>
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Áudios das Assinaturas</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Áudios promocionais para divulgação
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://drive.google.com/drive/folders/1FV_irBOjf_8F_V5ZSvGE2r_GtsNAXV7W" target="_blank" rel="noopener noreferrer">
-                  <Mic className="mr-2 h-4 w-4" />
-                  Acessar Áudios
-                </a>
-              </Button>
-            </Card>
-
-            <Card className="p-4 hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg mb-2">Avisar sobre Indicação</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                Contato direto para notificar indicações
-              </p>
-              <Button
-                asChild
-                className="w-full"
-                style={{ backgroundColor: VITAL_COLORS.turquoise }}
-              >
-                <a href="https://wa.me/5547933853726" target="_blank" rel="noopener noreferrer">
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  Abrir WhatsApp
-                </a>
-              </Button>
-            </Card>
+            )}
           </div>
         </section>
       </div>

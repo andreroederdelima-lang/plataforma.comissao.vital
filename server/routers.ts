@@ -14,6 +14,7 @@ import { materiaisDivulgacaoRouter } from "./routers/materiaisDivulgacao";
 import { materiaisApoioRouter } from "./routers/materiaisApoio";
 import { configuracoesGeraisRouter } from "./routers/configuracoesGerais";
 import { adminRouter } from "./routers/admin";
+import { cardsRecursosRouter } from "./routers/cardsRecursos";
 
 
 export const appRouter = router({
@@ -22,6 +23,7 @@ export const appRouter = router({
   comissoes: comissoesRouter,
   configuracoesGerais: configuracoesGeraisRouter,
   admin: adminRouter,
+  cardsRecursos: cardsRecursosRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

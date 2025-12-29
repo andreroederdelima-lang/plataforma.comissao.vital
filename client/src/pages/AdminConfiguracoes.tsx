@@ -14,6 +14,7 @@ type ComissaoKey = `${string}_${string}_${string}`; // nomePlano_tipoPlano_categ
 export default function AdminConfiguracoes() {
   const { user, loading } = useAuth();
   const { data: configs, isLoading } = trpc.comissaoConfig.list.useQuery();
+  const utils = trpc.useUtils();
   
   const [valores, setValores] = useState<Record<ComissaoKey, string>>({});
   
@@ -31,7 +32,7 @@ export default function AdminConfiguracoes() {
   const atualizarLinkMutation = trpc.configuracoesGerais.atualizarLinkBase.useMutation({
     onSuccess: () => {
       toast.success("Link de checkout atualizado!");
-      trpc.useUtils().configuracoesGerais.getConfiguracoes.invalidate();
+      utils.configuracoesGerais.getConfiguracoes.invalidate();
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao atualizar link");
@@ -41,7 +42,7 @@ export default function AdminConfiguracoes() {
   const atualizarDiasMutation = trpc.configuracoesGerais.atualizarDiasCancelamento.useMutation({
     onSuccess: () => {
       toast.success("Período de cancelamento atualizado!");
-      trpc.useUtils().configuracoesGerais.getConfiguracoes.invalidate();
+      utils.configuracoesGerais.getConfiguracoes.invalidate();
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao atualizar período");
@@ -52,7 +53,7 @@ export default function AdminConfiguracoes() {
   const atualizarConfigMutation = trpc.comissoes.atualizarConfiguracao.useMutation({
     onSuccess: () => {
       toast.success("Percentuais de comissão atualizados!");
-      trpc.useUtils().comissoes.listarConfiguracoes.invalidate();
+      utils.comissoes.listarConfiguracoes.invalidate();
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao atualizar percentuais");
@@ -62,7 +63,7 @@ export default function AdminConfiguracoes() {
   const upsertMutation = trpc.comissaoConfig.update.useMutation({
     onSuccess: () => {
       toast.success("Configuração salva com sucesso!");
-      trpc.useUtils().comissaoConfig.list.invalidate();
+      utils.comissaoConfig.list.invalidate();
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao salvar configuração");

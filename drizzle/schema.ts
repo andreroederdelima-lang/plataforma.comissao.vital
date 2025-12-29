@@ -328,3 +328,30 @@ export const materiaisApoio = mysqlTable("materiais_apoio", {
 
 export type MaterialApoio = typeof materiaisApoio.$inferSelect;
 export type InsertMaterialApoio = typeof materiaisApoio.$inferInsert;
+
+/**
+ * Tabela de cards/menus gerenciáveis na página de Materiais de Divulgação
+ * Admin pode adicionar, editar e excluir cards das seções Recursos Adicionais e Landing Pages
+ */
+export const cardsRecursos = mysqlTable("cards_recursos", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Seção onde o card aparece: "recursos_adicionais" ou "landing_pages" */
+  secao: varchar("secao", { length: 50 }).notNull(),
+  /** Título do card */
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  /** Descrição do card */
+  descricao: text("descricao"),
+  /** Link/URL do card */
+  link: varchar("link", { length: 500 }),
+  /** Ícone do card (emoji ou nome de ícone) */
+  icone: varchar("icone", { length: 50 }),
+  /** Ordem de exibição dentro da seção */
+  ordem: int("ordem").default(0).notNull(),
+  /** Status do card (1 = ativo, 0 = inativo) */
+  isActive: int("isActive").default(1).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CardRecurso = typeof cardsRecursos.$inferSelect;
+export type InsertCardRecurso = typeof cardsRecursos.$inferInsert;
