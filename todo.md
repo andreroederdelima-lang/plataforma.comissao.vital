@@ -1248,4 +1248,18 @@
 - [x] Criar usuário vendedor de teste no banco
 - [x] Testar login e navegação completa
 - [x] Documentar credenciais de teste
+- [x] Salvar checkpoint
+
+## URGENTE: Corrigir Menu Mobile Definitivamente
+
+- [x] Identificar causa raiz (problema no fluxo da Home)
+- [x] Verificar se PainelVendedorLayout tem todas as 8 opções
+- [x] Forçar rebuild completo do frontend
+
+## Corrigir Fluxo de Login da Home
+
+- [x] Verificar botão Fazer Login na Home
+- [x] Corrigir redirecionamento após login (promotor -> /painel-promotor)
+- [x] Testar fluxo completo Home -> Login -> Painel (SUCESSO!)
+- [x] Menu completo de 8 opções visível
 - [ ] Salvar checkpoint
