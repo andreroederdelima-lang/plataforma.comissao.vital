@@ -35,6 +35,31 @@ export default function Home() {
   const isVenda = tipoCadastro === "venda";
 
   const utils = trpc.useUtils();
+  
+  // Carregar valores dos planos do banco
+  const { data: configuracoesGerais } = trpc.configuracoesGerais.getConfiguracoes.useQuery();
+  
+  // Atualizar valor do plano automaticamente quando selecionado
+  useEffect(() => {
+    if (isVenda && configuracoesGerais) {
+      let valor = "0.00";
+      if (categoria === "pessoa_fisica") {
+        // Individual = Essencial, Familiar = Vital
+        if (tipoPlano === "individual") {
+          valor = configuracoesGerais.valorPlanoEssencial || "0.00";
+        } else {
+          valor = configuracoesGerais.valorPlanoVital || "0.00";
+        }
+      } else {
+        // Empresarial = Premium
+        valor = configuracoesGerais.valorPlanoPremium || "0.00";
+      }
+      setValorPlano(valor);
+    } else if (!isVenda) {
+      setValorPlano("");
+    }
+  }, [isVenda, categoria, tipoPlano, nomePlano, configuracoesGerais]);
+  
   const createMutation = trpc.indicacoes.create.useMutation({
     onSuccess: () => {
       toast.success("CADASTRO CONCLUÍDO");
@@ -413,14 +438,17 @@ export default function Home() {
                         </Label>
                         <Input
                           id="valorPlano"
-                          type="number"
-                          step="0.01"
+                          type="text"
                           value={valorPlano}
-                          onChange={(e) => setValorPlano(e.target.value)}
-                          placeholder="Ex: 199.90"
+                          readOnly
+                          disabled
+                          placeholder="Valor será preenchido automaticamente"
                           required={isVenda}
-                          className="text-base"
+                          className="text-base bg-muted cursor-not-allowed"
                         />
+                        <p className="text-xs text-muted-foreground">
+                          Valor definido pelo administrador nas configurações
+                        </p>
                       </div>
 
                       <div className="space-y-3">

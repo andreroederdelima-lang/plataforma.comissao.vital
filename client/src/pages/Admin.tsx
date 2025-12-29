@@ -201,9 +201,9 @@ export default function Admin() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-2xl">Gerenciar Indicações</CardTitle>
+                  <CardTitle className="text-2xl">Gerenciar Vendas e Indicações</CardTitle>
                   <CardDescription>
-                    Visualize e gerencie todas as indicações dos parceiros
+                    Visualize e gerencie todas as vendas e indicações dos parceiros
                   </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">

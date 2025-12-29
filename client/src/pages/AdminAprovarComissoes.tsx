@@ -7,7 +7,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
-import { Loader2, CheckCircle2, DollarSign, Calendar, CreditCard, User, ArrowLeft } from "lucide-react";
+import { Loader2, CheckCircle2, DollarSign, Calendar, CreditCard, User, ArrowLeft, FileDown } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const statusLabels = {
   aguardando_contato: "Aguardando Contato",
@@ -31,6 +33,64 @@ export default function AdminAprovarComissoes() {
   const [modalAberto, setModalAberto] = useState(false);
   const [indicacaoSelecionada, setIndicacaoSelecionada] = useState<any>(null);
   const [percentualSelecionado, setPercentualSelecionado] = useState<string>("100");
+  
+  const gerarPDF = () => {
+    if (!pendentes || pendentes.length === 0) {
+      toast.error("Nenhuma comissão pendente para gerar PDF");
+      return;
+    }
+
+    const doc = new jsPDF();
+    const dataAtual = new Date().toLocaleDateString("pt-BR");
+    const mesAtual = new Date().toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+
+    // Título
+    doc.setFontSize(18);
+    doc.text("Relatório de Comissões a Pagar", 14, 20);
+    doc.setFontSize(12);
+    doc.text(`Período: ${mesAtual}`, 14, 28);
+    doc.text(`Data de geração: ${dataAtual}`, 14, 35);
+
+    // Preparar dados da tabela
+    const tableData = pendentes.map((indicacao: any) => {
+      const isVenda = indicacao.dataVenda !== null;
+      const percentual = isVenda ? 100 : 50;
+      const valorComissao = (indicacao.valorPlano * percentual) / 100;
+      
+      return [
+        indicacao.parceiro?.name || "N/A",
+        indicacao.parceiro?.email || "N/A",
+        indicacao.nomeIndicado,
+        isVenda ? "Venda" : "Indicação",
+        `R$ ${indicacao.valorPlano.toFixed(2)}`,
+        `${percentual}%`,
+        `R$ ${valorComissao.toFixed(2)}`
+      ];
+    });
+
+    // Calcular total
+    const totalComissoes = pendentes.reduce((acc: number, ind: any) => {
+      const isVenda = ind.dataVenda !== null;
+      const percentual = isVenda ? 100 : 50;
+      return acc + (ind.valorPlano * percentual) / 100;
+    }, 0);
+
+    // Gerar tabela
+    autoTable(doc, {
+      startY: 42,
+      head: [["Parceiro", "Email/PIX", "Cliente", "Tipo", "Valor Plano", "Comissão", "A Pagar"]],
+      body: tableData,
+      foot: [["TOTAL", "", "", "", "", "", `R$ ${totalComissoes.toFixed(2)}`]],
+      theme: "striped",
+      headStyles: { fillColor: [43, 156, 156] },
+      footStyles: { fillColor: [43, 156, 156], fontStyle: "bold" },
+      styles: { fontSize: 9 },
+    });
+
+    // Salvar PDF
+    doc.save(`comissoes-${mesAtual.replace(" ", "-")}.pdf`);
+    toast.success("PDF gerado com sucesso!");
+  };
 
   const { data: pendentes, isLoading, refetch } = trpc.admin.listarPendentesAprovacao.useQuery();
 
@@ -95,11 +155,20 @@ export default function AdminAprovarComissoes() {
         </Button>
       </a>
       
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Aprovar Comissões</h1>
-        <p className="text-muted-foreground mt-2">
-          Vendas e indicações pendentes de aprovação (após período de carência de 7 dias)
-        </p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Aprovar Comissões</h1>
+          <p className="text-muted-foreground mt-2">
+            Vendas e indicações pendentes de aprovação (após período de carência de 7 dias)
+          </p>
+        </div>
+        
+        {pendentes && pendentes.length > 0 && (
+          <Button onClick={gerarPDF} variant="outline" className="gap-2">
+            <FileDown className="h-4 w-4" />
+            Gerar PDF
+          </Button>
+        )}
       </div>
 
       {!pendentes || pendentes.length === 0 ? (

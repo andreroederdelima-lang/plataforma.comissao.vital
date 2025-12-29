@@ -1092,3 +1092,13 @@
 - [ ] Atualizar página /qr-codes para carregar QR Codes do banco
 - [ ] Testar geração, edição e download de QR Codes
 - [ ] Salvar checkpoint
+
+## BUGS CRÍTICOS E NOVOS REQUISITOS
+- [x] **BUG CRÍTICO**: Bloquear edição de valor pelo vendedor (campo deve ser somente leitura, preenchido do banco)
+- [x] **BUG**: Corrigir exibição de "Nome Indicado" - deve mostrar nome do CLIENTE indicado, não do parceiro (já estava correto)
+- [x] Implementar gerador de PDF de comissões (nome, PIX, valores descritivos)
+- [x] Adicionar botão "Gerar PDF" na página Aprovar Comissões
+- [x] Renomear "Gerenciar Indicações" para "Gerenciar Vendas e Indicações"
+- [ ] Criar interface completa do gerador de QR Code editável
+- [ ] Testar todas as correções
+- [ ] Salvar checkpoint

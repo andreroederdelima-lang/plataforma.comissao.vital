@@ -32,7 +32,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const menuItems = [
     {
       path: "/admin",
-      label: "Indicações",
+      label: "Vendas e Indicações",
       icon: ClipboardList,
       adminOnly: false,
     },
