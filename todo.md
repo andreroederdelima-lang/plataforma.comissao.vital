@@ -1220,4 +1220,13 @@
 - [x] Implementar menu hambúrguer funcional
 - [x] Garantir que todas as 8 opções apareçam no menu
 - [x] Testar em mobile
+- [x] Salvar checkpoint
+
+## Corrigir Páginas com Layout Antigo
+
+- [x] Identificar páginas que usam VendedorLayout ao invés de PainelVendedorLayout
+- [x] Atualizar MinhasIndicacoes para usar PainelVendedorLayout
+- [x] Comissoes e Estatisticas são para admin (não precisam de PainelVendedorLayout)
+- [x] Atualizar QRCodes para usar PainelVendedorLayout
+- [x] Testar todas as rotas
 - [ ] Salvar checkpoint

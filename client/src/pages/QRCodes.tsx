@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Download, Printer, QrCode, Share2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
+import PainelVendedorLayout from "@/components/PainelVendedorLayout";
 
 export default function QRCodes() {
   const [, setLocation] = useLocation();
@@ -28,9 +29,11 @@ export default function QRCodes() {
   // Mostrar loading enquanto verifica autenticação
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Carregando...</p>
-      </div>
+      <PainelVendedorLayout>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </PainelVendedorLayout>
     );
   }
 
@@ -204,8 +207,8 @@ export default function QRCodes() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-background">
-      <div className="container py-12">
+    <PainelVendedorLayout>
+      <div className="space-y-6">
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-12">
           <img src={APP_LOGO} alt="Vital Logo" className="h-24 w-auto mb-6" />
@@ -396,6 +399,6 @@ export default function QRCodes() {
           </Button>
         </div>
       </div>
-    </div>
+    </PainelVendedorLayout>
   );
 }
