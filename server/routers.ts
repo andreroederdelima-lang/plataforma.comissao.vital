@@ -13,6 +13,7 @@ import { comissoesRouter } from "./routers/comissoes";
 import { materiaisDivulgacaoRouter } from "./routers/materiaisDivulgacao";
 import { materiaisApoioRouter } from "./routers/materiaisApoio";
 import { configuracoesGeraisRouter } from "./routers/configuracoesGerais";
+import { adminRouter } from "./routers/admin";
 
 
 export const appRouter = router({
@@ -20,6 +21,7 @@ export const appRouter = router({
   authIndicadores: authIndicadoresRouter,
   comissoes: comissoesRouter,
   configuracoesGerais: configuracoesGeraisRouter,
+  admin: adminRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

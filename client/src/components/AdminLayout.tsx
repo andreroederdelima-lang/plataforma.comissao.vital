@@ -13,6 +13,7 @@ import {
   Users,
   FileText,
   QrCode,
+  CheckCircle2,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { ReactNode } from "react";
@@ -38,6 +39,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       path: "/admin/usuarios",
       label: "Usuários",
       icon: Users,
+      adminOnly: true,
+    },
+    {
+      path: "/admin/aprovar-comissoes",
+      label: "Aprovar Comissões",
+      icon: CheckCircle2,
       adminOnly: true,
     },
     {

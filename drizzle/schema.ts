@@ -73,6 +73,10 @@ export const indicacoes = mysqlTable("indicacoes", {
   tipoComissao: mysqlEnum("tipoComissao", ["valor_fixo", "percentual"]),
   /** Valor da comissão (em centavos se valor fixo, ou percentual se percentual) */
   valorComissao: int("valorComissao"),
+  /** Percentual da comissão aplicado (50 para cliente pronto, 30 para venda difícil, 100 para venda direta) */
+  percentualComissao: int("percentualComissao"),
+  /** Data em que a comissão foi aprovada pelo admin */
+  dataAprovacao: timestamp("dataAprovacao"),
   /** Classificação do lead pelo vendedor: quente, frio ou null (não classificado) */
   classificacaoLead: mysqlEnum("classificacaoLead", ["quente", "frio"]),
   /** Data em que o lead foi classificado */

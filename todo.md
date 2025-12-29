@@ -1017,4 +1017,36 @@
 
 ### Salvar Checkpoint
 - [x] Testar sistema
+- [x] Salvar checkpoint
+
+
+## Sistema de Aprovação de Comissões (Admin)
+
+### Campos no Banco de Dados
+- [x] Adicionar campo `dataAprovacao` (timestamp, nullable)
+- [x] Campo `valorComissao` já existia no schema
+- [x] Adicionar campo `percentualComissao` (int, nullable)
+- [x] Aplicar migração no banco
+
+### Backend
+- [x] Criar mutation `aprovarComissao` no router admin
+- [x] Validar que venda tem mais de 7 dias
+- [x] Calcular automaticamente 100% para vendas diretas
+- [x] Permitir admin escolher 50% ou 30% para indicações
+- [x] Salvar dataAprovacao, valorComissao e percentualComissao
+- [x] Criar query `listarPendentesAprovacao`
+
+### Interface Admin
+- [x] Criar página AdminAprovarComissoes.tsx
+- [x] Listar apenas vendas com mais de 7 dias e não aprovadas
+- [x] Mostrar contador de dias desde venda
+- [x] Botão "Aprovar Comissão" para cada venda/indicação
+- [x] Modal com seletor de percentual (100% venda, 50% cliente pronto, 30% venda difícil)
+- [x] Exibir valor calculado da comissão em tempo real
+- [x] Atualizar lista após aprovação
+- [x] Adicionar rota /admin/aprovar-comissoes
+- [x] Adicionar link no menu AdminLayout
+
+### Testar e Salvar
+- [x] Verificar sistema funcionando sem erros
 - [ ] Salvar checkpoint

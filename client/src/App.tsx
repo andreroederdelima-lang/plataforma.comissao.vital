@@ -27,6 +27,7 @@ import ClassificarLead from "./pages/ClassificarLead";
 import DashboardPromotor from "./pages/DashboardPromotor";
 import AdminMateriaisApoio from "./pages/AdminMateriaisApoio";
 import MateriaisApoio from "./pages/MateriaisApoio";
+import AdminAprovarComissoes from "./pages/AdminAprovarComissoes";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -41,6 +42,7 @@ function Router() {
       <Route path={"/admin/configuracoes"} component={AdminConfiguracoes} />
       <Route path={"/admin/materiais"} component={AdminMateriais} />
       <Route path={"/admin/materiais-apoio"} component={AdminMateriaisApoio} />
+      <Route path={"/admin/aprovar-comissoes"} component={AdminAprovarComissoes} />
       <Route path={"/notificacoes"} component={Notificacoes} />
       <Route path={"/vendedor"} component={Vendedor} />
       <Route path={"/estatisticas"} component={Estatisticas} />
