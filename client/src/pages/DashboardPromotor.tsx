@@ -315,7 +315,7 @@ export default function DashboardPromotor() {
                     style={{ backgroundColor: VITAL_COLORS.turquoise }}
                     onClick={() => setLocation("/indicar")}
                   >
-                    Fazer Primeira Indicação
+                    Fazer Primeira Indicação ou Venda
                   </Button>
                 </div>
               ) : (

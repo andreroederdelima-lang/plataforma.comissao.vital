@@ -125,7 +125,11 @@ export const comissaoConfig = mysqlTable("comissaoConfig", {
   tipoPlano: mysqlEnum("tipoPlano", ["familiar", "individual"]).notNull(),
   /** Categoria: Empresarial ou Pessoa Física */
   categoria: mysqlEnum("categoria", ["empresarial", "pessoa_fisica"]).notNull(),
-  /** Valor da comissão em centavos (R$ 100,00 = 10000) */
+  /** Valor base da mensalidade do plano em centavos (R$ 289,90 = 28990) */
+  valorBase: int("valorBase").notNull().default(0),
+  /** Percentual de comissão (10 = 10%, 15 = 15%, etc) */
+  percentualComissao: int("percentualComissao").notNull().default(10),
+  /** Valor da comissão em centavos (calculado: valorBase * percentualComissao / 100) */
   valorComissao: int("valorComissao").notNull().default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

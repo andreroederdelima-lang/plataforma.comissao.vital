@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE comissaoConfig \nADD COLUMN valorBase INT NOT NULL DEFAULT 0 AFTER categoria,\nADD COLUMN percentualComissao INT NOT NULL DEFAULT 10 AFTER valorBase;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute ALTER TABLE comissaoConfig \nADD COLUMN valorBase INT NOT NULL DEFAULT 0 AFTER categoria,\nADD COLUMN percentualComissao INT NOT NULL DEFAULT 10 AFTER valorBase;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'valorbase' in 'comissaoConfig'"
+  ]
+}

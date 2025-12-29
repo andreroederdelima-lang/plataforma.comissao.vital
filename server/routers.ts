@@ -609,7 +609,9 @@ export const appRouter = router({
         nomePlano: z.enum(["essencial", "premium"]),
         tipoPlano: z.enum(["familiar", "individual"]),
         categoria: z.enum(["empresarial", "pessoa_fisica"]),
-        valorComissao: z.number().min(0, "Valor deve ser positivo"),
+        valorBase: z.number().min(0, "Valor base deve ser positivo").optional(),
+        percentualComissao: z.number().min(0).max(100, "Percentual deve estar entre 0 e 100").optional(),
+        valorComissao: z.number().min(0, "Valor deve ser positivo").optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         if (ctx.user.role !== "admin") {
@@ -619,8 +621,15 @@ export const appRouter = router({
           });
         }
 
-        const { upsertComissaoConfig } = await import("./db");
-        await upsertComissaoConfig(input.nomePlano, input.tipoPlano, input.categoria, input.valorComissao);
+        const { upsertComissaoConfigWithBase } = await import("./db");
+        await upsertComissaoConfigWithBase(
+          input.nomePlano, 
+          input.tipoPlano, 
+          input.categoria, 
+          input.valorBase, 
+          input.percentualComissao,
+          input.valorComissao
+        );
         return { success: true };
       }),
   }),

@@ -1288,3 +1288,17 @@
 - [x] Corrigir botão Materiais de Apoio (adicionar PainelVendedorLayout)
 - [x] Testar todos os 8 botões do menu promotor (TODOS FUNCIONANDO!)
 - [x] Salvar checkpoint
+
+## Atualizar Valores de Comissão dos Planos
+
+- [x] Verificar botão logout funcionando (OK!)
+- [ ] Corrigir botão "Fazer Primeira Indicação" para "Fazer Primeira Indicação ou Venda"
+- [ ] Adicionar campo valorBase (mensalidade) na tabela comissaoConfig
+- [ ] Atualizar interface para mostrar: Valor Base + Porcentagem = Comissão
+- [ ] Premium Familiar: R$ 289,90
+- [ ] Essencial Familiar: R$ 259,00
+- [ ] Essencial Empresarial: R$ 99,90
+- [ ] Premium Empresarial: R$ 119,90
+- [ ] Essencial Individual: R$ 129,00
+- [ ] Premium Individual: R$ 159,90
+- [ ] Salvar checkpoint

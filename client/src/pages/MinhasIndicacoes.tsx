@@ -148,7 +148,7 @@ export default function MinhasIndicacoes() {
                 Você ainda não fez nenhuma indicação.
               </p>
               <Link href="/indicar">
-                <Button className="mt-4">Fazer Primeira Indicação</Button>
+                <Button className="mt-4">Fazer Primeira Indicação ou Venda</Button>
               </Link>
             </CardContent>
           </Card>

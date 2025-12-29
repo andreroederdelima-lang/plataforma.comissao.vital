@@ -365,6 +365,73 @@ export async function upsertComissaoConfig(
 }
 
 /**
+ * Criar ou atualizar configuração de comissão com valor base e percentual
+ */
+export async function upsertComissaoConfigWithBase(
+  nomePlano: "essencial" | "premium",
+  tipoPlano: "familiar" | "individual",
+  categoria: "empresarial" | "pessoa_fisica",
+  valorBase?: number,
+  percentualComissao?: number,
+  valorComissao?: number
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Buscar se já existe uma configuração com essa combinação
+  const existing = await db.select()
+    .from(comissaoConfig)
+    .where(
+      and(
+        eq(comissaoConfig.nomePlano, nomePlano),
+        eq(comissaoConfig.tipoPlano, tipoPlano),
+        eq(comissaoConfig.categoria, categoria)
+      )
+    )
+    .limit(1);
+
+  // Preparar objeto de atualização
+  const updateData: any = { updatedAt: new Date() };
+  
+  if (valorBase !== undefined) {
+    updateData.valorBase = valorBase;
+  }
+  if (percentualComissao !== undefined) {
+    updateData.percentualComissao = percentualComissao;
+  }
+  if (valorComissao !== undefined) {
+    updateData.valorComissao = valorComissao;
+  }
+  
+  // Se tem valorBase e percentual, calcular valorComissao automaticamente
+  if (valorBase !== undefined && percentualComissao !== undefined) {
+    updateData.valorComissao = Math.round((valorBase * percentualComissao) / 100);
+  }
+
+  if (existing.length > 0) {
+    // Atualizar existente
+    await db.update(comissaoConfig)
+      .set(updateData)
+      .where(eq(comissaoConfig.id, existing[0].id));
+  } else {
+    // Inserir novo
+    const insertData: any = { nomePlano, tipoPlano, categoria };
+    if (valorBase !== undefined) insertData.valorBase = valorBase;
+    if (percentualComissao !== undefined) insertData.percentualComissao = percentualComissao;
+    if (valorComissao !== undefined) insertData.valorComissao = valorComissao;
+    
+    // Calcular valorComissao se tiver base e percentual
+    if (valorBase !== undefined && percentualComissao !== undefined) {
+      insertData.valorComissao = Math.round((valorBase * percentualComissao) / 100);
+    }
+    
+    await db.insert(comissaoConfig).values(insertData);
+  }
+}
+
+/**
  * Obter valor de comissão por combinação de plano + tipo + categoria
  */
 export async function getComissaoByTipoPlano(
