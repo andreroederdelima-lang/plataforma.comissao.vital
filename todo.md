@@ -1062,5 +1062,18 @@
 - [x] Remover duplicação de menus (unificar Materiais de Apoio e Gerenciar Cards)
 - [x] Implementar permissões corretas (admin edita tudo, vendedor só textos)
 - [x] Adicionar botão de edição rápida de cards na página MateriaisDivulgacao para admin
-- [ ] Testar sistema completo
-- [ ] Salvar checkpoint
+- [x] Testar sistema completo
+- [x] Salvar checkpoint
+
+## Ajustes no Sistema de Cadastro e Valores dos Planos
+- [x] Criar tabela/campos para armazenar valores dos planos no banco
+- [x] Adicionar interface no AdminConfiguracoes para editar valores dos planos
+- [x] Atualizar formulário de cadastro para buscar valores do banco (somente leitura para vendedor)
+- [x] Trocar mensagem "Indicação concluída" por "CADASTRO CONCLUÍDO"
+- [x] Limpar formulário e atualizar página após cadastro bem-sucedido
+- [x] Avaliar UX: botão único com seleção vs botões separados (mantido botão único)
+- [x] Implementar solução escolhida (adicionado seletor visual de tipo)
+- [x] Separar claramente Indicações vs Vendas na visualização (cards e tabela)
+- [x] Adicionar badge "Tipo" nos cards de indicações
+- [x] Testar fluxo completo
+- [x] Salvar checkpoint

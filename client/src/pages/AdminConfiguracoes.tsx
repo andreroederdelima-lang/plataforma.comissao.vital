@@ -28,6 +28,12 @@ export default function AdminConfiguracoes() {
   const [linkCheckoutBase, setLinkCheckoutBase] = useState("");
   const [diasCancelamento, setDiasCancelamento] = useState("7");
   
+  // Estados para valores dos planos
+  const [valorEssencial, setValorEssencial] = useState("0.00");
+  const [valorVital, setValorVital] = useState("0.00");
+  const [valorPremium, setValorPremium] = useState("0.00");
+  const [valorEmpresarial, setValorEmpresarial] = useState("0.00");
+  
   const { data: configsGerais } = trpc.configuracoesGerais.getConfiguracoes.useQuery();
   const atualizarLinkMutation = trpc.configuracoesGerais.atualizarLinkBase.useMutation({
     onSuccess: () => {
@@ -46,6 +52,16 @@ export default function AdminConfiguracoes() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao atualizar período");
+    },
+  });
+  
+  const atualizarValoresPlanosMutation = trpc.configuracoesGerais.atualizarValoresPlanos.useMutation({
+    onSuccess: () => {
+      toast.success("Valores dos planos atualizados!");
+      utils.configuracoesGerais.getConfiguracoes.invalidate();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erro ao atualizar valores");
     },
   });
   
@@ -75,6 +91,10 @@ export default function AdminConfiguracoes() {
     if (configsGerais) {
       setLinkCheckoutBase(configsGerais.linkCheckoutBase || "");
       setDiasCancelamento(String(configsGerais.diasCancelamentoGratuito));
+      setValorEssencial(String(configsGerais.valorPlanoEssencial || "0.00"));
+      setValorVital(String(configsGerais.valorPlanoVital || "0.00"));
+      setValorPremium(String(configsGerais.valorPlanoPremium || "0.00"));
+      setValorEmpresarial(String(configsGerais.valorPlanoEmpresarial || "0.00"));
     }
   }, [configsGerais]);
   
@@ -284,6 +304,87 @@ export default function AdminConfiguracoes() {
                   </p>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Valores dos Planos */}
+          <Card className="border-2 border-primary/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-2xl">💰</span>
+                Valores dos Planos
+              </CardTitle>
+              <CardDescription>
+                Defina os valores mensais de cada plano de assinatura (usados para cálculo de comissões)
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Plano Essencial (R$)</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={valorEssencial}
+                    onChange={(e) => setValorEssencial(e.target.value)}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Plano Vital (R$)</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={valorVital}
+                    onChange={(e) => setValorVital(e.target.value)}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Plano Premium (R$)</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={valorPremium}
+                    onChange={(e) => setValorPremium(e.target.value)}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Plano Empresarial (R$)</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={valorEmpresarial}
+                    onChange={(e) => setValorEmpresarial(e.target.value)}
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+              <Button
+                onClick={() => atualizarValoresPlanosMutation.mutate({
+                  valorEssencial: parseFloat(valorEssencial),
+                  valorVital: parseFloat(valorVital),
+                  valorPremium: parseFloat(valorPremium),
+                  valorEmpresarial: parseFloat(valorEmpresarial),
+                })}
+                disabled={atualizarValoresPlanosMutation.isPending}
+                className="w-full"
+              >
+                {atualizarValoresPlanosMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
+                Salvar Valores dos Planos
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Estes valores serão usados automaticamente no formulário de cadastro de indicações
+              </p>
             </CardContent>
           </Card>
 

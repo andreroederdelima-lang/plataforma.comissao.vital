@@ -834,11 +834,19 @@ export async function getConfiguracoesGerais() {
     await db.insert(configuracoesGerais).values({
       linkCheckoutBase: null,
       diasCancelamentoGratuito: 7,
+      valorPlanoEssencial: "0.00",
+      valorPlanoVital: "0.00",
+      valorPlanoPremium: "0.00",
+      valorPlanoEmpresarial: "0.00",
     });
     return {
       id: 1,
       linkCheckoutBase: null,
       diasCancelamentoGratuito: 7,
+      valorPlanoEssencial: "0.00",
+      valorPlanoVital: "0.00",
+      valorPlanoPremium: "0.00",
+      valorPlanoEmpresarial: "0.00",
       updatedAt: new Date(),
     };
   }

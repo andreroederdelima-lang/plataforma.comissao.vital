@@ -30,14 +30,14 @@ export default function Home() {
   const [valorPlano, setValorPlano] = useState("");
   const [formaPagamento, setFormaPagamento] = useState<"pix" | "cartao">("pix");
   
-  // Detectar tipo de cadastro (venda ou indicação)
-  const tipoParam = new URLSearchParams(searchParams).get("tipo");
-  const isVenda = tipoParam === "venda";
+  // Tipo de cadastro (venda ou indicação) - agora controlado por estado local
+  const [tipoCadastro, setTipoCadastro] = useState<"venda" | "indicacao">("indicacao");
+  const isVenda = tipoCadastro === "venda";
 
   const utils = trpc.useUtils();
   const createMutation = trpc.indicacoes.create.useMutation({
     onSuccess: () => {
-      toast.success("Indicação enviada com sucesso!");
+      toast.success("CADASTRO CONCLUÍDO");
       // Limpar formulário
       setNomeIndicado("");
       setWhatsappIndicado("");
@@ -45,7 +45,13 @@ export default function Home() {
       setTipoPlano("individual");
       setCategoria("pessoa_fisica");
       setObservacoes("");
+      // Limpar campos de venda
+      setDataVenda("");
+      setValorPlano("");
+      setFormaPagamento("pix");
       utils.indicacoes.listMine.invalidate();
+      // Atualizar página após pequeno delay para mostrar toast
+      setTimeout(() => window.location.reload(), 1500);
     },
     onError: (error) => {
       toast.error(error.message || "Erro ao enviar indicação");
@@ -206,20 +212,50 @@ export default function Home() {
               </CardHeader>
             </Card>
 
-            {/* Banner de Venda */}
-            {isVenda && (
-              <Card className="bg-green-50 border-green-500 border-2">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3">
-                    <div className="text-4xl">🎯</div>
-                    <div>
-                      <h3 className="text-xl font-bold text-green-700">💰 Você está cadastrando uma VENDA</h3>
-                      <p className="text-green-600">Ganhe 100% da comissão! Preencha os dados da venda fechada.</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+            {/* Seletor de Tipo de Cadastro */}
+            <Card className="border-2 border-primary/30">
+              <CardContent className="pt-6">
+                <div className="space-y-3">
+                  <Label className="text-base font-semibold">Tipo de Cadastro</Label>
+                  <RadioGroup
+                    value={tipoCadastro}
+                    onValueChange={(value) => setTipoCadastro(value as "venda" | "indicacao")}
+                    className="grid grid-cols-2 gap-4"
+                  >
+                    <Label
+                      htmlFor="indicacao"
+                      className={`flex flex-col items-center justify-center rounded-lg border-2 p-4 cursor-pointer transition-all ${
+                        tipoCadastro === "indicacao"
+                          ? "border-primary bg-primary/10"
+                          : "border-muted hover:border-primary/50"
+                      }`}
+                    >
+                      <RadioGroupItem value="indicacao" id="indicacao" className="sr-only" />
+                      <div className="text-3xl mb-2">📝</div>
+                      <div className="font-semibold">Indicação</div>
+                      <div className="text-xs text-center text-muted-foreground mt-1">
+                        Ganhe 50% quando fecharmos
+                      </div>
+                    </Label>
+                    <Label
+                      htmlFor="venda"
+                      className={`flex flex-col items-center justify-center rounded-lg border-2 p-4 cursor-pointer transition-all ${
+                        tipoCadastro === "venda"
+                          ? "border-green-600 bg-green-50"
+                          : "border-muted hover:border-green-600/50"
+                      }`}
+                    >
+                      <RadioGroupItem value="venda" id="venda" className="sr-only" />
+                      <div className="text-3xl mb-2">🎯</div>
+                      <div className="font-semibold text-green-700">Venda Direta</div>
+                      <div className="text-xs text-center text-green-600 mt-1">
+                        Ganhe 100% da comissão!
+                      </div>
+                    </Label>
+                  </RadioGroup>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Form */}
             <Card className="bg-card/80 backdrop-blur-sm">

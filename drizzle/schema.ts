@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { decimal, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -294,6 +294,14 @@ export const configuracoesGerais = mysqlTable("configuracoes_gerais", {
   linkCheckoutBase: varchar("linkCheckoutBase", { length: 500 }),
   /** Dias de período de cancelamento gratuito */
   diasCancelamentoGratuito: int("diasCancelamentoGratuito").default(7).notNull(),
+  /** Valor do Plano Essencial (em reais) */
+  valorPlanoEssencial: decimal("valorPlanoEssencial", { precision: 10, scale: 2 }).default("0.00"),
+  /** Valor do Plano Vital (em reais) */
+  valorPlanoVital: decimal("valorPlanoVital", { precision: 10, scale: 2 }).default("0.00"),
+  /** Valor do Plano Premium (em reais) */
+  valorPlanoPremium: decimal("valorPlanoPremium", { precision: 10, scale: 2 }).default("0.00"),
+  /** Valor do Plano Empresarial (em reais) */
+  valorPlanoEmpresarial: decimal("valorPlanoEmpresarial", { precision: 10, scale: 2 }).default("0.00"),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 

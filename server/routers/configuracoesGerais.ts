@@ -5,8 +5,10 @@ import {
   getConfiguracoesGerais, 
   atualizarLinkCheckoutBase, 
   atualizarDiasCancelamento,
-  getLinkCheckoutCompleto 
+  getLinkCheckoutCompleto,
+  getDb
 } from "../db";
+import { configuracoesGerais } from "../../drizzle/schema";
 
 export const configuracoesGeraisRouter = router({
   /**
@@ -61,6 +63,38 @@ export const configuracoesGeraisRouter = router({
       }
 
       await atualizarDiasCancelamento(input.dias);
+      return { success: true };
+    }),
+
+  /**
+   * Atualizar valores dos planos
+   */
+  atualizarValoresPlanos: protectedProcedure
+    .input(z.object({
+      valorEssencial: z.number().min(0),
+      valorVital: z.number().min(0),
+      valorPremium: z.number().min(0),
+      valorEmpresarial: z.number().min(0),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      // Apenas admin pode editar
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Sem permissão para editar configurações",
+        });
+      }
+
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Banco de dados indisponível" });
+
+      await db.update(configuracoesGerais).set({
+        valorPlanoEssencial: input.valorEssencial.toFixed(2),
+        valorPlanoVital: input.valorVital.toFixed(2),
+        valorPlanoPremium: input.valorPremium.toFixed(2),
+        valorPlanoEmpresarial: input.valorEmpresarial.toFixed(2),
+      });
+
       return { success: true };
     }),
 
