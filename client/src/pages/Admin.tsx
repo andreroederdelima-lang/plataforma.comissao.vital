@@ -289,6 +289,7 @@ export default function Admin() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Data</TableHead>
+                        <TableHead>Tipo</TableHead>
                         <TableHead className="w-[200px]">Status</TableHead>
                         <TableHead>Parceiro</TableHead>
                         <TableHead>Nome Indicado</TableHead>
@@ -300,10 +301,23 @@ export default function Admin() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {indicacoes.map((item) => (
+                      {indicacoes.map((item) => {
+                        const isVenda = item.indicacao.dataVenda !== null;
+                        return (
                         <TableRow key={item.indicacao.id}>
                           <TableCell className="whitespace-nowrap">
                             {new Date(item.indicacao.createdAt).toLocaleDateString("pt-BR")}
+                          </TableCell>
+                          <TableCell>
+                            {isVenda ? (
+                              <Badge className="bg-green-600 text-white hover:bg-green-700 gap-1">
+                                <span>🎯</span> Venda (100%)
+                              </Badge>
+                            ) : (
+                              <Badge className="bg-blue-600 text-white hover:bg-blue-700 gap-1">
+                                <span>📝</span> Indicação (50%)
+                              </Badge>
+                            )}
                           </TableCell>
                           <TableCell>
                             <select
@@ -366,7 +380,8 @@ export default function Admin() {
                             <ComissaoAutoCell indicacao={item.indicacao} />
                           </TableCell>
                         </TableRow>
-                      ))}
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 </div>

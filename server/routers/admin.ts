@@ -129,4 +129,50 @@ export const adminRouter = router({
 
     return pendentes;
   }),
+
+  /**
+   * Promover usuário a Admin
+   */
+  promoverAdmin: adminProcedure
+    .input(z.object({ userId: z.number() }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Banco de dados não disponível",
+        });
+      }
+
+      const { users } = await import("../../drizzle/schema");
+      await db
+        .update(users)
+        .set({ role: "admin" })
+        .where(eq(users.id, input.userId));
+
+      return { success: true };
+    }),
+
+  /**
+   * Rebaixar Admin para Promotor
+   */
+  rebaixarPromotor: adminProcedure
+    .input(z.object({ userId: z.number() }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Banco de dados não disponível",
+        });
+      }
+
+      const { users } = await import("../../drizzle/schema");
+      await db
+        .update(users)
+        .set({ role: "promotor" })
+        .where(eq(users.id, input.userId));
+
+      return { success: true };
+    }),
 });

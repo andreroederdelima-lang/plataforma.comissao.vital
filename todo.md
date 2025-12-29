@@ -1102,3 +1102,15 @@
 - [ ] Criar interface completa do gerador de QR Code editável
 - [ ] Testar todas as correções
 - [ ] Salvar checkpoint
+
+## BUGS E NOVOS REQUISITOS URGENTES
+- [x] **BUG**: Menu "Materiais" no Admin redireciona para página de promotor (deveria ir para /admin/materiais)
+- [x] Adicionar coluna "Tipo" na tabela de Vendas e Indicações com badge colorido
+- [x] Adicionar ícones diferenciados para Indicação (📝) e Venda (🎯)
+- [ ] Adicionar filtro para separar Indicações vs Vendas (opcional)
+- [x] Implementar procedure tRPC para promover usuário a Admin
+- [x] Implementar procedure tRPC para rebaixar Admin para Promotor
+- [ ] Implementar procedure tRPC para ativar/desativar usuários (opcional)
+- [x] Adicionar botões de ação na página AdminUsuarios (Promover/Rebaixar)
+- [x] Testar todas as correções
+- [x] Salvar checkpoint

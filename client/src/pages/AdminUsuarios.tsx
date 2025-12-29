@@ -84,6 +84,26 @@ export default function AdminUsuarios() {
     },
   });
 
+  const promoverAdminMutation = trpc.admin.promoverAdmin.useMutation({
+    onSuccess: () => {
+      toast.success("Usuário promovido a Admin com sucesso!");
+      utils.usuarios.list.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao promover usuário: ${error.message}`);
+    },
+  });
+
+  const rebaixarPromotorMutation = trpc.admin.rebaixarPromotor.useMutation({
+    onSuccess: () => {
+      toast.success("Admin rebaixado para Promotor com sucesso!");
+      utils.usuarios.list.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao rebaixar usuário: ${error.message}`);
+    },
+  });
+
   const handleCreateUser = () => {
     if (!newUserName || !newUserEmail) {
       toast.error("Nome e e-mail são obrigatórios");
@@ -314,6 +334,37 @@ export default function AdminUsuarios() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-2">
+                            {user.role === "admin" ? (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  if (confirm(`Rebaixar ${user.name || user.email} para Promotor?`)) {
+                                    rebaixarPromotorMutation.mutate({ userId: user.id });
+                                  }
+                                }}
+                                disabled={rebaixarPromotorMutation.isPending}
+                                title="Rebaixar para Promotor"
+                                className="text-orange-600 hover:text-orange-700"
+                              >
+                                ⬇️ Rebaixar
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  if (confirm(`Promover ${user.name || user.email} a Admin?`)) {
+                                    promoverAdminMutation.mutate({ userId: user.id });
+                                  }
+                                }}
+                                disabled={promoverAdminMutation.isPending}
+                                title="Promover a Admin"
+                                className="text-green-600 hover:text-green-700"
+                              >
+                                ⬆️ Promover
+                              </Button>
+                            )}
                             <Button
                               variant="ghost"
                               size="sm"

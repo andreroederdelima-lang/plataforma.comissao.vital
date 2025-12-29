@@ -67,10 +67,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       adminOnly: false,
     },
     {
-      path: "/materiais-divulgacao",
+      path: "/admin/materiais",
       label: "Materiais",
       icon: FileText,
-      adminOnly: false,
+      adminOnly: true,
     },
     {
       path: "/admin/gerenciar-cards",
