@@ -1229,4 +1229,11 @@
 - [x] Comissoes e Estatisticas são para admin (não precisam de PainelVendedorLayout)
 - [x] Atualizar QRCodes para usar PainelVendedorLayout
 - [x] Testar todas as rotas
+- [x] Salvar checkpoint
+
+## Corrigir Redirecionamento Após Login do Vendedor
+
+- [x] Identificar onde o login do vendedor redireciona
+- [x] Corrigir para redirecionar para /painel-promotor
+- [x] Testar fluxo completo de login
 - [ ] Salvar checkpoint

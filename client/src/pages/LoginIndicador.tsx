@@ -29,7 +29,7 @@ export default function LoginIndicador() {
       if (data.user.role === 'admin' || data.user.role === 'comercial' || data.user.role === 'promotor') {
         window.location.href = "/admin";
       } else {
-        window.location.href = "/materiais-divulgacao";
+        window.location.href = "/painel-promotor";
       }
     },
     onError: (error) => {
