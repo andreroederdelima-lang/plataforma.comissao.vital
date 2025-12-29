@@ -1,0 +1,30 @@
+{
+  "query": "SELECT * FROM users WHERE email = 'Oticavisttabnu@gmail.com';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT * FROM users WHERE email = 'Oticavisttabnu@gmail.com';",
+  "rows": [
+    {
+      "id": "2790001",
+      "openId": "indicador_oticavisttabnu_gmail_com_1767007522422",
+      "name": "Carlos Andrei Cardoso martins",
+      "email": "oticavisttabnu@gmail.com",
+      "loginMethod": "email_password",
+      "role": "promotor",
+      "createdAt": "2025-12-29 11:25:22",
+      "updatedAt": "2025-12-29 11:26:06",
+      "lastSignedIn": "2025-12-29 11:25:31",
+      "chavePix": "Oticavisttabnu@gmail.com",
+      "canDelete": "1",
+      "isActive": "1",
+      "lastRoleChange": "2025-12-29 11:25:22",
+      "passwordHash": "$2b$10$Uu0dyQUeF2w78bCh8ui3g.dUGf15D/y/U1fx0BmVdoxjPIoZKboBu",
+      "linkCheckoutPersonalizado": "VA6MLM7U",
+      "apresentacaoPersonal": "NULL",
+      "diferenciais": "NULL",
+      "ofertaEspecial": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\tloginMethod\trole\tcreatedAt\tupdatedAt\tlastSignedIn\tchavePix\tcanDelete\tisActive\tlastRoleChange\tpasswordHash\tlinkCheckoutPersonalizado\tapresentacaoPersonal\tdiferenciais\tofertaEspecial\n2790001\tindicador_oticavisttabnu_gmail_com_1767007522422\tCarlos Andrei Cardoso martins\toticavisttabnu@gmail.com\temail_password\tpromotor\t2025-12-29 11:25:22\t2025-12-29 11:26:06\t2025-12-29 11:25:31\tOticavisttabnu@gmail.com\t1\t1\t2025-12-29 11:25:22\t$2b$10$Uu0dyQUeF2w78bCh8ui3g.dUGf15D/y/U1fx0BmVdoxjPIoZKboBu\tVA6MLM7U\tNULL\tNULL\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

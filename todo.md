@@ -1194,4 +1194,11 @@
 - [x] Adicionar rota pública no App.tsx
 - [x] Adicionar procedure público no backend
 - [x] Testar acesso sem login
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
+
+## Adicionar Novo Administrador
+
+- [x] Verificar se Oticavisttabnu@gmail.com existe no banco
+- [x] Criar/atualizar usuário como admin
+- [x] Criar documento de orientações completo
+- [ ] Salvar checkpoint
