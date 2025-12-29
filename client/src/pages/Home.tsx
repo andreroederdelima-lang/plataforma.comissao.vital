@@ -257,23 +257,33 @@ export default function Home() {
 
                   {/* Nome do Plano */}
                   <div className="space-y-3">
-                    <Label className="text-base font-semibold">Tipo de Plano (provável ou de maior interesse) *</Label>
+                    <Label className="text-base font-semibold">Tipo de Plano *</Label>
                     <RadioGroup
                       value={nomePlano}
                       onValueChange={(value) => setNomePlano(value as "essencial" | "premium")}
-                      className="flex gap-4"
+                      className="flex flex-col gap-3"
                     >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="essencial" id="essencial" />
-                        <Label htmlFor="essencial" className="cursor-pointer font-normal">
-                          Essencial
-                        </Label>
+                      <div className="flex items-start space-x-2 p-3 border rounded-lg hover:bg-accent/5 cursor-pointer">
+                        <RadioGroupItem value="essencial" id="essencial" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="essencial" className="cursor-pointer font-semibold">
+                            Essencial
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Plano básico com cobertura essencial
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="premium" id="premium" />
-                        <Label htmlFor="premium" className="cursor-pointer font-normal">
-                          Premium
-                        </Label>
+                      <div className="flex items-start space-x-2 p-3 border rounded-lg hover:bg-accent/5 cursor-pointer">
+                        <RadioGroupItem value="premium" id="premium" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="premium" className="cursor-pointer font-semibold">
+                            Premium
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Plano completo com cobertura ampliada
+                          </p>
+                        </div>
                       </div>
                     </RadioGroup>
                   </div>
@@ -284,19 +294,29 @@ export default function Home() {
                     <RadioGroup
                       value={tipoPlano}
                       onValueChange={(value) => setTipoPlano(value as "familiar" | "individual")}
-                      className="flex gap-4"
+                      className="flex flex-col gap-3"
                     >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="individual" id="individual" />
-                        <Label htmlFor="individual" className="cursor-pointer font-normal">
-                          Individual
-                        </Label>
+                      <div className="flex items-start space-x-2 p-3 border rounded-lg hover:bg-accent/5 cursor-pointer">
+                        <RadioGroupItem value="individual" id="individual" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="individual" className="cursor-pointer font-semibold">
+                            Individual
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Cobertura para 1 pessoa
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="familiar" id="familiar" />
-                        <Label htmlFor="familiar" className="cursor-pointer font-normal">
-                          Familiar
-                        </Label>
+                      <div className="flex items-start space-x-2 p-3 border rounded-lg hover:bg-accent/5 cursor-pointer">
+                        <RadioGroupItem value="familiar" id="familiar" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="familiar" className="cursor-pointer font-semibold">
+                            Familiar
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Cobertura para até 4 pessoas
+                          </p>
+                        </div>
                       </div>
                     </RadioGroup>
                   </div>
@@ -307,19 +327,29 @@ export default function Home() {
                     <RadioGroup
                       value={categoria}
                       onValueChange={(value) => setCategoria(value as "empresarial" | "pessoa_fisica")}
-                      className="flex gap-4"
+                      className="flex flex-col gap-3"
                     >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="pessoa_fisica" id="pessoa_fisica" />
-                        <Label htmlFor="pessoa_fisica" className="cursor-pointer font-normal">
-                          Pessoa Física
-                        </Label>
+                      <div className="flex items-start space-x-2 p-3 border rounded-lg hover:bg-accent/5 cursor-pointer">
+                        <RadioGroupItem value="pessoa_fisica" id="pessoa_fisica" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="pessoa_fisica" className="cursor-pointer font-semibold">
+                            Pessoa Física
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Plano individual ou familiar para pessoa física
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="empresarial" id="empresarial" />
-                        <Label htmlFor="empresarial" className="cursor-pointer font-normal">
-                          Empresarial <span className="text-muted-foreground text-sm">(descreva o nome da empresa nas observações)</span>
-                        </Label>
+                      <div className="flex items-start space-x-2 p-3 border rounded-lg hover:bg-accent/5 cursor-pointer">
+                        <RadioGroupItem value="empresarial" id="empresarial" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="empresarial" className="cursor-pointer font-semibold">
+                            Empresarial
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Plano negociado com gestor da empresa (Essencial ou Premium)
+                          </p>
+                        </div>
                       </div>
                     </RadioGroup>
                   </div>

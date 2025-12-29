@@ -191,7 +191,8 @@ export async function sendRecuperacaoSenha(params: {
 }): Promise<boolean> {
   const { nome, email, token } = params;
 
-  const baseUrl = process.env.VITE_OAUTH_PORTAL_URL || "http://localhost:3000";
+  // Usar URL do site publicado ou localhost em desenvolvimento
+  const baseUrl = process.env.SITE_URL || process.env.PUBLIC_URL || "https://indicacao.suasaudevital.com.br";
   const resetUrl = `${baseUrl}/recuperar-senha?token=${token}`;
 
   const subject = "Recuperação de Senha - Vital";

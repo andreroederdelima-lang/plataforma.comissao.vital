@@ -994,3 +994,27 @@
 ### Salvar Checkpoint
 - [ ] Testar sistema completo
 - [ ] Salvar checkpoint
+
+
+## Clarificação de Produtos
+
+### Estrutura de Produtos
+- [x] Atualizar labels para mostrar claramente:
+  - [x] Premium Individual (1 pessoa)
+  - [x] Premium Familiar (até 4 pessoas)
+  - [x] Essencial Individual (1 pessoa)
+  - [x] Essencial Familiar (até 4 pessoas)
+  - [x] Empresarial (Essencial ou Premium, negociado com gestor)
+- [x] Melhorar visualização no formulário de cadastro
+- [x] Melhorar visualização na lista de vendas/indicações
+- [x] Adicionar descrições claras de cada produto
+
+### Correção de Recuperação de Senha
+- [x] Verificar link de recuperação de senha
+- [x] Corrigir redirecionamento (estava usando domínio manus.im)
+- [x] Atualizar para usar domínio correto do site
+- [ ] Testar fluxo completo
+
+### Salvar Checkpoint
+- [x] Testar sistema
+- [ ] Salvar checkpoint

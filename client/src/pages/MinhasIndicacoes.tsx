@@ -36,13 +36,27 @@ const statusColors = {
 };
 
 const tipoPlanoLabels = {
-  familiar: "Familiar",
-  individual: "Individual",
+  familiar: "Familiar (até 4 pessoas)",
+  individual: "Individual (1 pessoa)",
+};
+
+const nomePlanoLabels = {
+  essencial: "Essencial",
+  premium: "Premium",
 };
 
 const categoriaLabels = {
   empresarial: "Empresarial",
   pessoa_fisica: "Pessoa Física",
+};
+
+// Função para gerar nome completo do produto
+const getNomeProdutoCompleto = (nomePlano: string, tipoPlano: string, categoria: string) => {
+  const plano = nomePlanoLabels[nomePlano as keyof typeof nomePlanoLabels] || nomePlano;
+  const tipo = tipoPlano === "familiar" ? "Familiar" : "Individual";
+  const pessoas = tipoPlano === "familiar" ? "(até 4 pessoas)" : "(1 pessoa)";
+  const cat = categoria === "empresarial" ? " - Empresarial" : "";
+  return `${plano} ${tipo} ${pessoas}${cat}`;
 };
 
 export default function MinhasIndicacoes() {
@@ -158,11 +172,8 @@ export default function MinhasIndicacoes() {
                         </div>
 
                         <div className="flex flex-wrap gap-2">
-                          <Badge variant="outline">
-                            {tipoPlanoLabels[indicacao.tipoPlano]}
-                          </Badge>
-                          <Badge variant="outline">
-                            {categoriaLabels[indicacao.categoria]}
+                          <Badge variant="outline" className="text-sm">
+                            {getNomeProdutoCompleto(indicacao.nomePlano, indicacao.tipoPlano, indicacao.categoria)}
                           </Badge>
                         </div>
 
