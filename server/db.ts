@@ -431,6 +431,35 @@ export async function createVendedor(name: string, email: string, chavePix?: str
 }
 
 /**
+ * Criar novo usuário com senha (promotor ou comercial)
+ */
+export async function createVendedorWithPassword(
+  name: string,
+  email: string,
+  passwordHash: string,
+  chavePix?: string
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Gerar openId temporário baseado no email
+  const openId = `user_${email.replace(/[@.]/g, "_")}_${Date.now()}`;
+
+  await db.insert(users).values({
+    openId,
+    name,
+    email,
+    role: "promotor",
+    chavePix: chavePix || null,
+    passwordHash,
+    loginMethod: "email",
+    isActive: 1,
+  });
+}
+
+/**
  * Atualizar informações do usuário
  */
 export async function updateUser(

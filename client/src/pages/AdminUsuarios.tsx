@@ -21,6 +21,7 @@ export default function AdminUsuarios() {
   const [newUserName, setNewUserName] = useState("");
   const [newUserEmail, setNewUserEmail] = useState("");
   const [newUserChavePix, setNewUserChavePix] = useState("");
+  const [newUserSenha, setNewUserSenha] = useState("");
   
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
@@ -37,6 +38,7 @@ export default function AdminUsuarios() {
       setNewUserName("");
       setNewUserEmail("");
       setNewUserChavePix("");
+      setNewUserSenha("");
     },
     onError: (error) => {
       toast.error(`Erro ao criar vendedor: ${error.message}`);
@@ -109,10 +111,15 @@ export default function AdminUsuarios() {
       toast.error("Nome e e-mail são obrigatórios");
       return;
     }
+    if (!newUserSenha || newUserSenha.length < 6) {
+      toast.error("Senha deve ter no mínimo 6 caracteres");
+      return;
+    }
     createMutation.mutate({
       name: newUserName,
       email: newUserEmail,
       chavePix: newUserChavePix || undefined,
+      senha: newUserSenha,
     });
   };
 
@@ -225,6 +232,17 @@ export default function AdminUsuarios() {
                     value={newUserEmail}
                     onChange={(e) => setNewUserEmail(e.target.value)}
                   />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="senha">Senha Inicial *</Label>
+                  <Input
+                    id="senha"
+                    type="password"
+                    placeholder="Mínimo 6 caracteres"
+                    value={newUserSenha}
+                    onChange={(e) => setNewUserSenha(e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">O vendedor poderá alterar a senha após o primeiro login</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="chavePix">Chave PIX (opcional)</Label>

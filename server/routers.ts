@@ -684,6 +684,7 @@ export const appRouter = router({
         name: z.string().min(1, "Nome é obrigatório"),
         email: z.string().email("E-mail inválido"),
         chavePix: z.string().optional(),
+        senha: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
       }))
       .mutation(async ({ ctx, input }) => {
         if (ctx.user.role !== "admin") {
@@ -693,8 +694,11 @@ export const appRouter = router({
           });
         }
 
-        const { createVendedor } = await import("./db");
-        await createVendedor(input.name, input.email, input.chavePix);
+        const bcrypt = await import("bcryptjs");
+        const passwordHash = await bcrypt.default.hash(input.senha, 10);
+        
+        const { createVendedorWithPassword } = await import("./db");
+        await createVendedorWithPassword(input.name, input.email, passwordHash, input.chavePix);
         
         // Enviar e-mail de convite
         try {

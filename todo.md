@@ -1114,3 +1114,23 @@
 - [x] Adicionar botões de ação na página AdminUsuarios (Promover/Rebaixar)
 - [x] Testar todas as correções
 - [x] Salvar checkpoint
+
+## Sistema de Login Email/Senha para Vendedores
+- [x] Adicionar campo `passwordHash` na tabela users (já existe)
+- [x] Instalar biblioteca bcrypt para hash de senhas
+- [x] Criar procedure tRPC para login com email/senha (já existe em routers.ts)
+- [x] Criar procedure tRPC para trocar senha (já existe em routers.ts)
+- [x] Criar página de login simples (/login) para vendedores
+- [x] Adicionar opção "Esqueci minha senha"
+- [ ] Atualizar AdminUsuarios para definir senha ao criar vendedor
+- [ ] Permitir vendedor trocar senha no primeiro acesso
+- [ ] Testar fluxo completo de autenticação
+
+## Gerador de QR Code Editável (Continuação)
+- [ ] Criar interface completa na página /qr-codes
+- [ ] Adicionar formulário para criar novo QR Code
+- [ ] Adicionar botão "Editar Link" para cada QR Code
+- [ ] Integrar biblioteca qrcode.react para geração
+- [ ] Implementar função de download de QR Code como imagem
+- [ ] Testar criação, edição e download de QR Codes
+- [ ] Salvar checkpoint
