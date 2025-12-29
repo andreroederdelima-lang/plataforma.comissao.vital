@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../_core/trpc";
 import { TRPCError } from "@trpc/server";
-import { listarMateriaisApoio, adicionarMaterialApoio, deletarMaterialApoio } from "../db";
+import { listarMateriaisApoio, adicionarMaterialApoio, deletarMaterialApoio, atualizarMaterialApoio } from "../db";
 
 /**
  * Router para gerenciar materiais de apoio (banners e vídeos)
@@ -39,6 +39,35 @@ export const materiaisApoioRouter = router({
       }
 
       await adicionarMaterialApoio(input);
+      return { success: true };
+    }),
+
+  /**
+   * Atualizar material de apoio
+   * Apenas admin pode atualizar
+   */
+  update: protectedProcedure
+    .input(z.object({
+      id: z.number(),
+      tipo: z.enum(["banner", "video"]).optional(),
+      titulo: z.string().min(1, "Título é obrigatório").optional(),
+      descricao: z.string().optional(),
+      categoria: z.enum(["redes_sociais", "explicativo", "institucional"]).optional(),
+      urlArquivo: z.string().url("URL inválida").optional(),
+      thumbnailUrl: z.string().url("URL inválida").optional(),
+      tamanhoBytes: z.number().optional(),
+      ordem: z.number().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Apenas administradores podem atualizar materiais",
+        });
+      }
+
+      const { id, ...data } = input;
+      await atualizarMaterialApoio(id, data);
       return { success: true };
     }),
 

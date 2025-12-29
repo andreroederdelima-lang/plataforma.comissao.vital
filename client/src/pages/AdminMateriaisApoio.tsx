@@ -12,6 +12,8 @@ import { Trash2, Upload, Image, Video, ExternalLink } from "lucide-react";
 
 export default function AdminMateriaisApoio() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [tipo, setTipo] = useState<"banner" | "video">("banner");
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -34,6 +36,18 @@ export default function AdminMateriaisApoio() {
     },
   });
 
+  const updateMutation = trpc.materiaisApoio.update.useMutation({
+    onSuccess: () => {
+      toast.success("Material atualizado com sucesso!");
+      utils.materiaisApoio.list.invalidate();
+      setIsDialogOpen(false);
+      resetForm();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao atualizar material: ${error.message}`);
+    },
+  });
+
   const deleteMutation = trpc.materiaisApoio.delete.useMutation({
     onSuccess: () => {
       toast.success("Material excluído com sucesso!");
@@ -45,6 +59,8 @@ export default function AdminMateriaisApoio() {
   });
 
   const resetForm = () => {
+    setIsEditMode(false);
+    setEditingId(null);
     setTipo("banner");
     setTitulo("");
     setDescricao("");
@@ -52,6 +68,19 @@ export default function AdminMateriaisApoio() {
     setUrlArquivo("");
     setThumbnailUrl("");
     setOrdem(0);
+  };
+
+  const handleEdit = (material: any) => {
+    setIsEditMode(true);
+    setEditingId(material.id);
+    setTipo(material.tipo);
+    setTitulo(material.titulo);
+    setDescricao(material.descricao || "");
+    setCategoria(material.categoria);
+    setUrlArquivo(material.urlArquivo);
+    setThumbnailUrl(material.thumbnailUrl || "");
+    setOrdem(material.ordem || 0);
+    setIsDialogOpen(true);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -62,15 +91,28 @@ export default function AdminMateriaisApoio() {
       return;
     }
 
-    addMutation.mutate({
-      tipo,
-      titulo,
-      descricao: descricao || undefined,
-      categoria,
-      urlArquivo,
-      thumbnailUrl: thumbnailUrl || undefined,
-      ordem,
-    });
+    if (isEditMode && editingId) {
+      updateMutation.mutate({
+        id: editingId,
+        tipo,
+        titulo,
+        descricao: descricao || undefined,
+        categoria,
+        urlArquivo,
+        thumbnailUrl: thumbnailUrl || undefined,
+        ordem,
+      });
+    } else {
+      addMutation.mutate({
+        tipo,
+        titulo,
+        descricao: descricao || undefined,
+        categoria,
+        urlArquivo,
+        thumbnailUrl: thumbnailUrl || undefined,
+        ordem,
+      });
+    }
   };
 
   const handleDelete = (id: number) => {
@@ -119,9 +161,9 @@ export default function AdminMateriaisApoio() {
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Adicionar Novo Material</DialogTitle>
+              <DialogTitle>{isEditMode ? "Editar Material" : "Adicionar Novo Material"}</DialogTitle>
               <DialogDescription>
-                Adicione um banner ou vídeo para os promotores baixarem
+                {isEditMode ? "Edite as informações do material" : "Adicione um banner ou vídeo para os promotores baixarem"}
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -219,11 +261,14 @@ export default function AdminMateriaisApoio() {
               </div>
 
               <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                <Button type="button" variant="outline" onClick={() => { setIsDialogOpen(false); resetForm(); }}>
                   Cancelar
                 </Button>
-                <Button type="submit" disabled={addMutation.isPending}>
-                  {addMutation.isPending ? "Adicionando..." : "Adicionar Material"}
+                <Button type="submit" disabled={addMutation.isPending || updateMutation.isPending}>
+                  {isEditMode 
+                    ? (updateMutation.isPending ? "Salvando..." : "Salvar Alterações")
+                    : (addMutation.isPending ? "Adicionando..." : "Adicionar Material")
+                  }
                 </Button>
               </div>
             </form>
@@ -257,14 +302,23 @@ export default function AdminMateriaisApoio() {
                           {getCategoriaLabel(banner.categoria)}
                         </CardDescription>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(banner.id)}
-                        disabled={deleteMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEdit(banner)}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDelete(banner.id)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-2">
@@ -323,14 +377,23 @@ export default function AdminMateriaisApoio() {
                           {getCategoriaLabel(video.categoria)}
                         </CardDescription>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(video.id)}
-                        disabled={deleteMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEdit(video)}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDelete(video.id)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-2">

@@ -957,6 +957,16 @@ export async function adicionarMaterialApoio(material: InsertMaterialApoio) {
 }
 
 /**
+ * Atualizar material de apoio
+ */
+export async function atualizarMaterialApoio(id: number, data: Partial<InsertMaterialApoio>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(materiaisApoio).set(data).where(eq(materiaisApoio.id, id));
+}
+
+/**
  * Deletar material de apoio
  */
 export async function deletarMaterialApoio(id: number) {

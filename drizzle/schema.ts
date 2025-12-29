@@ -363,3 +363,26 @@ export const cardsRecursos = mysqlTable("cards_recursos", {
 
 export type CardRecurso = typeof cardsRecursos.$inferSelect;
 export type InsertCardRecurso = typeof cardsRecursos.$inferInsert;
+
+/**
+ * Tabela de QR Codes personalizados
+ * Armazena QR Codes editáveis para promotores
+ */
+export const qrCodes = mysqlTable("qr_codes", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Título do QR Code (ex: "WhatsApp - Time de Vendas") */
+  titulo: varchar("titulo", { length: 255 }).notNull(),
+  /** Descrição do QR Code */
+  descricao: text("descricao"),
+  /** Link/URL que o QR Code aponta */
+  link: text("link").notNull(),
+  /** Se o QR Code está ativo e visível para promotores */
+  ativo: int("ativo").default(1).notNull(),
+  /** Ordem de exibição */
+  ordem: int("ordem").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type QRCode = typeof qrCodes.$inferSelect;
+export type InsertQRCode = typeof qrCodes.$inferInsert;

@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
-import { Loader2, CheckCircle2, DollarSign, Calendar, CreditCard, User } from "lucide-react";
+import { Loader2, CheckCircle2, DollarSign, Calendar, CreditCard, User, ArrowLeft } from "lucide-react";
 
 const statusLabels = {
   aguardando_contato: "Aguardando Contato",
@@ -87,6 +87,14 @@ export default function AdminAprovarComissoes() {
 
   return (
     <div className="container mx-auto py-8 space-y-6">
+      {/* Botão Voltar */}
+      <a href="/admin">
+        <Button variant="ghost" size="sm">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Voltar
+        </Button>
+      </a>
+      
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Aprovar Comissões</h1>
         <p className="text-muted-foreground mt-2">

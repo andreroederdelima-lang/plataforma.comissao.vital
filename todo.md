@@ -1077,3 +1077,18 @@
 - [x] Adicionar badge "Tipo" nos cards de indicações
 - [x] Testar fluxo completo
 - [x] Salvar checkpoint
+
+## Melhorias de Navegação e Edição
+- [x] Adicionar botões "Voltar" em todas as subpáginas Admin sem botão
+- [x] Adicionar opção de edição na página Materiais de Apoio para Admin
+
+## Gerador de QR Code Editável
+- [x] Criar tabela qr_codes no banco (id, titulo, descricao, link, ativo, createdAt, updatedAt)
+- [x] Implementar procedures tRPC para listar, criar, atualizar e excluir QR Codes
+- [ ] Criar interface de edição de QR Codes para Admin
+- [ ] Adicionar botão "Editar Link" para cada QR Code
+- [ ] Integrar biblioteca qrcode.react para geração de QR Codes
+- [ ] Implementar função de download de QR Code como imagem
+- [ ] Atualizar página /qr-codes para carregar QR Codes do banco
+- [ ] Testar geração, edição e download de QR Codes
+- [ ] Salvar checkpoint

@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Upload, Trash2, ExternalLink, Loader2, FileText, Image as ImageIcon } from "lucide-react";
+import { Upload, Trash2, ExternalLink, Loader2, FileText, Image as ImageIcon, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 
 const VITAL_COLORS = {
@@ -137,6 +137,14 @@ export default function AdminMateriais() {
   return (
     <AdminLayout>
       <div className="space-y-6">
+        {/* Botão Voltar */}
+        <a href="/admin">
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+        </a>
+        
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Gerenciar Materiais</h1>
           <p className="text-muted-foreground mt-1">

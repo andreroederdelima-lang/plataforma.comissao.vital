@@ -1,11 +1,12 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import AdminLayout from "@/components/AdminLayout";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { trpc } from "@/lib/trpc";
-import { Loader2, Save } from "lucide-react";
+import { ArrowLeft, Loader2, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -216,6 +217,14 @@ export default function AdminConfiguracoes() {
     <AdminLayout>
       <div className="container py-8 max-w-5xl">
         <div className="space-y-6">
+          {/* Botão Voltar */}
+          <Link href="/admin">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Voltar
+            </Button>
+          </Link>
+          
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold text-foreground">Configurações do Sistema</h1>
