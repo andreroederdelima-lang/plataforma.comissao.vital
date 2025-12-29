@@ -1236,4 +1236,16 @@
 - [x] Identificar onde o login do vendedor redireciona
 - [x] Corrigir para redirecionar para /painel-promotor
 - [x] Testar fluxo completo de login
+- [x] Salvar checkpoint
+
+## Investigar Problema de Login do Usuário andreroederdelima@gmail.com
+
+- [x] Verificar dados do usuário no banco
+- [x] Identificar problema (usuário é admin, não vendedor)
+
+## Criar Usuário Vendedor de Teste
+
+- [x] Criar usuário vendedor de teste no banco
+- [x] Testar login e navegação completa
+- [x] Documentar credenciais de teste
 - [ ] Salvar checkpoint

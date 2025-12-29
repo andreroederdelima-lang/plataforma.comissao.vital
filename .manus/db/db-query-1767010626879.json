@@ -1,0 +1,18 @@
+{
+  "query": "SELECT id, openId, name, email, role, loginMethod FROM users WHERE email = 'andreroederdelima@gmail.com';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT id, openId, name, email, role, loginMethod FROM users WHERE email = 'andreroederdelima@gmail.com';",
+  "rows": [
+    {
+      "id": "2610002",
+      "openId": "indicador_andreroederdelima_gmail_com_1764611940711",
+      "name": "André Roeder de Lima",
+      "email": "andreroederdelima@gmail.com",
+      "role": "promotor",
+      "loginMethod": "email_password"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\trole\tloginMethod\n2610002\tindicador_andreroederdelima_gmail_com_1764611940711\tAndré Roeder de Lima\tandreroederdelima@gmail.com\tpromotor\temail_password\n",
+  "stderr": "",
+  "execution_time_ms": 82
+}
