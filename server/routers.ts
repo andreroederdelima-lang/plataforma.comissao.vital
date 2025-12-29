@@ -16,6 +16,7 @@ import { configuracoesGeraisRouter } from "./routers/configuracoesGerais";
 import { adminRouter } from "./routers/admin";
 import { cardsRecursosRouter } from "./routers/cardsRecursos";
 import { qrCodesRouter } from "./routers/qrCodes";
+import { perfilRouter } from "./routers/perfil";
 
 
 export const appRouter = router({
@@ -26,6 +27,7 @@ export const appRouter = router({
   admin: adminRouter,
   cardsRecursos: cardsRecursosRouter,
   qrCodes: qrCodesRouter,
+  perfil: perfilRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

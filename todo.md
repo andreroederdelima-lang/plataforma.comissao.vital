@@ -1146,4 +1146,19 @@
 - [x] Atualizar página de QR Codes para gerar códigos dinamicamente
 - [x] Implementar QR Code personalizado por vendedor (com código único)
 - [x] Testar geração dinâmica de QR Codes
+- [x] Salvar checkpoint final
+
+## Correção de Layout Mobile e Menu Completo
+
+- [x] Analisar componente VendedorLayout atual
+- [x] Implementar sidebar responsivo que se transforma em menu hambúrguer no mobile
+- [x] Adicionar opção "Materiais de Apoio" no menu
+- [x] Adicionar opção "Meu Cadastro/Perfil" no menu
+- [x] Adicionar opção "QR Codes" no menu
+- [x] Criar procedures backend para atualizar perfil do vendedor
+- [x] Criar página Meu Perfil com edição de nome, email, PIX, senha
+- [x] Corrigir sobreposição de sidebar e conteúdo no mobile
+- [x] Testar layout em diferentes tamanhos de tela
+- [x] Garantir que todos os botões sejam acessíveis no mobile
+- [x] Fazer avaliação final do sistema
 - [ ] Salvar checkpoint final

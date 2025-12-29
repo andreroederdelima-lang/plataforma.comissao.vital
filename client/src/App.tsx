@@ -30,6 +30,7 @@ import AdminMateriaisApoio from "./pages/AdminMateriaisApoio";
 import MateriaisApoio from "./pages/MateriaisApoio";
 import AdminAprovarComissoes from "./pages/AdminAprovarComissoes";
 import AdminGerenciarCards from "./pages/admin/AdminGerenciarCards";
+import MeuPerfil from "./pages/MeuPerfil";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -51,6 +52,7 @@ function Router() {
       <Route path={"/vendedor"} component={Vendedor} />
       <Route path={"/estatisticas"} component={Estatisticas} />
       <Route path={"/perfil"} component={Perfil} />
+      <Route path={"/meu-perfil"} component={MeuPerfil} />
       <Route path={"/comissoes"} component={Comissoes} />
       <Route path={"/materiais-divulgacao"} component={MateriaisDivulgacao} />
       <Route path={"/materiais-apoio"} component={MateriaisApoio} />
