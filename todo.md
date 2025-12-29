@@ -1161,4 +1161,19 @@
 - [x] Testar layout em diferentes tamanhos de tela
 - [x] Garantir que todos os botões sejam acessíveis no mobile
 - [x] Fazer avaliação final do sistema
+- [x] Salvar checkpoint final
+
+## Criação de Guias de Uso
+
+- [x] Capturar screenshots das principais telas
+- [x] Criar Guia do Vendedor/Promotor (passo a passo ilustrado)
+- [x] Criar Guia do Administrador (configuração e gestão)
+- [x] Criar Guia para Sócios/Gestores (visão geral e estratégica)
+- [x] Salvar checkpoint com guias completos
+
+## Orientações sobre Acesso Administrativo
+
+- [x] Criar página de orientação sobre acesso admin
+- [x] Adicionar explicações claras na página inicial
+- [x] Atualizar guias de documentação
 - [ ] Salvar checkpoint final

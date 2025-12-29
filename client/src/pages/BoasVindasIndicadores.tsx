@@ -104,21 +104,36 @@ export default function BoasVindasIndicadores() {
             </div>
 
             {/* Botões de Acesso */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                onClick={() => setLocation("/login-indicador")}
-                className="bg-[#1e9d9f] hover:bg-[#178a8c] text-white px-8 py-6 text-lg"
-              >
-                Fazer Login
-              </Button>
-              
-              <Button
-                onClick={() => setLocation("/admin")}
-                variant="outline"
-                className="border-2 border-[#1e9d9f] text-[#1e9d9f] hover:bg-[#1e9d9f] hover:text-white px-8 py-6 text-lg"
-              >
-                📊 Área Administrativa
-              </Button>
+            <div className="space-y-6">
+              {/* Explicação sobre tipos de acesso */}
+              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                <h4 className="font-bold text-blue-900 mb-2">🔑 Tipos de Acesso:</h4>
+                <div className="space-y-2 text-sm text-blue-800">
+                  <p>
+                    <strong>Vendedor/Promotor:</strong> Use o botão "Fazer Login" com o email e senha que você recebeu no cadastro.
+                  </p>
+                  <p>
+                    <strong>Administrador:</strong> Use o botão "Área Administrativa" e faça login com sua conta Manus (que pode usar Google, GitHub, etc.).
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={() => setLocation("/login-indicador")}
+                  className="bg-[#1e9d9f] hover:bg-[#178a8c] text-white px-8 py-6 text-lg"
+                >
+                  Fazer Login
+                </Button>
+                
+                <Button
+                  onClick={() => setLocation("/admin")}
+                  variant="outline"
+                  className="border-2 border-[#1e9d9f] text-[#1e9d9f] hover:bg-[#1e9d9f] hover:text-white px-8 py-6 text-lg"
+                >
+                  📊 Área Administrativa
+                </Button>
+              </div>
             </div>
 
             {/* Link para Cadastro */}
