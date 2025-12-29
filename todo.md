@@ -1134,3 +1134,16 @@
 - [ ] Implementar função de download de QR Code como imagem
 - [ ] Testar criação, edição e download de QR Codes
 - [ ] Salvar checkpoint
+
+## Sistema de QR Codes Dinâmicos
+
+- [x] Adicionar campos no banco de dados (whatsappNumero, whatsappMensagem) na tabela configuracoes_gerais
+- [x] Criar procedures backend para atualizar configurações de WhatsApp
+- [x] Instalar biblioteca qrcode para geração de QR Codes
+- [x] Criar endpoint/procedure para gerar QR Code do link de checkout personalizado
+- [x] Criar endpoint/procedure para gerar QR Code do WhatsApp
+- [x] Adicionar seção de configuração de WhatsApp no painel admin
+- [x] Atualizar página de QR Codes para gerar códigos dinamicamente
+- [x] Implementar QR Code personalizado por vendedor (com código único)
+- [x] Testar geração dinâmica de QR Codes
+- [ ] Salvar checkpoint final

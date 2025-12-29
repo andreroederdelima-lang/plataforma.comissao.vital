@@ -35,6 +35,10 @@ export default function AdminConfiguracoes() {
   const [valorPremium, setValorPremium] = useState("0.00");
   const [valorEmpresarial, setValorEmpresarial] = useState("0.00");
   
+  // Estados para WhatsApp
+  const [whatsappNumero, setWhatsappNumero] = useState("");
+  const [whatsappMensagem, setWhatsappMensagem] = useState("Olá! Gostaria de conhecer os planos Vital.");
+  
   const { data: configsGerais } = trpc.configuracoesGerais.getConfiguracoes.useQuery();
   const atualizarLinkMutation = trpc.configuracoesGerais.atualizarLinkBase.useMutation({
     onSuccess: () => {
@@ -63,6 +67,16 @@ export default function AdminConfiguracoes() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao atualizar valores");
+    },
+  });
+  
+  const atualizarWhatsAppMutation = trpc.configuracoesGerais.atualizarWhatsApp.useMutation({
+    onSuccess: () => {
+      toast.success("Configurações de WhatsApp atualizadas!");
+      utils.configuracoesGerais.getConfiguracoes.invalidate();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Erro ao atualizar WhatsApp");
     },
   });
   
@@ -96,6 +110,8 @@ export default function AdminConfiguracoes() {
       setValorVital(String(configsGerais.valorPlanoVital || "0.00"));
       setValorPremium(String(configsGerais.valorPlanoPremium || "0.00"));
       setValorEmpresarial(String(configsGerais.valorPlanoEmpresarial || "0.00"));
+      setWhatsappNumero(configsGerais.whatsappNumero || "");
+      setWhatsappMensagem(configsGerais.whatsappMensagem || "Olá! Gostaria de conhecer os planos Vital.");
     }
   }, [configsGerais]);
   
@@ -394,6 +410,62 @@ export default function AdminConfiguracoes() {
               <p className="text-xs text-muted-foreground">
                 Estes valores serão usados automaticamente no formulário de cadastro de indicações
               </p>
+            </CardContent>
+          </Card>
+
+          {/* Configurações de WhatsApp */}
+          <Card className="border-2 border-primary/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-2xl">📱</span>
+                WhatsApp Comercial
+              </CardTitle>
+              <CardDescription>
+                Configure o número do WhatsApp comercial e a mensagem inicial para o QR Code
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Número do WhatsApp (com DDI e DDD)</Label>
+                  <Input
+                    type="text"
+                    placeholder="Ex: 5547999999999"
+                    value={whatsappNumero}
+                    onChange={(e) => setWhatsappNumero(e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Formato: DDI (55) + DDD + Número (sem espaços ou caracteres especiais)
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label>Mensagem Inicial</Label>
+                  <Input
+                    type="text"
+                    placeholder="Olá! Gostaria de conhecer os planos Vital."
+                    value={whatsappMensagem}
+                    onChange={(e) => setWhatsappMensagem(e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Esta mensagem aparecerá automaticamente quando o cliente escanear o QR Code
+                  </p>
+                </div>
+              </div>
+              <Button
+                onClick={() => atualizarWhatsAppMutation.mutate({
+                  numero: whatsappNumero,
+                  mensagem: whatsappMensagem,
+                })}
+                disabled={atualizarWhatsAppMutation.isPending || !whatsappNumero || !whatsappMensagem}
+                className="w-full"
+              >
+                {atualizarWhatsAppMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
+                Salvar Configurações de WhatsApp
+              </Button>
             </CardContent>
           </Card>
 

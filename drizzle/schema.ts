@@ -302,6 +302,10 @@ export const configuracoesGerais = mysqlTable("configuracoes_gerais", {
   valorPlanoPremium: decimal("valorPlanoPremium", { precision: 10, scale: 2 }).default("0.00"),
   /** Valor do Plano Empresarial (em reais) */
   valorPlanoEmpresarial: decimal("valorPlanoEmpresarial", { precision: 10, scale: 2 }).default("0.00"),
+  /** Número do WhatsApp comercial (com DDI e DDD, ex: 5547999999999) */
+  whatsappNumero: varchar("whatsappNumero", { length: 20 }),
+  /** Mensagem inicial do WhatsApp */
+  whatsappMensagem: text("whatsappMensagem"),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 

@@ -867,6 +867,8 @@ export async function getConfiguracoesGerais() {
       valorPlanoVital: "0.00",
       valorPlanoPremium: "0.00",
       valorPlanoEmpresarial: "0.00",
+      whatsappNumero: null,
+      whatsappMensagem: null,
     });
     return {
       id: 1,
@@ -876,6 +878,8 @@ export async function getConfiguracoesGerais() {
       valorPlanoVital: "0.00",
       valorPlanoPremium: "0.00",
       valorPlanoEmpresarial: "0.00",
+      whatsappNumero: null,
+      whatsappMensagem: null,
       updatedAt: new Date(),
     };
   }
