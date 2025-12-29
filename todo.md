@@ -1176,4 +1176,22 @@
 - [x] Criar página de orientação sobre acesso admin
 - [x] Adicionar explicações claras na página inicial
 - [x] Atualizar guias de documentação
+- [x] Salvar checkpoint final
+
+## Ajuste de Título e Descrição da Plataforma
+
+- [x] Atualizar VITE_APP_TITLE para refletir função de gestão de vendas e indicações (via Management UI)
+- [x] Salvar checkpoint
+
+## Configurar WhatsApp Comercial
+
+- [x] Atualizar número do WhatsApp no banco de dados (+55 47 93385-3726)
+- [x] Testar geração do QR Code
+
+## Página Pública QR Code WhatsApp
+
+- [x] Criar página pública /qr-whatsapp
+- [x] Adicionar rota pública no App.tsx
+- [x] Adicionar procedure público no backend
+- [x] Testar acesso sem login
 - [ ] Salvar checkpoint final

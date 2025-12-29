@@ -31,6 +31,7 @@ import MateriaisApoio from "./pages/MateriaisApoio";
 import AdminAprovarComissoes from "./pages/AdminAprovarComissoes";
 import AdminGerenciarCards from "./pages/admin/AdminGerenciarCards";
 import MeuPerfil from "./pages/MeuPerfil";
+import QRWhatsAppPublico from "./pages/QRWhatsAppPublico";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -64,6 +65,7 @@ function Router() {
       <Route path={"/login-indicador"} component={LoginIndicador} />
       <Route path={"/esqueci-senha"} component={EsqueciSenha} />
       <Route path={"/recuperar-senha"} component={RecuperarSenha} />
+      <Route path={"/qr-whatsapp"} component={QRWhatsAppPublico} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

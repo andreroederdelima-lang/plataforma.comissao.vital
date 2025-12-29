@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { protectedProcedure, router } from "../_core/trpc";
+import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { 
   getConfiguracoesGerais, 
@@ -12,6 +12,19 @@ import { configuracoesGerais } from "../../drizzle/schema";
 import QRCode from "qrcode";
 
 export const configuracoesGeraisRouter = router({
+  /**
+   * Obter configurações públicas do WhatsApp (sem autenticação)
+   * Usado na página pública de QR Code
+   */
+  getWhatsAppPublico: publicProcedure.query(async () => {
+    const config = await getConfiguracoesGerais();
+    // Retorna apenas as informações públicas do WhatsApp
+    return {
+      whatsappNumero: config?.whatsappNumero || null,
+      whatsappMensagem: config?.whatsappMensagem || null,
+    };
+  }),
+
   /**
    * Obter configurações gerais (link base e dias de cancelamento)
    */
