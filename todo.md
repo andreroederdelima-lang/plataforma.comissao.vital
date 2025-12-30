@@ -1348,3 +1348,13 @@
 - [x] LoginIndicador.tsx já redireciona admins para /admin
 - [x] Testar fluxo completo (SUCESSO! Login admin funcionando)
 - [x] Salvar checkpoint
+
+
+## Remover Seção Duplicada "Valores dos Planos"
+
+- [x] Localizar seção "Valores dos Planos" na AdminConfiguracoes.tsx
+- [x] Remover campos: Plano Essencial, Plano Premium, Plano Vital, Plano Empresarial
+- [x] Remover estados e mutations não utilizados
+- [x] Manter apenas seção de configuração de comissões (mais completa)
+- [x] Testar página de configurações (SUCESSO!)
+- [x] Salvar checkpoint
