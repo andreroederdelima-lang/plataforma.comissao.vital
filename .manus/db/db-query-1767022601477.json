@@ -1,0 +1,28 @@
+{
+  "query": "SELECT id, name, email, role, openId, loginMethod, isActive FROM users WHERE role = 'admin' ORDER BY createdAt DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT id, name, email, role, openId, loginMethod, isActive FROM users WHERE role = 'admin' ORDER BY createdAt DESC;",
+  "rows": [
+    {
+      "id": "2790001",
+      "name": "Carlos Andrei Cardoso martins",
+      "email": "oticavisttabnu@gmail.com",
+      "role": "admin",
+      "openId": "indicador_oticavisttabnu_gmail_com_1767007522422",
+      "loginMethod": "email_password",
+      "isActive": "1"
+    },
+    {
+      "id": "2610001",
+      "name": "ADM",
+      "email": "administrativo@suasaudevital.com.br",
+      "role": "admin",
+      "openId": "indicador_mo_pmuller_gmail_com_1764610953522",
+      "loginMethod": "email_password",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\topenId\tloginMethod\tisActive\n2790001\tCarlos Andrei Cardoso martins\toticavisttabnu@gmail.com\tadmin\tindicador_oticavisttabnu_gmail_com_1767007522422\temail_password\t1\n2610001\tADM\tadministrativo@suasaudevital.com.br\tadmin\tindicador_mo_pmuller_gmail_com_1764610953522\temail_password\t1\n",
+  "stderr": "",
+  "execution_time_ms": 123
+}

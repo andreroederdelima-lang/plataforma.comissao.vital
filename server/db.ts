@@ -2,6 +2,8 @@ import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes, materiaisDivulgacao, materiaisDiversos, materiaisPromotores, configuracoesGerais, materiaisApoio, InsertMaterialApoio } from "../drizzle/schema";
 import { ENV } from './_core/env';
+import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -1148,4 +1150,130 @@ export async function getRankingIndicadores(limit: number = 5) {
     ...r,
     totalComissoes: r.totalComissoes || 0,
   }));
+}
+
+
+// ============================================
+// Admin Login & Password Management
+// ============================================
+
+/**
+ * Cria hash de senha usando bcrypt
+ */
+export async function hashPassword(password: string): Promise<string> {
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
+}
+
+/**
+ * Verifica se senha corresponde ao hash
+ */
+export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  return await bcrypt.compare(password, hash);
+}
+
+/**
+ * Login de admin com email e senha
+ * Retorna usuário se credenciais válidas, null caso contrário
+ */
+export async function loginAdminWithPassword(email: string, password: string) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot login: database not available");
+    return null;
+  }
+
+  try {
+    const result = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+
+    if (result.length === 0) {
+      return null; // Usuário não encontrado
+    }
+
+    const user = result[0];
+
+    // Verificar se é admin
+    if (user.role !== 'admin') {
+      return null; // Não é admin
+    }
+
+    // Verificar se está ativo
+    if (user.isActive !== 1) {
+      return null; // Usuário desativado
+    }
+
+    // Verificar senha
+    if (!user.passwordHash) {
+      return null; // Usuário sem senha cadastrada
+    }
+
+    const passwordMatch = await verifyPassword(password, user.passwordHash);
+    if (!passwordMatch) {
+      return null; // Senha incorreta
+    }
+
+    // Atualizar lastSignedIn
+    await db
+      .update(users)
+      .set({ lastSignedIn: new Date() })
+      .where(eq(users.id, user.id));
+
+    return user;
+  } catch (error) {
+    console.error("[Database] Failed to login admin:", error);
+    return null;
+  }
+}
+
+/**
+ * Define senha para um usuário admin
+ */
+export async function setAdminPassword(email: string, password: string): Promise<boolean> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot set password: database not available");
+    return false;
+  }
+
+  try {
+    const passwordHash = await hashPassword(password);
+    
+    await db
+      .update(users)
+      .set({ passwordHash })
+      .where(eq(users.email, email));
+
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to set admin password:", error);
+    return false;
+  }
+}
+
+/**
+ * Gera token de recuperação de senha (simples, sem tabela separada)
+ * Retorna token que expira em 1 hora
+ */
+export function generatePasswordResetToken(): string {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+/**
+ * Envia email de recuperação de senha
+ * (Implementação simplificada - você pode integrar com serviço de email real)
+ */
+export async function sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {
+  // TODO: Integrar com serviço de email (SendGrid, AWS SES, etc.)
+  // Por enquanto, apenas loga o token
+  console.log(`[Password Reset] Token for ${email}: ${resetToken}`);
+  console.log(`[Password Reset] Link: https://seu-dominio.com/redefinir-senha-admin?token=${resetToken}&email=${email}`);
+  
+  // Você pode usar o sistema de notificação do Manus para enviar email
+  // ou integrar com Resend API que já está configurado
+  
+  return true;
 }

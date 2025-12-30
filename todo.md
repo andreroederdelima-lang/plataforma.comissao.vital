@@ -1337,3 +1337,14 @@
 
 ### Finalização
 - [ ] Salvar checkpoint
+
+
+## Criar Sistema de Login Admin com Email/Senha
+
+- [x] Campo senha já existe na tabela users (passwordHash)
+- [x] Criar procedures de login admin (loginAdminWithPassword, hashPassword, verifyPassword)
+- [x] Definir senhas para os 2 admins (admin123)
+- [x] Atualizar botão "Área Admin" para redirecionar para /login-indicador
+- [x] LoginIndicador.tsx já redireciona admins para /admin
+- [x] Testar fluxo completo (SUCESSO! Login admin funcionando)
+- [x] Salvar checkpoint

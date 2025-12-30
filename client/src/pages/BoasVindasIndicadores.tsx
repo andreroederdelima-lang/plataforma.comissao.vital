@@ -113,7 +113,7 @@ export default function BoasVindasIndicadores() {
                     <strong>Vendedor/Promotor:</strong> Use o botão "Fazer Login" com o email e senha que você recebeu no cadastro.
                   </p>
                   <p>
-                    <strong>Administrador:</strong> Use o botão "Área Administrativa" e faça login com sua conta Manus (que pode usar Google, GitHub, etc.).
+                    <strong>Administrador:</strong> Use o botão "Área Administrativa" com o email e senha de administrador.
                   </p>
                 </div>
               </div>
@@ -127,7 +127,7 @@ export default function BoasVindasIndicadores() {
                 </Button>
                 
                 <Button
-                  onClick={() => window.location.href = getLoginUrl()}
+                  onClick={() => setLocation("/login-indicador")}
                   variant="outline"
                   className="border-2 border-[#1e9d9f] text-[#1e9d9f] hover:bg-[#1e9d9f] hover:text-white px-8 py-6 text-lg"
                 >

@@ -1,0 +1,50 @@
+{
+  "query": "SELECT * FROM users WHERE role = 'admin';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute SELECT * FROM users WHERE role = 'admin';",
+  "rows": [
+    {
+      "id": "2610001",
+      "openId": "indicador_mo_pmuller_gmail_com_1764610953522",
+      "name": "ADM",
+      "email": "administrativo@suasaudevital.com.br",
+      "loginMethod": "email_password",
+      "role": "admin",
+      "createdAt": "2025-12-01 17:42:33",
+      "updatedAt": "2025-12-29 06:40:11",
+      "lastSignedIn": "2025-12-29 06:40:12",
+      "chavePix": "013212312312",
+      "canDelete": "1",
+      "isActive": "1",
+      "lastRoleChange": "2025-12-01 17:42:33",
+      "passwordHash": "$2b$10$Bxni7KMwoI39soe2qp.DuewXNBSzFeIFfuIGJOptWjo68JqhFWPym",
+      "linkCheckoutPersonalizado": "Z2375W06",
+      "apresentacaoPersonal": "NULL",
+      "diferenciais": "NULL",
+      "ofertaEspecial": "NULL"
+    },
+    {
+      "id": "2790001",
+      "openId": "indicador_oticavisttabnu_gmail_com_1767007522422",
+      "name": "Carlos Andrei Cardoso martins",
+      "email": "oticavisttabnu@gmail.com",
+      "loginMethod": "email_password",
+      "role": "admin",
+      "createdAt": "2025-12-29 11:25:22",
+      "updatedAt": "2025-12-29 11:34:47",
+      "lastSignedIn": "2025-12-29 11:34:48",
+      "chavePix": "Oticavisttabnu@gmail.com",
+      "canDelete": "1",
+      "isActive": "1",
+      "lastRoleChange": "2025-12-29 11:25:22",
+      "passwordHash": "$2b$10$Uu0dyQUeF2w78bCh8ui3g.dUGf15D/y/U1fx0BmVdoxjPIoZKboBu",
+      "linkCheckoutPersonalizado": "VA6MLM7U",
+      "apresentacaoPersonal": "NULL",
+      "diferenciais": "NULL",
+      "ofertaEspecial": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\tloginMethod\trole\tcreatedAt\tupdatedAt\tlastSignedIn\tchavePix\tcanDelete\tisActive\tlastRoleChange\tpasswordHash\tlinkCheckoutPersonalizado\tapresentacaoPersonal\tdiferenciais\tofertaEspecial\n2610001\tindicador_mo_pmuller_gmail_com_1764610953522\tADM\tadministrativo@suasaudevital.com.br\temail_password\tadmin\t2025-12-01 17:42:33\t2025-12-29 06:40:11\t2025-12-29 06:40:12\t013212312312\t1\t1\t2025-12-01 17:42:33\t$2b$10$Bxni7KMwoI39soe2qp.DuewXNBSzFeIFfuIGJOptWjo68JqhFWPym\tZ2375W06\tNULL\tNULL\tNULL\n2790001\tindicador_oticavisttabnu_gmail_com_1767007522422\tCarlos Andrei Cardoso martins\toticavisttabnu@gmail.com\temail_password\tadmin\t2025-12-29 11:25:22\t2025-12-29 11:34:47\t2025-12-29 11:34:48\tOticavisttabnu@gmail.com\t1\t1\t2025-12-29 11:25:22\t$2b$10$Uu0dyQUeF2w78bCh8ui3g.dUGf15D/y/U1fx0BmVdoxjPIoZKboBu\tVA6MLM7U\tNULL\tNULL\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}

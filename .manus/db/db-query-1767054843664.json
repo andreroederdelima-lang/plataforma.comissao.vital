@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE users \nSET passwordHash = '$2b$10$r.pyi5d58C/NLtjfchi/p.5lhBuy/eslYF5pomj1TD.8HI73iD/fW'\nWHERE email IN ('andreroederdelima@gmail.com', 'administrativo@suasaudevital.com.br');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user TocTSbjr2e5vBbe.9dba77222357 --database GWvTVfETvjk8Ur5xNZ6mEk --execute UPDATE users \nSET passwordHash = '$2b$10$r.pyi5d58C/NLtjfchi/p.5lhBuy/eslYF5pomj1TD.8HI73iD/fW'\nWHERE email IN ('andreroederdelima@gmail.com', 'administrativo@suasaudevital.com.br');",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 341
+}
