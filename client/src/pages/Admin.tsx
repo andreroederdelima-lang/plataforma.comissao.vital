@@ -129,7 +129,7 @@ export default function Admin() {
       Data: new Date(item.indicacao.createdAt).toLocaleDateString("pt-BR"),
       Parceiro: item.parceiro?.name || "N/A",
       "Email Parceiro": item.parceiro?.email || "N/A",
-      "Nome Indicado": item.indicacao.nomeIndicado,
+      "Cliente": item.indicacao.nomeIndicado,
       WhatsApp: item.indicacao.whatsappIndicado,
       "Tipo Assinatura": tipoPlanoLabels[item.indicacao.tipoPlano],
       Categoria: categoriaLabels[item.indicacao.categoria],
@@ -292,7 +292,7 @@ export default function Admin() {
                         <TableHead>Tipo</TableHead>
                         <TableHead className="w-[200px]">Status</TableHead>
                         <TableHead>Parceiro</TableHead>
-                        <TableHead>Nome Indicado</TableHead>
+                        <TableHead>Cliente</TableHead>
                         <TableHead>WhatsApp</TableHead>
                         <TableHead>Assinatura</TableHead>
                         <TableHead>Categoria</TableHead>

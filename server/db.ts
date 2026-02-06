@@ -713,16 +713,24 @@ export async function classificarLead(
     throw new Error("Configuração de comissão não encontrada");
   }
 
-  // Calcular comissão do indicador
+  // Calcular comissão baseado no tipo
   const bonificacaoTotal = plano[0].bonificacaoPadrao; // em centavos
-  const percentualIndicador = config[0].percentualIndicador; // ex: 70 para 70%
-  const valorComissaoIndicador = Math.round((bonificacaoTotal * percentualIndicador) / 100);
+  let valorComissao: number;
+  
+  // Se for VENDA DIRETA, vendedor recebe 100% da comissão
+  if (indicacao.tipo === "venda") {
+    valorComissao = bonificacaoTotal; // 100% para o vendedor
+  } else {
+    // Se for INDICAÇÃO, dividir conforme Lead Quente/Frio
+    const percentualIndicador = config[0].percentualIndicador; // ex: 70 para 70%
+    valorComissao = Math.round((bonificacaoTotal * percentualIndicador) / 100);
+  }
 
   const updateData: any = {
     classificacaoLead: classificacao,
     dataClassificacao: new Date(),
     tipoComissao: "valor_fixo" as const,
-    valorComissao: valorComissaoIndicador,
+    valorComissao: valorComissao,
   };
 
   // Se houver observações do comercial, adicionar às observações existentes

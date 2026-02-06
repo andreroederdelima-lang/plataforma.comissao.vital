@@ -286,8 +286,9 @@ export default function Vendedor() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Data</TableHead>
+                        <TableHead>Tipo</TableHead>
                         <TableHead>Parceiro</TableHead>
-                        <TableHead>Nome Indicado</TableHead>
+                        <TableHead>Cliente</TableHead>
                         <TableHead>WhatsApp</TableHead>
                         <TableHead>Assinatura</TableHead>
                         <TableHead>Categoria</TableHead>
@@ -297,10 +298,23 @@ export default function Vendedor() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {indicacoes.map((item) => (
+                      {indicacoes.map((item) => {
+                        const isVenda = item.indicacao.tipo === "venda";
+                        return (
                         <TableRow key={item.indicacao.id}>
                           <TableCell className="font-medium">
                             {new Date(item.indicacao.createdAt).toLocaleDateString("pt-BR")}
+                          </TableCell>
+                          <TableCell>
+                            {isVenda ? (
+                              <Badge className="bg-green-600 text-white hover:bg-green-700 gap-1">
+                                <span>🎯</span> Venda (100%)
+                              </Badge>
+                            ) : (
+                              <Badge className="bg-blue-600 text-white hover:bg-blue-700 gap-1">
+                                <span>📝</span> Indicação
+                              </Badge>
+                            )}
                           </TableCell>
                           <TableCell>
                             <div>
@@ -388,7 +402,8 @@ export default function Vendedor() {
                             )}
                           </TableCell>
                         </TableRow>
-                      ))}
+                      );
+                      })}
                     </TableBody>
                   </Table>
                 </div>

@@ -1,0 +1,1 @@
+ALTER TABLE `indicacoes` ADD `tipo` enum('venda','indicacao') DEFAULT 'indicacao' NOT NULL;

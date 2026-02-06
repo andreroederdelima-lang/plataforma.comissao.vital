@@ -1358,3 +1358,83 @@
 - [x] Manter apenas seção de configuração de comissões (mais completa)
 - [x] Testar página de configurações (SUCESSO!)
 - [x] Salvar checkpoint
+
+
+## Revisão Completa do Sistema - Campo "Nome da Pessoa" e Auditorias
+
+### Análise Inicial
+- [x] Analisar schema do banco de dados (tabela indicacoes)
+- [x] Verificar se campo "nomeCliente" está adequado para ambos os casos
+- [x] Revisar labels e placeholders em todos os formulários
+
+### Primeira Auditoria: Formulários e Campos
+- [x] Revisar formulário de cadastro de indicação/venda (Home.tsx)
+- [x] Revisar formulário no painel do promotor (DashboardPromotor.tsx)
+- [x] Verificar se labels deixam claro que serve para indicado OU comprador
+- [x] Revisar validações de campos obrigatórios
+- [x] Verificar campos de WhatsApp, plano, tipo de plano, modalidade
+
+### Segunda Auditoria: Cálculos e Comissões
+- [x] Revisar lógica de cálculo de comissão para INDICAÇÃO
+- [x] Revisar lógica de cálculo de comissão para VENDA DIRETA
+- [x] Verificar se percentuais estão corretos (Lead Quente/Frio)
+- [x] Revisar procedure de criação de indicação (db.ts)
+- [x] Verificar se comissão de venda direta é 100% para o vendedor (IMPLEMENTADO!)
+- [x] Revisar cálculo de comissão na aprovação (AdminAprovarComissoes.tsx)
+
+### Terceira Auditoria: Botões e Navegação
+- [ ] Revisar botão "Cadastrar Venda" no dashboard promotor
+- [ ] Revisar botão "Cadastrar Indicação" no dashboard promotor
+- [ ] Verificar botão "Cadastrar VENDA" na página MinhasIndicacoes
+- [ ] Verificar botão "Cadastrar Indicação" na página MinhasIndicacoes
+- [ ] Testar navegação entre páginas
+- [ ] Verificar se modais abrem corretamente
+- [ ] Testar botões de salvar/cancelar em formulários
+
+### Correções Necessárias
+- [x] Atualizar labels para "Nome Completo da Pessoa (Indicada ou Compradora)"
+- [x] Garantir que tipo "venda" = 100% comissão para vendedor (IMPLEMENTADO!)
+- [x] Garantir que tipo "indicacao" = divisão conforme Lead Quente/Frio
+- [x] Adicionar campo `tipo` ao schema (enum: "venda" | "indicacao")
+- [x] Atualizar backend para suportar campo tipo
+- [x] Atualizar lógica de cálculo em classificarLead
+
+### Testes Finais
+- [ ] Testar cadastro de INDICAÇÃO completo
+- [ ] Testar cadastro de VENDA DIRETA completo
+- [ ] Verificar cálculo de comissão em ambos os casos
+- [ ] Testar aprovação de comissões
+- [ ] Verificar relatórios e exportação PDF
+- [ ] Salvar checkpoint final
+
+
+## Melhorias no Fluxo de Moderação do Vendedor Interno
+
+### Bloquear Classificação de Vendas Diretas
+- [x] Atualizar ClassificarLead.tsx para verificar tipo
+- [x] Mostrar mensagem se for venda direta
+- [x] Redirecionar para validação de venda
+
+### Criar Página de Validação de Vendas
+- [ ] Criar ValidarVenda.tsx
+- [ ] Mostrar dados da venda
+- [ ] Botão "Confirmar Venda Direta" (100%)
+- [ ] Botão "Converter para Indicação"
+- [ ] Campos para completar dados faltantes
+
+### Atualizar Painel do Vendedor
+- [x] Badge visual diferente para cada tipo
+- [x] Coluna "Tipo" adicionada à tabela
+- [x] Renomear "Nome Indicado" para "Cliente"
+- [ ] (Opcional) Separar em abas: Indicações vs Vendas Diretas
+- [ ] (Opcional) Filtrar por tipo na listagem
+
+### Schema e Backend
+- [ ] Adicionar campo validadoVendedor ao schema
+- [ ] Criar procedure de validação de venda
+- [ ] Criar procedure de conversão venda → indicação
+
+### Testes
+- [ ] Testar classificação de indicação
+- [ ] Testar validação de venda direta
+- [ ] Testar conversão de venda para indicação

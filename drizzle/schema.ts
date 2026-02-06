@@ -63,6 +63,8 @@ export const indicacoes = mysqlTable("indicacoes", {
   categoria: mysqlEnum("categoria", ["empresarial", "pessoa_fisica"]).notNull(),
   /** Observações adicionais sobre a indicação */
   observacoes: text("observacoes"),
+  /** Tipo de cadastro: venda direta (vendedor fecha) ou indicação (equipe fecha) */
+  tipo: mysqlEnum("tipo", ["venda", "indicacao"]).default("indicacao").notNull(),
   /** Campos específicos para vendas diretas */
   dataVenda: timestamp("dataVenda"),
   valorPlano: int("valorPlano"), // Valor em centavos

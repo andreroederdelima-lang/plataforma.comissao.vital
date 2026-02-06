@@ -301,6 +301,8 @@ export const appRouter = router({
         tipoPlano: z.enum(["familiar", "individual"]),
         categoria: z.enum(["empresarial", "pessoa_fisica"]),
         observacoes: z.string().optional(),
+        // Tipo de cadastro: venda direta ou indicação
+        tipo: z.enum(["venda", "indicacao"]).default("indicacao"),
         // Campos específicos para vendas
         dataVenda: z.string().optional(),
         valorPlano: z.string().optional(),
@@ -321,6 +323,7 @@ export const appRouter = router({
           tipoPlano: input.tipoPlano,
           categoria: input.categoria,
           observacoes: input.observacoes || null,
+          tipo: input.tipo,
           dataVenda: dataVendaDate,
           valorPlano: valorPlanoInt,
           formaPagamento: input.formaPagamento || null,

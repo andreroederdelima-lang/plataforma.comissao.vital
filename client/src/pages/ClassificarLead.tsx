@@ -102,6 +102,53 @@ export default function ClassificarLead() {
     );
   }
 
+  // Se for VENDA DIRETA, não deve classificar
+  if (indicacao.tipo === "venda") {
+    return (
+      <AdminLayout>
+        <div className="container py-8 max-w-2xl">
+          <Card className="border-green-500 border-2">
+            <CardHeader className="bg-green-50">
+              <CardTitle className="text-green-700 flex items-center gap-2">
+                🎯 Venda Direta - Não Precisa Classificar
+              </CardTitle>
+              <CardDescription>
+                Esta é uma venda direta. O vendedor já recebe 100% da comissão automaticamente.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="bg-white p-4 rounded-lg border">
+                <h3 className="font-semibold mb-2">Dados da Venda:</h3>
+                <div className="space-y-2 text-sm">
+                  <p><strong>Cliente:</strong> {indicacao.nomeIndicado}</p>
+                  <p><strong>WhatsApp:</strong> {indicacao.whatsappIndicado}</p>
+                  <p><strong>Assinatura:</strong> {indicacao.nomePlano === "essencial" ? "Essencial" : "Premium"} - {indicacao.tipoPlano === "familiar" ? "Familiar" : "Individual"}</p>
+                  {indicacao.dataVenda && (
+                    <p><strong>Data da Venda:</strong> {new Date(indicacao.dataVenda).toLocaleDateString("pt-BR")}</p>
+                  )}
+                  {indicacao.valorPlano && (
+                    <p><strong>Valor:</strong> R$ {(indicacao.valorPlano / 100).toFixed(2)}</p>
+                  )}
+                </div>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <p className="text-sm text-green-700">
+                  <strong>✅ Comissão:</strong> O vendedor receberá 100% da comissão após aprovação do administrador.
+                </p>
+              </div>
+              <Button
+                onClick={() => setLocation("/vendedor")}
+                className="w-full"
+              >
+                Voltar para Painel
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   // Se já foi classificado
   if (indicacao.classificacaoLead) {
     return (

@@ -104,6 +104,7 @@ export default function Home() {
       tipoPlano,
       categoria,
       observacoes,
+      tipo: tipoCadastro, // Enviar tipo: "venda" ou "indicacao"
       // Enviar campos de venda se for venda
       ...(isVenda && {
         dataVenda,
@@ -286,10 +287,46 @@ export default function Home() {
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardContent className="pt-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Tipo de Cadastro */}
+                  <div className="space-y-3 p-4 border-2 rounded-lg bg-primary/5">
+                    <Label className="text-base font-bold text-primary">Tipo de Cadastro *</Label>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Escolha se você está <strong>indicando</strong> uma pessoa para nossa equipe entrar em contato, ou se já <strong>fechou a venda</strong> diretamente.
+                    </p>
+                    <RadioGroup
+                      value={tipoCadastro}
+                      onValueChange={(value) => setTipoCadastro(value as "venda" | "indicacao")}
+                      className="flex flex-col gap-3"
+                    >
+                      <div className="flex items-start space-x-2 p-4 border-2 rounded-lg hover:bg-accent/10 cursor-pointer bg-white">
+                        <RadioGroupItem value="indicacao" id="indicacao" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="indicacao" className="cursor-pointer font-bold text-lg">
+                            📝 Indicação
+                          </Label>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Você indica o contato e <strong>nossa equipe fecha a venda</strong>. Comissão dividida conforme Lead Quente/Frio.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-2 p-4 border-2 rounded-lg hover:bg-accent/10 cursor-pointer bg-white border-green-500">
+                        <RadioGroupItem value="venda" id="venda" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="venda" className="cursor-pointer font-bold text-lg text-green-700">
+                            🎯 Venda Direta (100% comissão)
+                          </Label>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Você <strong>já fechou a venda</strong> completa. Recebe <strong className="text-green-700">100% da comissão</strong>!
+                          </p>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
                   {/* Nome */}
                   <div className="space-y-2">
                     <Label htmlFor="nome" className="text-base font-semibold">
-                      Nome Completo da Pessoa Indicada *
+                      Nome Completo da Pessoa (Indicada ou Compradora) *
                     </Label>
                     <Input
                       id="nome"
@@ -304,7 +341,7 @@ export default function Home() {
                   {/* WhatsApp */}
                   <div className="space-y-2">
                     <Label htmlFor="whatsapp" className="text-base font-semibold">
-                      WhatsApp da Pessoa Indicada *
+                      WhatsApp da Pessoa (Indicada ou Compradora) *
                     </Label>
                     <Input
                       id="whatsapp"
