@@ -748,6 +748,100 @@ export async function classificarLead(
     .where(eq(indicacoes.id, indicacaoId));
 }
 
+/**
+ * Validar venda direta (confirma 100% comissão para vendedor)
+ */
+export async function validarVenda(indicacaoId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Buscar indicação atual
+  const indicacaoAtual = await db
+    .select()
+    .from(indicacoes)
+    .where(eq(indicacoes.id, indicacaoId))
+    .limit(1);
+
+  if (indicacaoAtual.length === 0) {
+    throw new Error("Indicação não encontrada");
+  }
+
+  const indicacao = indicacaoAtual[0];
+
+  if (indicacao.tipo !== "venda") {
+    throw new Error("Apenas vendas diretas podem ser validadas");
+  }
+
+  // Buscar plano correspondente
+  const plano = await db
+    .select()
+    .from(planosSaude)
+    .where(eq(planosSaude.tipo, indicacao.nomePlano))
+    .limit(1);
+
+  if (plano.length === 0) {
+    throw new Error("Plano não encontrado");
+  }
+
+  // Calcular 100% da comissão para vendedor
+  const valorComissao = plano[0].bonificacaoPadrao; // 100% em centavos
+
+  await db
+    .update(indicacoes)
+    .set({
+      validadoVendedor: 1,
+      dataValidacao: new Date(),
+      tipoComissao: "valor_fixo" as const,
+      valorComissao: valorComissao,
+      percentualComissao: 100,
+    })
+    .where(eq(indicacoes.id, indicacaoId));
+}
+
+/**
+ * Converter venda direta para indicação (muda tipo e remove validação)
+ */
+export async function converterParaIndicacao(indicacaoId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Buscar indicação atual
+  const indicacaoAtual = await db
+    .select()
+    .from(indicacoes)
+    .where(eq(indicacoes.id, indicacaoId))
+    .limit(1);
+
+  if (indicacaoAtual.length === 0) {
+    throw new Error("Indicação não encontrada");
+  }
+
+  const indicacao = indicacaoAtual[0];
+
+  if (indicacao.tipo !== "venda") {
+    throw new Error("Apenas vendas diretas podem ser convertidas");
+  }
+
+  // Converter para indicação e resetar validação
+  await db
+    .update(indicacoes)
+    .set({
+      tipo: "indicacao" as const,
+      validadoVendedor: 0,
+      dataValidacao: null,
+      tipoComissao: null,
+      valorComissao: null,
+      percentualComissao: null,
+      classificacaoLead: null,
+      dataClassificacao: null,
+    })
+    .where(eq(indicacoes.id, indicacaoId));
+}
+
 
 // ==================== MATERIAIS DE DIVULGAÇÃO ====================
 

@@ -17,6 +17,7 @@ import { adminRouter } from "./routers/admin";
 import { cardsRecursosRouter } from "./routers/cardsRecursos";
 import { qrCodesRouter } from "./routers/qrCodes";
 import { perfilRouter } from "./routers/perfil";
+import { relatoriosRouter } from "./routers/relatorios";
 
 
 export const appRouter = router({
@@ -28,6 +29,7 @@ export const appRouter = router({
   cardsRecursos: cardsRecursosRouter,
   qrCodes: qrCodesRouter,
   perfil: perfilRouter,
+  relatorios: relatoriosRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -561,6 +563,48 @@ export const appRouter = router({
 
         const { classificarLead } = await import("./db");
         await classificarLead(input.id, input.classificacao, input.observacoes);
+        
+        return { success: true };
+      }),
+
+    /**
+     * Validar venda direta (confirma 100% comissão) - comercial ou admin
+     */
+    validarVenda: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "comercial") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores e comerciais podem validar vendas",
+          });
+        }
+
+        const { validarVenda } = await import("./db");
+        await validarVenda(input.id);
+        
+        return { success: true };
+      }),
+
+    /**
+     * Converter venda direta para indicação (comercial ou admin)
+     */
+    converterParaIndicacao: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "comercial") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Apenas administradores e comerciais podem converter vendas",
+          });
+        }
+
+        const { converterParaIndicacao } = await import("./db");
+        await converterParaIndicacao(input.id);
         
         return { success: true };
       }),

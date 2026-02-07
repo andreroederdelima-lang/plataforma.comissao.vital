@@ -1438,3 +1438,86 @@
 - [ ] Testar classificação de indicação
 - [ ] Testar validação de venda direta
 - [ ] Testar conversão de venda para indicação
+
+
+## Sistema Completo de Validação e Relatórios
+
+### Campo CPF
+- [ ] Adicionar campo cpf ao schema de users
+- [ ] Migração do banco de dados
+- [ ] Atualizar formulário de cadastro de vendedor
+- [ ] Atualizar formulário de edição de vendedor
+
+### Página de Validação de Vendas
+- [ ] Criar ValidarVendas.tsx
+- [ ] Listar vendas pendentes de validação
+- [ ] Botão "Confirmar Venda Direta" (100%)
+- [ ] Botão "Converter para Indicação"
+- [ ] Formulário para completar dados faltantes
+- [ ] Adicionar rota no App.tsx
+
+### Backend - Procedures de Validação
+- [ ] Criar procedure validarVenda (confirma 100%)
+- [ ] Criar procedure converterParaIndicacao (venda → indicacao)
+- [ ] Adicionar campo validadoVendedor ao schema indicacoes
+- [ ] Atualizar lógica de aprovação de comissões
+
+### Relatório PDF de Comissões
+- [ ] Criar procedure getRelatorioComissoes (período, vendedorId)
+- [ ] Implementar geração de PDF no backend
+- [ ] Incluir: nome, CPF, PIX, lista de vendas/indicações
+- [ ] Calcular total a pagar
+- [ ] Botão para gerar PDF no painel admin
+- [ ] Botão para gerar PDF no painel vendedor interno
+
+### Permissões e Roles
+- [ ] Verificar role "comercial" pode validar vendas
+- [ ] Verificar role "comercial" pode gerar relatórios
+- [ ] Garantir que apenas "admin" aprova comissões finais
+- [ ] Testar permissões de cada role
+
+### Auditoria Final
+- [ ] Revisar todos os fluxos de venda e indicação
+- [ ] Verificar cálculos de comissão
+- [ ] Testar permissões de cada perfil
+- [ ] Verificar integridade dos dados
+- [ ] Buscar problemas lógicos
+
+
+## ✅ Revisão Completa do Sistema - 07/02/2026
+
+### Campo Tipo (Venda vs Indicação)
+- [x] Adicionar campo `tipo` ao schema (enum: "venda" | "indicacao")
+- [x] Atualizar backend para suportar campo tipo
+- [x] Atualizar lógica de cálculo em classificarLead (100% para vendas)
+- [x] Atualizar formulário Home.tsx com seleção de tipo
+- [x] Atualizar labels para "Pessoa (Indicada ou Compradora)"
+
+### Sistema de Validação de Vendas
+- [x] Adicionar campos validadoVendedor e dataValidacao ao schema
+- [x] Criar função validarVenda() em db.ts
+- [x] Criar função converterParaIndicacao() em db.ts
+- [x] Adicionar procedures ao router de indicações
+- [x] Bloquear classificação de vendas diretas em ClassificarLead.tsx
+- [x] Adicionar coluna Tipo com badge visual em Vendedor.tsx
+- [ ] Criar página de validação de vendas (PENDENTE - não crítico)
+
+### Sistema de Relatórios PDF
+- [x] Criar router relatorios.ts com procedures
+- [x] Criar página AdminRelatorios.tsx
+- [x] Implementar geração de PDF com jsPDF
+- [x] Adicionar rota /admin/relatorios
+- [x] Incluir dados: vendedor, CPF, chave PIX, lista de comissões, total
+- [x] Corrigir query para buscar apenas comissões aprovadas (dataAprovacao NOT NULL)
+
+### Campo CPF
+- [x] Adicionar campo CPF ao schema de users
+- [x] Executar migração do banco de dados
+
+### Auditoria Final
+- [x] Revisar lógica de cálculo de comissões
+- [x] Revisar fluxos de indicação e venda direta
+- [x] Verificar permissões de admin e comercial
+- [x] Identificar e corrigir problema crítico na query de relatórios
+- [ ] Testar sistema completo end-to-end
+- [ ] Adicionar link de relatórios no menu Admin

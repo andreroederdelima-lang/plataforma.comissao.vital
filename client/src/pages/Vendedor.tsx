@@ -301,7 +301,7 @@ export default function Vendedor() {
                       {indicacoes.map((item) => {
                         const isVenda = item.indicacao.tipo === "venda";
                         return (
-                        <TableRow key={item.indicacao.id}>
+                          <TableRow key={item.indicacao.id}>
                           <TableCell className="font-medium">
                             {new Date(item.indicacao.createdAt).toLocaleDateString("pt-BR")}
                           </TableCell>
@@ -402,7 +402,7 @@ export default function Vendedor() {
                             )}
                           </TableCell>
                         </TableRow>
-                      );
+                        );
                       })}
                     </TableBody>
                   </Table>

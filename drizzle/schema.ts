@@ -21,6 +21,8 @@ export const users = mysqlTable("users", {
   canDelete: int("canDelete").default(1).notNull(),
   /** Status do usuário (1 = ativo, 0 = desativado) */
   isActive: int("isActive").default(1).notNull(),
+  /** CPF do parceiro (para relatórios e pagamentos) */
+  cpf: varchar("cpf", { length: 14 }),
   /** Chave PIX do parceiro para recebimento de comissões */
   chavePix: varchar("chavePix", { length: 255 }),
   /** Link de checkout personalizado do promotor/vendedor (código único) */
@@ -83,6 +85,10 @@ export const indicacoes = mysqlTable("indicacoes", {
   classificacaoLead: mysqlEnum("classificacaoLead", ["quente", "frio"]),
   /** Data em que o lead foi classificado */
   dataClassificacao: timestamp("dataClassificacao"),
+  /** Se a venda direta foi validada pelo vendedor interno (true = confirmada, false = pendente) */
+  validadoVendedor: int("validadoVendedor").default(0).notNull(),
+  /** Data em que a venda foi validada pelo vendedor interno */
+  dataValidacao: timestamp("dataValidacao"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

@@ -33,6 +33,7 @@ import AdminGerenciarCards from "./pages/admin/AdminGerenciarCards";
 import MeuPerfil from "./pages/MeuPerfil";
 import QRWhatsAppPublico from "./pages/QRWhatsAppPublico";
 import AdminRanking from "./pages/AdminRanking";
+import AdminRelatorios from "./pages/AdminRelatorios";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -51,6 +52,7 @@ function Router() {
       <Route path={"/admin/aprovar-comissoes"} component={AdminAprovarComissoes} />
       <Route path={"/admin/gerenciar-cards"} component={AdminGerenciarCards} />
       <Route path={"/admin/ranking"} component={AdminRanking} />
+      <Route path={"/admin/relatorios"} component={AdminRelatorios} />
       <Route path={"/notificacoes"} component={Notificacoes} />
       <Route path={"/vendedor"} component={Vendedor} />
       <Route path={"/estatisticas"} component={Estatisticas} />
