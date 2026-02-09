@@ -1577,3 +1577,20 @@
 - [x] Limpar campos ao enviar formulário
 - [ ] Testar formulário completo com ambos os tipos
 - [ ] Salvar checkpoint final
+
+
+## 📊 Página de Monitoramento Admin Master
+
+- [x] Criar backend procedures para buscar atividades recentes
+  - [x] Procedure para listar últimas vendas/indicações cadastradas
+  - [x] Procedure para listar atividades por vendedor (ranking)
+  - [x] Procedure para estatísticas gerais (total vendas, indicações, comissões)
+- [x] Criar página AdminMonitoramento.tsx
+  - [x] Timeline de atividades recentes
+  - [x] Cards com estatísticas gerais (5 cards principais)
+  - [x] Ranking de vendedores ativos
+  - [x] Filtros por período e tipo
+  - [x] Botão de atualizar dados
+- [x] Adicionar rota `/admin/monitoramento`
+- [x] Adicionar link no menu lateral do admin
+- [ ] Testar e salvar checkpoint

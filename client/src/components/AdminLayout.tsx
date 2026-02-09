@@ -15,6 +15,7 @@ import {
   QrCode,
   CheckCircle2,
   LayoutGrid,
+  Activity,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { ReactNode } from "react";
@@ -46,6 +47,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       path: "/admin/aprovar-comissoes",
       label: "Aprovar Comissões",
       icon: CheckCircle2,
+      adminOnly: true,
+    },
+    {
+      path: "/admin/monitoramento",
+      label: "Monitoramento",
+      icon: Activity,
       adminOnly: true,
     },
     {

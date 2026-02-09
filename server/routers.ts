@@ -18,6 +18,7 @@ import { cardsRecursosRouter } from "./routers/cardsRecursos";
 import { qrCodesRouter } from "./routers/qrCodes";
 import { perfilRouter } from "./routers/perfil";
 import { relatoriosRouter } from "./routers/relatorios";
+import { monitoramentoRouter } from "./routers/monitoramento";
 
 
 export const appRouter = router({
@@ -30,6 +31,7 @@ export const appRouter = router({
   qrCodes: qrCodesRouter,
   perfil: perfilRouter,
   relatorios: relatoriosRouter,
+  monitoramento: monitoramentoRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
