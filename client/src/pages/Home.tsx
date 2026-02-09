@@ -29,6 +29,7 @@ export default function Home() {
   const [dataVenda, setDataVenda] = useState("");
   const [dataAproximada, setDataAproximada] = useState("");
   const [cpfCliente, setCpfCliente] = useState("");
+  const [formaPagamento, setFormaPagamento] = useState<"pix" | "cartao">("pix");
   
   // Tipo de cadastro (venda ou indicação) - agora controlado por estado local
   const [tipoCadastro, setTipoCadastro] = useState<"venda" | "indicacao">("indicacao");
@@ -55,6 +56,7 @@ export default function Home() {
       setDataVenda("");
       setDataAproximada("");
       setCpfCliente("");
+      setFormaPagamento("pix");
       utils.indicacoes.listMine.invalidate();
       // Atualizar página após pequeno delay para mostrar toast
       setTimeout(() => window.location.reload(), 1500);
@@ -72,9 +74,20 @@ export default function Home() {
       return;
     }
     
+    // Validar CPF (sempre obrigatório)
+    if (!cpfCliente) {
+      toast.error("Por favor, preencha o CPF do cliente");
+      return;
+    }
+    
     // Validar campos de venda se for venda
     if (isVenda && !dataVenda) {
       toast.error("Por favor, preencha a data da venda");
+      return;
+    }
+    
+    if (isVenda && !formaPagamento) {
+      toast.error("Por favor, selecione a forma de pagamento");
       return;
     }
 
@@ -86,11 +99,15 @@ export default function Home() {
       categoria,
       observacoes,
       tipo: tipoCadastro, // Enviar tipo: "venda" ou "indicacao"
+      cpfCliente, // CPF sempre obrigatório
       // Enviar campos de venda se for venda
       ...(isVenda && {
         dataVenda,
+        formaPagamento,
+      }),
+      // Enviar data aproximada se for indicação
+      ...(!isVenda && dataAproximada && {
         dataAproximada,
-        cpfCliente,
       }),
     });
   };
@@ -334,6 +351,24 @@ export default function Home() {
                     />
                   </div>
 
+                  {/* CPF */}
+                  <div className="space-y-2">
+                    <Label htmlFor="cpf" className="text-base font-semibold">
+                      CPF do Cliente *
+                    </Label>
+                    <Input
+                      id="cpf"
+                      value={cpfCliente}
+                      onChange={(e) => setCpfCliente(e.target.value)}
+                      placeholder="Ex: 000.000.000-00"
+                      required
+                      className="text-base"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      O CPF é usado para conferência e auditoria das vendas/indicações
+                    </p>
+                  </div>
+
                   {/* Nome do Plano */}
                   <div className="space-y-3">
                     <Label className="text-base font-semibold">Tipo de Plano *</Label>
@@ -488,6 +523,71 @@ export default function Home() {
                   )}
 
                   {/* Observações - apenas para indicações */}
+                  {/* Campos específicos para VENDA DIRETA */}
+                  {isVenda && (
+                    <div className="space-y-4 p-4 border-2 border-green-500 rounded-lg bg-green-50">
+                      <h3 className="font-bold text-green-700 text-lg">🎯 Dados da Venda Direta</h3>
+                      
+                      {/* Data da Venda */}
+                      <div className="space-y-2">
+                        <Label htmlFor="dataVenda" className="text-base font-semibold">
+                          Data da Venda *
+                        </Label>
+                        <Input
+                          id="dataVenda"
+                          type="date"
+                          value={dataVenda}
+                          onChange={(e) => setDataVenda(e.target.value)}
+                          required
+                          className="text-base"
+                        />
+                      </div>
+
+                      {/* Forma de Pagamento */}
+                      <div className="space-y-3">
+                        <Label className="text-base font-semibold">Forma de Pagamento *</Label>
+                        <RadioGroup
+                          value={formaPagamento}
+                          onValueChange={(value) => setFormaPagamento(value as "pix" | "cartao")}
+                          className="flex flex-col gap-3"
+                        >
+                          <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-white cursor-pointer">
+                            <RadioGroupItem value="pix" id="pix" />
+                            <Label htmlFor="pix" className="cursor-pointer font-semibold flex-1">
+                              💳 PIX
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-white cursor-pointer">
+                            <RadioGroupItem value="cartao" id="cartao" />
+                            <Label htmlFor="cartao" className="cursor-pointer font-semibold flex-1">
+                              💳 Cartão de Crédito
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Campo Data Aproximada para INDICAÇÃO */}
+                  {!isVenda && (
+                    <div className="space-y-2">
+                      <Label htmlFor="dataAproximada" className="text-base font-semibold">
+                        Data Aproximada (opcional)
+                      </Label>
+                      <Input
+                        id="dataAproximada"
+                        type="date"
+                        value={dataAproximada}
+                        onChange={(e) => setDataAproximada(e.target.value)}
+                        className="text-base"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Data aproximada da indicação, para referência
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Observações */}
                   {!isVenda && (
                     <div className="space-y-2">
                       <Label htmlFor="observacoes" className="text-base font-semibold">

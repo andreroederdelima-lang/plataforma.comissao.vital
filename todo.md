@@ -1563,3 +1563,17 @@
   - Testar cálculo de comissões
 
 - [ ] Salvar checkpoint final
+
+
+## 🔧 Atualização do Formulário Home.tsx - Campos e Validações
+
+- [x] Adicionar campo CPF (obrigatório sempre)
+- [x] Adicionar campo Forma de Pagamento (PIX/Cartão) - obrigatório para vendas
+- [x] Adicionar campo Data da Venda - obrigatório para vendas
+- [x] Adicionar campo Data Aproximada (opcional) - para indicações
+- [x] Implementar validações condicionais:
+  - CPF sempre obrigatório
+  - Data + Forma Pagamento obrigatórios apenas para vendas diretas
+- [x] Limpar campos ao enviar formulário
+- [ ] Testar formulário completo com ambos os tipos
+- [ ] Salvar checkpoint final
