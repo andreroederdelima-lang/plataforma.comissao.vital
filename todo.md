@@ -1521,3 +1521,45 @@
 - [x] Identificar e corrigir problema crítico na query de relatórios
 - [ ] Testar sistema completo end-to-end
 - [ ] Adicionar link de relatórios no menu Admin
+
+
+## 🐛 Bug Crítico: Campos Obrigatórios Incorretos
+
+- [ ] Corrigir validação de campos no formulário de cadastro (Home.tsx)
+  - Remover campos `valorPlano` e `formaPagamento` (venda é online, valor é fixo)
+  - Manter apenas `dataVenda` como obrigatório para VENDA DIRETA
+  - Para INDICAÇÃO, nenhum campo adicional obrigatório
+- [ ] Atualizar schema e backend para remover campos desnecessários
+- [ ] Testar correção com cenários de indicação e venda direta
+- [ ] Salvar checkpoint após correção
+
+
+## 🔧 Correções Finais - Bug Reportado pelo Vendedor
+
+- [ ] Implementar preenchimento automático de `valorPlano` no backend
+  - Buscar valor das configurações baseado em nomePlano, tipoPlano, categoria
+  - Preencher automaticamente ao criar indicação
+  - Garantir histórico correto mesmo se valores mudarem
+
+- [ ] Tornar CPF obrigatório
+  - Atualizar schema: cpfCliente NOT NULL
+  - Atualizar formulário: campo CPF obrigatório
+  - Adicionar validação no backend
+  - CPF é usado para conferência exata (mais importante que nome)
+
+- [ ] Garantir nome nunca vazio
+  - Validação no frontend
+  - Validação no backend
+  - Nome pode ter variações, mas não pode ficar em branco
+
+- [ ] Corrigir erros TypeScript restantes
+  - AdminAprovarComissoes.tsx (formaPagamento)
+  - Vendedor.tsx (erro de sintaxe linha 405)
+
+- [ ] Testar sistema completo
+  - Cadastro de indicação (sem CPF deve falhar)
+  - Cadastro de venda direta (sem CPF deve falhar)
+  - Verificar valorPlano preenchido automaticamente
+  - Testar cálculo de comissões
+
+- [ ] Salvar checkpoint final

@@ -305,17 +305,19 @@ export const appRouter = router({
         observacoes: z.string().optional(),
         // Tipo de cadastro: venda direta ou indicação
         tipo: z.enum(["venda", "indicacao"]).default("indicacao"),
-        // Campos específicos para vendas
+        // CPF do cliente (opcional, para conferência)
+        cpfCliente: z.string().optional(),
+        // Data aproximada (opcional, para referência)
+        dataAproximada: z.string().optional(),
+        // Data da venda (obrigatória apenas para vendas diretas)
         dataVenda: z.string().optional(),
-        valorPlano: z.string().optional(),
+        // Forma de pagamento (obrigatória para vendas diretas)
         formaPagamento: z.enum(["pix", "cartao"]).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        // Converter dataVenda string para Date se fornecida
+        // Converter datas string para Date se fornecidas
         const dataVendaDate = input.dataVenda ? new Date(input.dataVenda) : null;
-        
-        // Converter valorPlano string para centavos se fornecido
-        const valorPlanoInt = input.valorPlano ? Math.round(parseFloat(input.valorPlano) * 100) : null;
+        const dataAproximadaDate = input.dataAproximada ? new Date(input.dataAproximada) : null;
         
         const result = await createIndicacao({
           parceiroId: ctx.user.id,
@@ -326,8 +328,9 @@ export const appRouter = router({
           categoria: input.categoria,
           observacoes: input.observacoes || null,
           tipo: input.tipo,
+          cpfCliente: input.cpfCliente || null,
+          dataAproximada: dataAproximadaDate,
           dataVenda: dataVendaDate,
-          valorPlano: valorPlanoInt,
           formaPagamento: input.formaPagamento || null,
         });
 

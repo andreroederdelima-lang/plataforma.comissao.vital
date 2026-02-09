@@ -126,8 +126,8 @@ export default function ClassificarLead() {
                   {indicacao.dataVenda && (
                     <p><strong>Data da Venda:</strong> {new Date(indicacao.dataVenda).toLocaleDateString("pt-BR")}</p>
                   )}
-                  {indicacao.valorPlano && (
-                    <p><strong>Valor:</strong> R$ {(indicacao.valorPlano / 100).toFixed(2)}</p>
+                  {indicacao.cpfCliente && (
+                    <p><strong>CPF:</strong> {indicacao.cpfCliente}</p>
                   )}
                 </div>
               </div>

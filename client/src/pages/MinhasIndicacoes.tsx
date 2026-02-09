@@ -158,7 +158,6 @@ export default function MinhasIndicacoes() {
               // Verificar se é venda (tem dataVenda preenchida)
               const isVenda = !!indicacao.dataVenda;
               const dataVenda = indicacao.dataVenda ? new Date(indicacao.dataVenda) : null;
-              const valorEmReais = indicacao.valorPlano ? (indicacao.valorPlano / 100).toFixed(2) : null;
               
               // Calcular dias desde a venda
               const diasDesdeVenda = dataVenda ? Math.floor((Date.now() - dataVenda.getTime()) / (1000 * 60 * 60 * 24)) : null;
@@ -213,18 +212,11 @@ export default function MinhasIndicacoes() {
                               </Badge>
                             )}
                           </div>
-                          {valorEmReais && (
+                          {indicacao.cpfCliente && (
                             <div className="flex items-center gap-2 text-sm">
-                              <DollarSign className="h-4 w-4 text-green-600" />
-                              <span className="font-medium">Valor:</span>
-                              <span className="text-green-700 font-semibold">R$ {valorEmReais}</span>
-                            </div>
-                          )}
-                          {indicacao.formaPagamento && (
-                            <div className="flex items-center gap-2 text-sm">
-                              <CreditCard className="h-4 w-4 text-green-600" />
-                              <span className="font-medium">Pagamento:</span>
-                              <span>{indicacao.formaPagamento === "pix" ? "PIX" : "Cartão de Crédito"}</span>
+                              <CreditCard className="h-4 w-4 text-blue-600" />
+                              <span className="font-medium">CPF:</span>
+                              <span>{indicacao.cpfCliente}</span>
                             </div>
                           )}
                           {!podeAprovar && diasDesdeVenda !== null && (

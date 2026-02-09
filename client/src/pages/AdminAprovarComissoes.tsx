@@ -237,13 +237,15 @@ export default function AdminAprovarComissoes() {
                           R$ {((indicacao.valorPlano || 0) / 100).toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="flex items-center gap-1 text-gray-700">
-                          <CreditCard className="h-4 w-4" />
-                          Pagamento:
-                        </span>
-                        <span className="font-semibold uppercase">{indicacao.formaPagamento}</span>
-                      </div>
+                      {indicacao.cpfCliente && (
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="flex items-center gap-1 text-blue-700">
+                            <CreditCard className="h-4 w-4" />
+                            CPF:
+                          </span>
+                          <span className="font-semibold">{indicacao.cpfCliente}</span>
+                        </div>
+                      )}
                       <div className="pt-2 border-t border-green-300">
                         <p className="text-xs text-green-700 font-medium">
                           ✅ {diasDesdeVenda} dias desde a venda (período de carência cumprido)

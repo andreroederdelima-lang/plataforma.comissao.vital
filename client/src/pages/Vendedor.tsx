@@ -401,7 +401,7 @@ export default function Vendedor() {
                               </div>
                             )}
                           </TableCell>
-                        </TableRow>
+                          </TableRow>
                         );
                       })}
                     </TableBody>

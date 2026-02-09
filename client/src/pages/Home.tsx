@@ -27,8 +27,8 @@ export default function Home() {
   
   // Campos específicos para venda
   const [dataVenda, setDataVenda] = useState("");
-  const [valorPlano, setValorPlano] = useState("");
-  const [formaPagamento, setFormaPagamento] = useState<"pix" | "cartao">("pix");
+  const [dataAproximada, setDataAproximada] = useState("");
+  const [cpfCliente, setCpfCliente] = useState("");
   
   // Tipo de cadastro (venda ou indicação) - agora controlado por estado local
   const [tipoCadastro, setTipoCadastro] = useState<"venda" | "indicacao">("indicacao");
@@ -39,26 +39,7 @@ export default function Home() {
   // Carregar valores dos planos do banco
   const { data: configuracoesGerais } = trpc.configuracoesGerais.getConfiguracoes.useQuery();
   
-  // Atualizar valor do plano automaticamente quando selecionado
-  useEffect(() => {
-    if (isVenda && configuracoesGerais) {
-      let valor = "0.00";
-      if (categoria === "pessoa_fisica") {
-        // Individual = Essencial, Familiar = Vital
-        if (tipoPlano === "individual") {
-          valor = configuracoesGerais.valorPlanoEssencial || "0.00";
-        } else {
-          valor = configuracoesGerais.valorPlanoVital || "0.00";
-        }
-      } else {
-        // Empresarial = Premium
-        valor = configuracoesGerais.valorPlanoPremium || "0.00";
-      }
-      setValorPlano(valor);
-    } else if (!isVenda) {
-      setValorPlano("");
-    }
-  }, [isVenda, categoria, tipoPlano, nomePlano, configuracoesGerais]);
+  // Valor do plano é calculado automaticamente no backend baseado nas configurações
   
   const createMutation = trpc.indicacoes.create.useMutation({
     onSuccess: () => {
@@ -70,10 +51,10 @@ export default function Home() {
       setTipoPlano("individual");
       setCategoria("pessoa_fisica");
       setObservacoes("");
-      // Limpar campos de venda
+      // Limpar campos
       setDataVenda("");
-      setValorPlano("");
-      setFormaPagamento("pix");
+      setDataAproximada("");
+      setCpfCliente("");
       utils.indicacoes.listMine.invalidate();
       // Atualizar página após pequeno delay para mostrar toast
       setTimeout(() => window.location.reload(), 1500);
@@ -92,8 +73,8 @@ export default function Home() {
     }
     
     // Validar campos de venda se for venda
-    if (isVenda && (!dataVenda || !valorPlano)) {
-      toast.error("Por favor, preencha data e valor da venda");
+    if (isVenda && !dataVenda) {
+      toast.error("Por favor, preencha a data da venda");
       return;
     }
 
@@ -108,8 +89,8 @@ export default function Home() {
       // Enviar campos de venda se for venda
       ...(isVenda && {
         dataVenda,
-        valorPlano,
-        formaPagamento,
+        dataAproximada,
+        cpfCliente,
       }),
     });
   };
@@ -452,64 +433,58 @@ export default function Home() {
                     </RadioGroup>
                   </div>
 
+                  {/* Campo CPF (opcional para ambos) */}
+                  <div className="space-y-2">
+                    <Label htmlFor="cpfCliente" className="text-base font-semibold">
+                      CPF do Cliente (opcional)
+                    </Label>
+                    <Input
+                      id="cpfCliente"
+                      type="text"
+                      value={cpfCliente}
+                      onChange={(e) => setCpfCliente(e.target.value)}
+                      placeholder="000.000.000-00"
+                      className="text-base"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Para conferência e auditoria
+                    </p>
+                  </div>
+
                   {/* Campos específicos para VENDA */}
                   {isVenda && (
-                    <>
-                      <div className="space-y-2">
-                        <Label htmlFor="dataVenda" className="text-base font-semibold">
-                          Data da Venda *
-                        </Label>
-                        <Input
-                          id="dataVenda"
-                          type="date"
-                          value={dataVenda}
-                          onChange={(e) => setDataVenda(e.target.value)}
-                          required={isVenda}
-                          className="text-base"
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="dataVenda" className="text-base font-semibold">
+                        Data da Venda *
+                      </Label>
+                      <Input
+                        id="dataVenda"
+                        type="date"
+                        value={dataVenda}
+                        onChange={(e) => setDataVenda(e.target.value)}
+                        required={isVenda}
+                        className="text-base"
+                      />
+                    </div>
+                  )}
 
-                      <div className="space-y-2">
-                        <Label htmlFor="valorPlano" className="text-base font-semibold">
-                          Valor do Plano (R$) *
-                        </Label>
-                        <Input
-                          id="valorPlano"
-                          type="text"
-                          value={valorPlano}
-                          readOnly
-                          disabled
-                          placeholder="Valor será preenchido automaticamente"
-                          required={isVenda}
-                          className="text-base bg-muted cursor-not-allowed"
-                        />
-                        <p className="text-xs text-muted-foreground">
-                          Valor definido pelo administrador nas configurações
-                        </p>
-                      </div>
-
-                      <div className="space-y-3">
-                        <Label className="text-base font-semibold">Forma de Pagamento *</Label>
-                        <RadioGroup
-                          value={formaPagamento}
-                          onValueChange={(value) => setFormaPagamento(value as "pix" | "cartao")}
-                          className="flex gap-4"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="pix" id="pix" />
-                            <Label htmlFor="pix" className="cursor-pointer font-normal">
-                              PIX
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="cartao" id="cartao" />
-                            <Label htmlFor="cartao" className="cursor-pointer font-normal">
-                              Cartão de Crédito
-                            </Label>
-                          </div>
-                        </RadioGroup>
-                      </div>
-                    </>
+                  {/* Campo data aproximada para INDICAÇÕES */}
+                  {!isVenda && (
+                    <div className="space-y-2">
+                      <Label htmlFor="dataAproximada" className="text-base font-semibold">
+                        Data Aproximada (opcional)
+                      </Label>
+                      <Input
+                        id="dataAproximada"
+                        type="date"
+                        value={dataAproximada}
+                        onChange={(e) => setDataAproximada(e.target.value)}
+                        className="text-base"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Para referência e acompanhamento
+                      </p>
+                    </div>
                   )}
 
                   {/* Observações - apenas para indicações */}

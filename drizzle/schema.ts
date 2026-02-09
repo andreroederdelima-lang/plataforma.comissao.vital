@@ -67,9 +67,15 @@ export const indicacoes = mysqlTable("indicacoes", {
   observacoes: text("observacoes"),
   /** Tipo de cadastro: venda direta (vendedor fecha) ou indicação (equipe fecha) */
   tipo: mysqlEnum("tipo", ["venda", "indicacao"]).default("indicacao").notNull(),
-  /** Campos específicos para vendas diretas */
+  /** CPF do cliente para conferência (opcional) */
+  cpfCliente: varchar("cpfCliente", { length: 14 }),
+  /** Data aproximada da indicação (opcional, para referência) */
+  dataAproximada: timestamp("dataAproximada"),
+  /** Data da venda (obrigatória apenas para vendas diretas) */
   dataVenda: timestamp("dataVenda"),
-  valorPlano: int("valorPlano"), // Valor em centavos
+  /** Valor do plano em centavos (preenchido automaticamente pelo backend baseado nas configurações) */
+  valorPlano: int("valorPlano"),
+  /** Forma de pagamento (obrigatória para vendas diretas): PIX ou Cartão */
   formaPagamento: mysqlEnum("formaPagamento", ["pix", "cartao"]),
   /** Status da indicação para controle de comissionamento */
   status: mysqlEnum("status", ["aguardando_contato", "em_negociacao", "venda_com_objecoes", "venda_fechada", "nao_comprou", "cliente_sem_interesse"]).default("aguardando_contato").notNull(),
