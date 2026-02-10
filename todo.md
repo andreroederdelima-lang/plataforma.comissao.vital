@@ -1594,3 +1594,13 @@
 - [x] Adicionar rota `/admin/monitoramento`
 - [x] Adicionar link no menu lateral do admin
 - [ ] Testar e salvar checkpoint
+
+
+## 🔍 Melhoria: Filtro por Vendedor na Página de Monitoramento
+
+- [x] Atualizar backend (monitoramento.ts) para incluir lista de vendedores com nome e email
+- [x] Adicionar dropdown de filtro por vendedor na página AdminMonitoramento.tsx
+- [x] Implementar lógica de filtragem de atividades por vendedor selecionado
+- [x] Mostrar nome + email de cada vendedor no dropdown
+- [x] Opção "Todos" para ver movimentação geral
+- [ ] Testar filtro e salvar checkpoint

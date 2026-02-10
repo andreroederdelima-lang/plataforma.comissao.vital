@@ -39,6 +39,32 @@ export const monitoramentoRouter = router({
   }),
 
   /**
+   * Listar todos os vendedores/indicadores cadastrados
+   */
+  listarVendedores: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new Error("Database not available");
+
+    const vendedores = await db
+      .select({
+        id: users.id,
+        nome: users.name,
+        email: users.email,
+        role: users.role,
+      })
+      .from(users)
+      .where(sql`${users.role} IN ('promotor', 'comercial', 'admin')`)
+      .orderBy(users.name);
+
+    return vendedores.map((v) => ({
+      id: v.id,
+      nome: v.nome || "Sem nome",
+      email: v.email || "Sem email",
+      role: v.role,
+    }));
+  }),
+
+  /**
    * Buscar atividades recentes (últimas vendas/indicações cadastradas)
    */
   atividadesRecentes: adminProcedure
@@ -46,6 +72,7 @@ export const monitoramentoRouter = router({
       z.object({
         limite: z.number().default(20),
         tipo: z.enum(["todos", "venda", "indicacao"]).optional(),
+        vendedorId: z.number().optional(),
       })
     )
     .query(async ({ input }) => {
@@ -70,8 +97,18 @@ export const monitoramentoRouter = router({
         .orderBy(desc(indicacoes.createdAt))
         .limit(input.limite);
 
+      // Filtrar por tipo
+      const conditions = [];
       if (input.tipo && input.tipo !== "todos") {
-        query = query.where(eq(indicacoes.tipo, input.tipo)) as typeof query;
+        conditions.push(eq(indicacoes.tipo, input.tipo));
+      }
+      // Filtrar por vendedor
+      if (input.vendedorId) {
+        conditions.push(eq(indicacoes.parceiroId, input.vendedorId));
+      }
+
+      if (conditions.length > 0) {
+        query = query.where(and(...conditions)) as typeof query;
       }
 
       const atividades = await query;

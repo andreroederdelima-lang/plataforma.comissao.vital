@@ -29,14 +29,17 @@ export default function AdminMonitoramento() {
   const [tipoAtividade, setTipoAtividade] = useState<
     "todos" | "venda" | "indicacao"
   >("todos");
+  const [vendedorSelecionado, setVendedorSelecionado] = useState<number | undefined>(undefined);
 
   // Queries
   const { data: estatisticas, refetch: refetchEstatisticas } =
     trpc.monitoramento.estatisticasGerais.useQuery();
+  const { data: vendedores } = trpc.monitoramento.listarVendedores.useQuery();
   const { data: atividades, refetch: refetchAtividades } =
     trpc.monitoramento.atividadesRecentes.useQuery({
       limite: 20,
       tipo: tipoAtividade,
+      vendedorId: vendedorSelecionado,
     });
   const { data: ranking, refetch: refetchRanking } =
     trpc.monitoramento.rankingVendedores.useQuery({
@@ -165,26 +168,49 @@ export default function AdminMonitoramento() {
         {/* Timeline de Atividades Recentes */}
         <Card className="lg:col-span-2">
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4">
               <CardTitle className="flex items-center gap-2">
                 <Activity className="w-5 h-5 text-teal-600" />
                 Atividades Recentes
               </CardTitle>
-              <Select
-                value={tipoAtividade}
-                onValueChange={(value: "todos" | "venda" | "indicacao") =>
-                  setTipoAtividade(value)
-                }
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filtrar por tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todos">Todos</SelectItem>
-                  <SelectItem value="venda">Vendas</SelectItem>
-                  <SelectItem value="indicacao">Indicações</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2">
+                {/* Filtro por Tipo */}
+                <Select
+                  value={tipoAtividade}
+                  onValueChange={(value: "todos" | "venda" | "indicacao") =>
+                    setTipoAtividade(value)
+                  }
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Filtrar por tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos os tipos</SelectItem>
+                    <SelectItem value="venda">Vendas</SelectItem>
+                    <SelectItem value="indicacao">Indicações</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {/* Filtro por Vendedor */}
+                <Select
+                  value={vendedorSelecionado?.toString() || "todos"}
+                  onValueChange={(value) =>
+                    setVendedorSelecionado(value === "todos" ? undefined : parseInt(value))
+                  }
+                >
+                  <SelectTrigger className="w-[280px]">
+                    <SelectValue placeholder="Filtrar por vendedor" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos os vendedores</SelectItem>
+                    {vendedores?.map((vendedor) => (
+                      <SelectItem key={vendedor.id} value={vendedor.id.toString()}>
+                        {vendedor.nome} ({vendedor.email})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
