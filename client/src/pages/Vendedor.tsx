@@ -375,30 +375,35 @@ export default function Vendedor() {
                             </Select>
                           </TableCell>
                           <TableCell>
-                            {!item.indicacao.classificacaoLead ? (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setLocation(`/classificar-lead/${item.indicacao.id}`)}
-                                className="gap-2"
-                              >
-                                <ClipboardCheck className="h-4 w-4" />
-                                Classificar
-                              </Button>
+                            {/* Classificar lead só faz sentido para indicações, não para vendas diretas */}
+                            {!isVenda ? (
+                              !item.indicacao.classificacaoLead ? (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => setLocation(`/classificar-lead/${item.indicacao.id}`)}
+                                  className="gap-2"
+                                >
+                                  <ClipboardCheck className="h-4 w-4" />
+                                  Classificar
+                                </Button>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  {item.indicacao.classificacaoLead === "quente" ? (
+                                    <Badge className="bg-orange-500/10 text-orange-700 border-orange-500/20 gap-1">
+                                      <Flame className="h-3 w-3" />
+                                      Quente
+                                    </Badge>
+                                  ) : (
+                                    <Badge className="bg-blue-500/10 text-blue-700 border-blue-500/20 gap-1">
+                                      <ThermometerSnowflake className="h-3 w-3" />
+                                      Frio
+                                    </Badge>
+                                  )}
+                                </div>
+                              )
                             ) : (
-                              <div className="flex items-center gap-2">
-                                {item.indicacao.classificacaoLead === "quente" ? (
-                                  <Badge className="bg-orange-500/10 text-orange-700 border-orange-500/20 gap-1">
-                                    <Flame className="h-3 w-3" />
-                                    Quente
-                                  </Badge>
-                                ) : (
-                                  <Badge className="bg-blue-500/10 text-blue-700 border-blue-500/20 gap-1">
-                                    <ThermometerSnowflake className="h-3 w-3" />
-                                    Frio
-                                  </Badge>
-                                )}
-                              </div>
+                              <span className="text-sm text-muted-foreground">-</span>
                             )}
                           </TableCell>
                           </TableRow>

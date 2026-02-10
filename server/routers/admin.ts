@@ -175,4 +175,67 @@ export const adminRouter = router({
 
       return { success: true };
     }),
+
+  /**
+   * Listar vendas pendentes de conferência (dataAprovacao = null)
+   * Retorna vendas diretas e indicações que ainda não foram aprovadas
+   */
+  listarVendasPendentes: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Banco de dados não disponível",
+      });
+    }
+
+    const { users } = await import("../../drizzle/schema");
+    const { isNull } = await import("drizzle-orm");
+    
+    // Buscar todas as vendas/indicações não aprovadas com dados do vendedor
+    const result = await db
+      .select({
+        indicacao: indicacoes,
+        parceiro: {
+          id: users.id,
+          name: users.name,
+          email: users.email,
+          cpf: users.cpf,
+          chavePix: users.chavePix,
+        },
+      })
+      .from(indicacoes)
+      .leftJoin(users, eq(indicacoes.parceiroId, users.id))
+      .where(isNull(indicacoes.dataAprovacao));
+
+    return result;
+  }),
+
+  /**
+   * Aprovar vendas conferidas em lote
+   * Marca dataAprovacao para as vendas selecionadas
+   */
+  aprovarVendasConferidas: adminProcedure
+    .input(z.object({
+      indicacaoIds: z.array(z.number()),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Banco de dados não disponível",
+        });
+      }
+
+      // Aprovar todas as vendas selecionadas
+      for (const id of input.indicacaoIds) {
+        await db
+          .update(indicacoes)
+          .set({ dataAprovacao: new Date() })
+          .where(eq(indicacoes.id, id));
+      }
+
+      return { success: true, count: input.indicacaoIds.length };
+    }),
 });

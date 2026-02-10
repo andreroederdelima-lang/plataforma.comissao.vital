@@ -107,12 +107,38 @@ export async function updateUserRole(userId: number, role: "promotor" | "admin" 
 }
 
 /**
+ * Verificar se CPF já existe no banco de dados
+ */
+export async function verificarCpfDuplicado(cpf: string) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .select()
+    .from(indicacoes)
+    .where(eq(indicacoes.cpfCliente, cpf))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+/**
  * Criar uma nova indicação
  */
 export async function createIndicacao(data: InsertIndicacao) {
   const db = await getDb();
   if (!db) {
     throw new Error("Database not available");
+  }
+
+  // Validar CPF duplicado se fornecido
+  if (data.cpfCliente) {
+    const existente = await verificarCpfDuplicado(data.cpfCliente);
+    if (existente) {
+      throw new Error(`CPF ${data.cpfCliente} já cadastrado no sistema (ID: ${existente.id}, Cliente: ${existente.nomeIndicado})`);
+    }
   }
 
   const result = await db.insert(indicacoes).values(data);

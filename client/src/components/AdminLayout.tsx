@@ -50,6 +50,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       adminOnly: true,
     },
     {
+      path: "/admin/conferir-vendas",
+      label: "Conferir Vendas",
+      icon: CheckCircle2,
+      adminOnly: true,
+    },
+    {
       path: "/admin/monitoramento",
       label: "Monitoramento",
       icon: Activity,

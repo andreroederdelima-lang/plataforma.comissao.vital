@@ -52,11 +52,13 @@ export const relatoriosRouter = router({
           id: indicacoes.id,
           tipo: indicacoes.tipo,
           nomeCliente: indicacoes.nomeIndicado,
-          cpfCliente: sql<string>`NULL`, // TODO: adicionar campo CPF do cliente se necessário
+          cpfCliente: indicacoes.cpfCliente,
           nomePlano: indicacoes.nomePlano,
           tipoPlano: indicacoes.tipoPlano,
           categoria: indicacoes.categoria,
           valorComissao: indicacoes.valorComissao,
+          valorPlanoManual: indicacoes.valorPlanoManual,
+          vendedorSecundarioId: indicacoes.vendedorSecundarioId,
           dataVenda: indicacoes.dataVenda,
           dataAprovacao: indicacoes.dataAprovacao,
           createdAt: indicacoes.createdAt,
@@ -71,8 +73,14 @@ export const relatoriosRouter = router({
           )
         );
 
-      // Calcular total
-      const totalComissao = comissoes.reduce((acc, c) => acc + (c.valorComissao || 0), 0);
+      // Calcular total (considerando divisão com segundo vendedor)
+      const totalComissaoVendedor = comissoes.reduce((acc, c) => {
+        const temSegundoVendedor = !!c.vendedorSecundarioId;
+        const valorVendedor = temSegundoVendedor 
+          ? Math.round((c.valorComissao || 0) / 2)
+          : (c.valorComissao || 0);
+        return acc + valorVendedor;
+      }, 0);
 
       return {
         vendedor: {
@@ -86,17 +94,28 @@ export const relatoriosRouter = router({
           inicio: input.dataInicio,
           fim: input.dataFim,
         },
-        comissoes: comissoes.map(c => ({
-          id: c.id,
-          tipo: c.tipo === "venda" ? "Venda Direta" : "Indicação",
-          nomeCliente: c.nomeCliente,
-          cpfCliente: c.cpfCliente || "Não informado",
-          plano: `${c.nomePlano} - ${c.tipoPlano} - ${c.categoria}`,
-          valorComissao: c.valorComissao || 0,
-          data: c.dataVenda || c.createdAt,
-        })),
-        totalComissao,
-        totalComissaoFormatado: (totalComissao / 100).toFixed(2),
+        comissoes: comissoes.map(c => {
+          const temSegundoVendedor = !!c.vendedorSecundarioId;
+          const valorComissaoVendedor = temSegundoVendedor 
+            ? Math.round((c.valorComissao || 0) / 2)
+            : (c.valorComissao || 0);
+          
+          return {
+            id: c.id,
+            tipo: c.tipo === "venda" ? "Venda Direta" : "Indicação",
+            nomeCliente: c.nomeCliente,
+            cpfCliente: c.cpfCliente || "Não informado",
+            plano: `${c.nomePlano} - ${c.tipoPlano} - ${c.categoria}`,
+            valorComissaoTotal: c.valorComissao || 0,
+            valorComissaoVendedor,
+            temSegundoVendedor,
+            vendedorSecundarioId: c.vendedorSecundarioId,
+            valorPlanoManual: c.valorPlanoManual,
+            data: c.dataVenda || c.createdAt,
+          };
+        }),
+        totalComissaoVendedor,
+        totalComissaoFormatado: (totalComissaoVendedor / 100).toFixed(2),
       };
     }),
 

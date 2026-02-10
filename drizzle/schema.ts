@@ -95,6 +95,10 @@ export const indicacoes = mysqlTable("indicacoes", {
   validadoVendedor: int("validadoVendedor").default(0).notNull(),
   /** Data em que a venda foi validada pelo vendedor interno */
   dataValidacao: timestamp("dataValidacao"),
+  /** ID do segundo vendedor (opcional, para vendas compartilhadas com divisão 50/50) */
+  vendedorSecundarioId: int("vendedorSecundarioId"),
+  /** Valor manual do plano em centavos (usado apenas para planos empresariais com valores personalizados) */
+  valorPlanoManual: int("valorPlanoManual"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

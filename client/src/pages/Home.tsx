@@ -31,6 +31,10 @@ export default function Home() {
   const [cpfCliente, setCpfCliente] = useState("");
   const [formaPagamento, setFormaPagamento] = useState<"pix" | "cartao">("pix");
   
+  // Novos campos
+  const [vendedorSecundarioId, setVendedorSecundarioId] = useState<string>("");
+  const [valorPlanoManual, setValorPlanoManual] = useState<string>("");
+  
   // Tipo de cadastro (venda ou indicação) - agora controlado por estado local
   const [tipoCadastro, setTipoCadastro] = useState<"venda" | "indicacao">("indicacao");
   const isVenda = tipoCadastro === "venda";
@@ -49,6 +53,9 @@ export default function Home() {
   // Carregar valores dos planos do banco
   const { data: configuracoesGerais } = trpc.configuracoesGerais.getConfiguracoes.useQuery();
   
+  // TODO: Implementar query para listar vendedores ativos
+  // const { data: vendedores } = trpc.authIndicadores.listarVendedores.useQuery();
+  
   // Valor do plano é calculado automaticamente no backend baseado nas configurações
   
   const createMutation = trpc.indicacoes.create.useMutation({
@@ -66,6 +73,8 @@ export default function Home() {
       setDataAproximada("");
       setCpfCliente("");
       setFormaPagamento("pix");
+      setVendedorSecundarioId("");
+      setValorPlanoManual("");
       utils.indicacoes.listMine.invalidate();
     },
     onError: (error) => {
@@ -115,6 +124,13 @@ export default function Home() {
       // Enviar data aproximada se for indicação
       ...(!isVenda && dataAproximada && {
         dataAproximada,
+      }),
+      // Novos campos
+      ...(vendedorSecundarioId && {
+        vendedorSecundarioId: parseInt(vendedorSecundarioId),
+      }),
+      ...(valorPlanoManual && categoria === "empresarial" && {
+        valorPlanoManual: Math.round(parseFloat(valorPlanoManual.replace(",", ".")) * 100), // Converter para centavos
       }),
     });
   };
@@ -475,6 +491,27 @@ export default function Home() {
                     </RadioGroup>
                   </div>
 
+                  {/* Campo Valor Manual para Plano Empresarial */}
+                  {categoria === "empresarial" && (
+                    <div className="space-y-2 p-4 border-2 border-orange-500 rounded-lg bg-orange-50">
+                      <Label htmlFor="valorPlanoManual" className="text-base font-semibold text-orange-700">
+                        💰 Valor do Plano Empresarial (R$) *
+                      </Label>
+                      <Input
+                        id="valorPlanoManual"
+                        type="text"
+                        value={valorPlanoManual}
+                        onChange={(e) => setValorPlanoManual(e.target.value)}
+                        placeholder="Ex: 289.90"
+                        required={categoria === "empresarial"}
+                        className="text-base"
+                      />
+                      <p className="text-xs text-orange-600">
+                        Cada empresa pode ter um valor diferente. Digite o valor mensal negociado.
+                      </p>
+                    </div>
+                  )}
+
                   {/* Campo CPF (opcional para ambos) */}
                   <div className="space-y-2">
                     <Label htmlFor="cpfCliente" className="text-base font-semibold">
@@ -610,6 +647,24 @@ export default function Home() {
                       />
                     </div>
                   )}
+
+                  {/* Campo Segundo Vendedor (opcional) */}
+                  <div className="space-y-2 p-4 border-2 border-blue-500 rounded-lg bg-blue-50">
+                    <Label htmlFor="vendedorSecundario" className="text-base font-semibold text-blue-700">
+                      🤝 Segundo Vendedor (opcional)
+                    </Label>
+                    <Input
+                      id="vendedorSecundario"
+                      type="text"
+                      value={vendedorSecundarioId}
+                      onChange={(e) => setVendedorSecundarioId(e.target.value)}
+                      placeholder="Digite o ID do segundo vendedor"
+                      className="text-base"
+                    />
+                    <p className="text-xs text-blue-600">
+                      Se houver um segundo vendedor, a comissão será dividida 50/50 automaticamente.
+                    </p>
+                  </div>
 
                   {/* Submit Button */}
                   <Button

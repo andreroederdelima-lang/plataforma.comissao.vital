@@ -315,6 +315,10 @@ export const appRouter = router({
         dataVenda: z.string().optional(),
         // Forma de pagamento (obrigatória para vendas diretas)
         formaPagamento: z.enum(["pix", "cartao"]).optional(),
+        // Segundo vendedor (opcional, para divisão 50/50)
+        vendedorSecundarioId: z.number().optional(),
+        // Valor manual do plano (obrigatório para empresarial)
+        valorPlanoManual: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         // Converter datas string para Date se fornecidas
@@ -334,6 +338,8 @@ export const appRouter = router({
           dataAproximada: dataAproximadaDate,
           dataVenda: dataVendaDate,
           formaPagamento: input.formaPagamento || null,
+          vendedorSecundarioId: input.vendedorSecundarioId || null,
+          valorPlanoManual: input.valorPlanoManual || null,
         });
 
         // Notificar o proprietário e equipe sobre a nova indicação

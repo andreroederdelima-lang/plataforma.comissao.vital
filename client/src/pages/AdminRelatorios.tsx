@@ -86,17 +86,19 @@ export default function AdminRelatorios() {
       doc.text(`PERÍODO: ${new Date(relatorio.periodo.inicio).toLocaleDateString("pt-BR")} a ${new Date(relatorio.periodo.fim).toLocaleDateString("pt-BR")}`, 14, 74);
 
       // Tabela de comissões
-      const tableData = relatorio.comissoes.map((c) => [
+      const tableData = relatorio.comissoes.map((c: any) => [
         new Date(c.data).toLocaleDateString("pt-BR"),
         c.tipo,
         c.nomeCliente,
+        c.cpfCliente,
         c.plano,
-        `R$ ${(c.valorComissao / 100).toFixed(2)}`,
+        c.temSegundoVendedor ? "50%" : "100%",
+        `R$ ${(c.valorComissaoVendedor / 100).toFixed(2)}`,
       ]);
 
       autoTable(doc, {
         startY: 80,
-        head: [["Data", "Tipo", "Cliente", "Plano", "Comissão"]],
+        head: [["Data", "Tipo", "Cliente", "CPF", "Plano", "Divisão", "Valor"]],
         body: tableData,
         theme: "grid",
         headStyles: {
@@ -109,11 +111,13 @@ export default function AdminRelatorios() {
           cellPadding: 3,
         },
         columnStyles: {
-          0: { cellWidth: 25 },
-          1: { cellWidth: 30 },
-          2: { cellWidth: 50 },
-          3: { cellWidth: 50 },
-          4: { cellWidth: 30, halign: "right" },
+          0: { cellWidth: 20 }, // Data
+          1: { cellWidth: 25 }, // Tipo
+          2: { cellWidth: 35 }, // Cliente
+          3: { cellWidth: 30 }, // CPF
+          4: { cellWidth: 35 }, // Plano
+          5: { cellWidth: 20 }, // Divisão
+          6: { cellWidth: 25, halign: "right" }, // Valor
         },
       });
 
@@ -262,7 +266,7 @@ export default function AdminRelatorios() {
                             {c.tipo} - {new Date(c.data).toLocaleDateString("pt-BR")}
                           </p>
                         </div>
-                        <p className="font-semibold">R$ {(c.valorComissao / 100).toFixed(2)}</p>
+                        <p className="font-semibold">R$ {(c.valorComissaoVendedor / 100).toFixed(2)}</p>
                       </div>
                     ))}
                   </div>

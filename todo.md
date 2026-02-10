@@ -1619,3 +1619,84 @@
   - Formulário pode ser usado múltiplas vezes sem crash
 
 - [ ] Testar correções e salvar checkpoint
+
+
+## 🚀 MELHORIAS CRÍTICAS - Feedback Detalhado do Usuário
+
+### 1. Validação de Duplicados
+- [ ] Implementar verificação de CPF duplicado antes de cadastrar venda/indicação
+- [ ] Mostrar mensagem de erro clara quando CPF já existe
+- [ ] Permitir visualizar registro existente ao tentar duplicar
+
+### 2. PDF Completo com Dados do Vendedor
+- [ ] Adicionar chave PIX do vendedor no PDF
+- [ ] Adicionar nome completo do vendedor no PDF
+- [ ] Testar geração de PDF com novos campos
+
+### 3. Aba de Conferência para Admin
+- [ ] Criar página /admin/conferir-vendas para aprovar vendas uma a uma
+- [ ] Adicionar checkbox para marcar cada venda como conferida
+- [ ] Adicionar botão "Aprovar Todas" para aprovar em lote
+- [ ] Verificação de CPF do cliente e status ativo no plano
+- [ ] Só liberar comissão após aprovação nesta aba
+
+### 4. Remover Menu de Classificação para Vendas Diretas
+- [ ] Ocultar opção "Classificar Lead" quando tipo = "venda"
+- [ ] Manter classificação apenas para indicações
+- [ ] Atualizar interface do painel do vendedor
+
+### 5. Valores de Planos Editáveis pelo Admin
+- [ ] Garantir que admin pode editar valores base de todos os planos
+- [ ] Valores devem estar disponíveis em /admin/configuracoes
+- [ ] Testar edição e salvamento
+
+### 6. Plano Empresarial com Valor Manual
+- [ ] Adicionar campo "Valor do Plano" no formulário quando selecionar Empresarial
+- [ ] Campo deve ser editável pelo vendedor
+- [ ] Valor digitado deve ser usado para cálculo de comissão
+- [ ] Valor deve aparecer no PDF
+
+### 7. Dois Vendedores por Venda
+- [ ] Adicionar campo "Segundo Vendedor" (opcional) no formulário
+- [ ] Implementar divisão automática de comissão (50/50)
+- [ ] Atualizar schema do banco para suportar vendedorSecundarioId
+- [ ] Atualizar cálculo de comissões para dividir quando houver 2 vendedores
+
+### 8. PDF com Total por Vendedor
+- [ ] Calcular total individual quando há 2 vendedores
+- [ ] Mostrar no PDF: "Vendedor 1: R$ X" e "Vendedor 2: R$ Y"
+- [ ] Testar geração de PDF com vendas compartilhadas
+
+### 9. Filtros no Relatório PDF
+- [ ] Adicionar filtro por nome do vendedor
+- [ ] Adicionar filtro por período (data início e fim)
+- [ ] Gerar PDF apenas com vendas filtradas
+- [ ] Mostrar período no cabeçalho do PDF
+
+### 10. Testar e Salvar Checkpoint
+- [ ] Testar todas as novas funcionalidades
+- [ ] Validar fluxo completo de venda com 2 vendedores
+- [ ] Validar conferência e aprovação de vendas
+- [ ] Salvar checkpoint final
+
+- [x] Validação de CPF duplicado implementada no backend
+
+- [x] Campo de segundo vendedor adicionado ao formulário (divisão 50/50)
+- [x] Campo de valor manual para planos empresariais implementado
+- [x] Schema do backend atualizado para aceitar novos campos
+
+- [x] Página AdminConferirVendas criada com lista de vendas pendentes
+- [x] Sistema de checkbox para selecionar vendas uma a uma
+- [x] Botão "Aprovar Todas" para aprovar em lote
+- [x] Procedures listarVendasPendentes e aprovarVendasConferidas implementadas
+- [x] Link "Conferir Vendas" adicionado ao menu lateral do admin
+
+- [x] PDF atualizado com CPF do cliente na tabela
+- [x] PDF mostra divisão de comissão (50% ou 100%)
+- [x] PDF calcula e exibe valor correto por vendedor quando há segundo vendedor
+- [x] Chave PIX e nome completo já estavam no PDF (mantidos)
+- [x] Filtros por vendedor e período já funcionavam (mantidos)
+
+- [x] Menu de classificação de lead removido para vendas diretas
+- [x] Botão "Classificar" só aparece para indicações
+- [x] Vendas diretas mostram "-" na coluna de ações
