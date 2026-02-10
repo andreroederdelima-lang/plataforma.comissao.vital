@@ -1604,3 +1604,18 @@
 - [x] Mostrar nome + email de cada vendedor no dropdown
 - [x] Opção "Todos" para ver movimentação geral
 - [ ] Testar filtro e salvar checkpoint
+
+
+## 🐛 BUGS CRÍTICOS - Feedback Vendedor Interno
+
+- [x] **BUG 1:** Botões "Registrar Venda" e "Vender Completo" na página inicial não funcionam
+  - CORRIGIDO: Adicionado onClick aos botões em DashboardPromotor.tsx
+  - Botões agora redirecionam para /?tipo=venda ou /?tipo=indicacao
+  - Home.tsx detecta parâmetro e pré-seleciona tipo automaticamente
+  
+- [x] **BUG 2:** Página crasha ao tentar cadastrar pela segunda vez consecutiva
+  - CORRIGIDO: Removido window.location.reload() que causava conflito de estado
+  - Sistema agora usa apenas invalidate() do tRPC para atualizar dados
+  - Formulário pode ser usado múltiplas vezes sem crash
+
+- [ ] Testar correções e salvar checkpoint

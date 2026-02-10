@@ -146,6 +146,7 @@ export default function DashboardPromotor() {
                       Ideal para quem tem uma rede de contatos mas prefere não fazer vendas.
                     </p>
                     <Button 
+                      onClick={() => setLocation("/?tipo=indicacao")}
                       className="w-full" 
                       variant="outline"
                       style={{ borderColor: VITAL_COLORS.turquoise, color: VITAL_COLORS.turquoise }}
@@ -176,6 +177,7 @@ export default function DashboardPromotor() {
                       Ideal para quem tem experiência em vendas e quer maximizar ganhos.
                     </p>
                     <Button 
+                      onClick={() => setLocation("/?tipo=venda")}
                       className="w-full" 
                       style={{ backgroundColor: VITAL_COLORS.turquoise }}
                     >

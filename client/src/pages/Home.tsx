@@ -37,6 +37,15 @@ export default function Home() {
 
   const utils = trpc.useUtils();
   
+  // Detectar parâmetro ?tipo= na URL e pré-selecionar tipo
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const tipoParam = params.get("tipo");
+    if (tipoParam === "venda" || tipoParam === "indicacao") {
+      setTipoCadastro(tipoParam);
+    }
+  }, [searchParams]);
+  
   // Carregar valores dos planos do banco
   const { data: configuracoesGerais } = trpc.configuracoesGerais.getConfiguracoes.useQuery();
   
@@ -58,8 +67,6 @@ export default function Home() {
       setCpfCliente("");
       setFormaPagamento("pix");
       utils.indicacoes.listMine.invalidate();
-      // Atualizar página após pequeno delay para mostrar toast
-      setTimeout(() => window.location.reload(), 1500);
     },
     onError: (error) => {
       toast.error(error.message || "Erro ao enviar indicação");
