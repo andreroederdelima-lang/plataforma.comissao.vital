@@ -2,7 +2,7 @@ import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { indicacoes, InsertIndicacao, InsertNotificacao, InsertUser, notificacoes, users, comissaoConfig, InsertComissaoConfig, materiais, InsertMaterial, planosSaude, configuracaoComissoes, materiaisDivulgacao, materiaisDiversos, materiaisPromotores, configuracoesGerais, materiaisApoio, InsertMaterialApoio } from "../drizzle/schema";
 import { ENV } from './_core/env';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
 let _db: ReturnType<typeof drizzle> | null = null;

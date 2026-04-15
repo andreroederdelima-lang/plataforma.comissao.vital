@@ -68,18 +68,13 @@ export async function notifyOwner(
 ): Promise<boolean> {
   const { title, content } = validatePayload(payload);
 
-  if (!ENV.forgeApiUrl) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Notification service URL is not configured.",
-    });
-  }
-
-  if (!ENV.forgeApiKey) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Notification service API key is not configured.",
-    });
+  // Forge notification is optional. When not configured, silently skip
+  // so core flows (like creating indicações) are not blocked in dev/self-hosted setups.
+  if (!ENV.forgeApiUrl || !ENV.forgeApiKey) {
+    console.warn(
+      "[Notification] Forge API not configured (BUILT_IN_FORGE_API_URL/BUILT_IN_FORGE_API_KEY). Skipping owner notification."
+    );
+    return false;
   }
 
   const endpoint = buildEndpointUrl(ENV.forgeApiUrl);
