@@ -18,7 +18,7 @@
 - **Materiais:** Gerenciar materiais de divulgação
 - **QR Codes:** Gerar QR codes para promotores
 
-### Área do Promotor (/painel-vendedor)
+### Área do Promotor (/painel-promotor)
 - **Dashboard:** Estatísticas e escolha de modalidade (Indicar/Vender)
 - **Minhas Indicações:** Listar indicações e vendas
 - **Materiais de Divulgação:** Central de Argumentos, Promoção Vigente, Link personalizado
