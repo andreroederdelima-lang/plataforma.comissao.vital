@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "8430206a-e53d-4fa5-ad8a-655b4c0efc0e",
-  "prevId": "0716eb57-be6d-444a-8702-92cd8801693b",
+  "id": "6ad2f107-dda4-4f69-a8f1-0342c6329d6c",
+  "prevId": "8430206a-e53d-4fa5-ad8a-655b4c0efc0e",
   "tables": {
     "beneficio_promotor": {
       "name": "beneficio_promotor",
@@ -103,7 +103,29 @@
           "default": "(now())"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_beneficio_promotor_promotorId": {
+          "name": "idx_beneficio_promotor_promotorId",
+          "columns": [
+            "promotorId"
+          ],
+          "isUnique": false
+        },
+        "idx_beneficio_promotor_indicacaoId": {
+          "name": "idx_beneficio_promotor_indicacaoId",
+          "columns": [
+            "indicacaoId"
+          ],
+          "isUnique": false
+        },
+        "idx_beneficio_promotor_status": {
+          "name": "idx_beneficio_promotor_status",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {
         "beneficio_promotor_id": {

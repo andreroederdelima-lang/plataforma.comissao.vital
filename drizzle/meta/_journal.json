@@ -246,6 +246,20 @@
       "when": 1770661518264,
       "tag": "0034_serious_maverick",
       "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "5",
+      "when": 1776401797279,
+      "tag": "0035_slippery_raider",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "5",
+      "when": 1776401834890,
+      "tag": "0036_icy_butterfly",
+      "breakpoints": true
     }
   ]
 }

@@ -19,6 +19,7 @@ import { qrCodesRouter } from "./routers/qrCodes";
 import { perfilRouter } from "./routers/perfil";
 import { relatoriosRouter } from "./routers/relatorios";
 import { monitoramentoRouter } from "./routers/monitoramento";
+import { beneficiosPromotorRouter } from "./routers/beneficiosPromotor";
 
 
 export const appRouter = router({
@@ -32,6 +33,7 @@ export const appRouter = router({
   perfil: perfilRouter,
   relatorios: relatoriosRouter,
   monitoramento: monitoramentoRouter,
+  beneficiosPromotor: beneficiosPromotorRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
