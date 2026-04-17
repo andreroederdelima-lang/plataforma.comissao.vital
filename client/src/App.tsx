@@ -36,8 +36,30 @@ import AdminRanking from "./pages/AdminRanking";
 import AdminRelatorios from "./pages/AdminRelatorios";
 import AdminMonitoramento from "./pages/AdminMonitoramento";
 import AdminConferirVendas from "./pages/AdminConferirVendas";
+import LandingPromotor from "./pages/promotor/LandingPromotor";
+import CadastroPromotor from "./pages/promotor/CadastroPromotor";
+import PainelPromotor from "./pages/promotor/PainelPromotor";
+import { isIndiqueHost } from "./lib/hostname";
+
+function PromotorRouter() {
+  return (
+    <Switch>
+      <Route path={"/"} component={LandingPromotor} />
+      <Route path={"/cadastro"} component={CadastroPromotor} />
+      <Route path={"/login"} component={LoginIndicador} />
+      <Route path={"/painel"} component={PainelPromotor} />
+      <Route path={"/indicar"} component={Home} />
+      <Route path={"/esqueci-senha"} component={EsqueciSenha} />
+      <Route path={"/recuperar-senha"} component={RecuperarSenha} />
+      <Route component={NotFound} />
+    </Switch>
+  );
+}
 
 function Router() {
+  if (isIndiqueHost()) {
+    return <PromotorRouter />;
+  }
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
