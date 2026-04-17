@@ -1,4 +1,4 @@
-import { decimal, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { decimal, index, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -16,7 +16,17 @@ export const users = mysqlTable("users", {
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["promotor", "comercial", "admin"]).default("promotor").notNull(),
+  role: mysqlEnum("role", [
+    // Valores legados (em processo de migração — ver shared/roles.ts)
+    "promotor",
+    "comercial",
+    "admin",
+    // Valores novos da fase 1
+    "vendedor_interno",
+    "vendedor_externo",
+    "admin_comercial",
+    "admin_plataforma",
+  ]).default("promotor").notNull(),
   /** Permissão para deletar indicações (true para admin completo, false para admin comercial) */
   canDelete: int("canDelete").default(1).notNull(),
   /** Status do usuário (1 = ativo, 0 = desativado) */
@@ -412,3 +422,51 @@ export const qrCodes = mysqlTable("qr_codes", {
 
 export type QRCode = typeof qrCodes.$inferSelect;
 export type InsertQRCode = typeof qrCodes.$inferInsert;
+
+/**
+ * Benefícios devidos a promotores por indicações confirmadas.
+ *
+ * Regra de negócio (fase 1):
+ *  - Cada indicação que vira venda_fechada e cumpre a carência gera 1 registro aqui.
+ *  - O benefício NÃO é recorrente — é pontual por indicação.
+ *  - O vendedor (interno ou externo) que conversa com o promotor decide
+ *    caso-a-caso se o benefício será "mensalidade grátis" ou "PIX".
+ *  - Valor do PIX também é definido na conversa (gravado em valorCentavos).
+ *  - Condição adicional (não imposta pelo schema, checada em lógica):
+ *    o promotor só mantém direito se continuar trazendo novas indicações;
+ *    não há "aposentado indicando uma vez e ganhando para sempre".
+ */
+export const beneficioPromotor = mysqlTable("beneficio_promotor", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Indicação que originou este benefício (FK implícita para indicacoes.id). */
+  indicacaoId: int("indicacaoId").notNull(),
+  /** Promotor que receberá o benefício (FK implícita para users.id). */
+  promotorId: int("promotorId").notNull(),
+  /** Vendedor que dialogou com o promotor e definiu o benefício (FK users.id). */
+  definidoPorUserId: int("definidoPorUserId"),
+  /** Tipo do benefício escolhido na conversa. */
+  tipoBeneficio: mysqlEnum("tipoBeneficio", ["mensalidade_gratis", "pix"]).notNull(),
+  /** Valor em centavos — preenchido só quando tipoBeneficio='pix'. */
+  valorCentavos: int("valorCentavos"),
+  /** Chave PIX copiada do promotor no momento do registro (snapshot). */
+  chavePix: varchar("chavePix", { length: 255 }),
+  /** Status do benefício ao longo do ciclo. */
+  status: mysqlEnum("status", ["pendente", "pago", "cancelado"])
+    .default("pendente")
+    .notNull(),
+  /** Notas da conversa entre vendedor e promotor. */
+  observacoes: text("observacoes"),
+  /** Quando o pagamento ou isenção foi efetivado. */
+  dataPagamento: timestamp("dataPagamento"),
+  /** URL/identificador de comprovante (S3 ou ID de assinatura gratuita). */
+  comprovantePagamento: varchar("comprovantePagamento", { length: 500 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => ({
+  idxPromotor: index("idx_beneficio_promotor_promotorId").on(t.promotorId),
+  idxIndicacao: index("idx_beneficio_promotor_indicacaoId").on(t.indicacaoId),
+  idxStatus: index("idx_beneficio_promotor_status").on(t.status),
+}));
+
+export type BeneficioPromotor = typeof beneficioPromotor.$inferSelect;
+export type InsertBeneficioPromotor = typeof beneficioPromotor.$inferInsert;
