@@ -132,7 +132,7 @@ export default function Comissoes() {
               <CardContent className="pt-6">
                 <div className="text-center">
                   <div className="text-4xl font-bold text-blue-600">
-                    R$ {totalComissao.toFixed(2)}
+                    R$ {(totalComissao / 100).toFixed(2)}
                   </div>
                   <div className="text-sm text-blue-700 mt-1 font-medium">Total em Comissões</div>
                 </div>
@@ -170,7 +170,7 @@ export default function Comissoes() {
                             {new Date(indicacao.dataVenda).toLocaleDateString('pt-BR')}
                           </TableCell>
                           <TableCell className="text-right font-bold text-green-600">
-                            R$ {indicacao.valorComissaoCalculado.toFixed(2)}
+                            R$ {(indicacao.valorComissaoCalculado / 100).toFixed(2)}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -356,7 +356,7 @@ export default function Comissoes() {
 
       <footer className="border-t border-gray-200 bg-white/50 backdrop-blur-sm py-6 mt-12">
         <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-          © 2024 Sua Saúde Vital - Plataforma de Comissionamento
+          © {new Date().getFullYear()} Sua Saúde Vital - Plataforma de Comissionamento
         </div>
       </footer>
     </div>

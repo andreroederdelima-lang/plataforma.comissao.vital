@@ -105,3 +105,9 @@ temp/
 *.db
 *.sqlite
 *.sqlite3
+
+# Manus tooling dumps (SQL history, credenciais, password hashes — não devem ir pro repo)
+.manus/
+
+# Credenciais em plaintext (manter fora do versionamento)
+CREDENCIAIS.md
