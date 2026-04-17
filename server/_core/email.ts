@@ -115,9 +115,10 @@ export async function notifyVendaFechada(params: {
 }) {
   const { nomeIndicado, nomeParceiro, parceiroEmail, valorComissao, tipoComissao } = params;
   
-  const valorFormatado = tipoComissao === "percentual" 
+  // valorComissao para valor_fixo é armazenado em centavos no banco.
+  const valorFormatado = tipoComissao === "percentual"
     ? `${valorComissao}%`
-    : `R$ ${valorComissao.toFixed(2).replace('.', ',')}`;
+    : `R$ ${(valorComissao / 100).toFixed(2).replace('.', ',')}`;
   
   const messageToPartner = `🎉 Parabéns ${nomeParceiro}!
 

@@ -261,7 +261,6 @@ export const appRouter = router({
     editarPerfil: protectedProcedure
       .input(z.object({
         nome: z.string().optional(),
-        whatsapp: z.string().optional(),
         chavePix: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
@@ -278,10 +277,9 @@ export const appRouter = router({
         const { users } = await import("../drizzle/schema");
         const { eq } = await import("drizzle-orm");
 
-        const updateData: any = {};
-        
+        const updateData: Record<string, unknown> = {};
+
         if (input.nome !== undefined) updateData.name = input.nome;
-        if (input.whatsapp !== undefined) updateData.whatsapp = input.whatsapp;
         if (input.chavePix !== undefined) updateData.chavePix = input.chavePix;
 
         await db
