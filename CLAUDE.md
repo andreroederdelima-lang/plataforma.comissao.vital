@@ -1,191 +1,137 @@
-# CLAUDE.md
+# Plataforma Comissao Vital (Sua Saude Vital - Indicacoes)
 
-Boas praticas gerais para este projeto. Aplicar sempre, independente de linguagem ou stack.
+Sistema de comissionamento e indicacoes para planos de saude Sua Saude Vital.
+Promotores indicam clientes, comerciais classificam leads, admins gerenciam comissoes.
 
----
+## Quick Start
 
-## Principios Fundamentais
+```bash
+pnpm install
+cp .env.example .env  # preencher variaveis
+pnpm db:push          # gerar e aplicar migrations (drizzle-kit generate + migrate)
+pnpm dev              # servidor dev com hot reload (tsx watch)
+pnpm build            # vite build (client) + esbuild (server)
+pnpm start            # node dist/index.js (producao)
+pnpm test             # vitest
+pnpm check            # tsc --noEmit
+```
 
-- **Simplicity First**: a mudanca mais simples que resolve o problema vence.
-- **No Laziness**: achar causa raiz. Proibido fix temporario, workaround ou gambiarra sem justificativa explicita.
-- **Investigate Deeply**: entender o problema antes da solucao. Ler o codigo, nao adivinhar.
-- **Own Your Mistakes**: se quebrou, conserta. Sem empurrar responsabilidade.
-- **Respect Existing Architecture**: entender o padrao do projeto antes de mudar. Seguir convencoes ja estabelecidas.
-- **Extreme Ownership**: qualidade do resultado final e responsabilidade sua, nao do usuario.
+## Folder Structure
 
----
+```
+client/
+  src/
+    App.tsx              # Router principal (wouter)
+    pages/               # Paginas React (34 arquivos)
+    components/          # Componentes reutilizaveis
+      ui/                # Radix UI + shadcn/ui components
+    _core/hooks/         # useAuth.ts
+    contexts/            # ThemeContext
+    hooks/               # Custom hooks
+    lib/                 # Utilitarios
+server/
+  _core/
+    index.ts             # Express server bootstrap
+    trpc.ts              # tRPC setup (publicProcedure, protectedProcedure)
+    context.ts           # JWT auth context
+    env.ts               # ENV config object
+    email.ts             # Notificacoes (owner, status change)
+    oauth.ts             # OAuth routes
+    vite.ts              # Dev/prod static serving
+  routers.ts             # appRouter principal (tRPC)
+  routers/               # Sub-routers (admin, auth, comissoes, etc.)
+  routes/upload.ts       # Express route para upload de arquivos (multer)
+  db.ts                  # Drizzle ORM connection (MySQL)
+  email.ts               # SMTP email (nodemailer)
+  storage.ts             # Storage proxy (Forge API)
+shared/
+  types.ts               # Re-exports de schema + errors
+  const.ts               # Constantes compartilhadas
+  _core/                 # Shared core utilities
+drizzle/
+  schema.ts              # Schema Drizzle ORM (MySQL)
+  relations.ts           # Relacoes entre tabelas
+  *.sql                  # Migrations (35 arquivos)
+```
 
-## Workflow
+## Stack
 
-### 1. Plan Mode por Padrao
-- Tarefas com 3+ passos ou decisoes arquiteturais: entrar em plan mode antes de executar.
-- Se algo desviar do plano, PARAR e replanejar. Nao insistir numa rota errada.
-- Plan mode serve tambem para verificacao, nao so construcao.
+- **Frontend**: React 19, Vite 7, wouter (routing), TanStack Query, Tailwind CSS 4, Radix UI/shadcn
+- **Backend**: Express 4, tRPC 11, Drizzle ORM, MySQL (mysql2)
+- **Auth**: JWT (jsonwebtoken/jose) + bcryptjs, cookie-based sessions
+- **Storage**: Forge API proxy (storagePut/storageGet em server/storage.ts)
+- **Email**: Nodemailer (SMTP) + Resend API
+- **PDF**: jspdf + jspdf-autotable
+- **Charts**: Recharts
+- **Package manager**: pnpm
 
-### 2. Subagents
-- Delegar pesquisa, exploracao e analise paralela a subagents para manter contexto principal limpo.
-- Uma tarefa focada por subagent.
+## Key Patterns
 
-### 3. Autonomous Execution
-- Dado um bug: consertar. Nao perguntar como.
-- Dado logs, erros, testes falhando: resolver direto.
-- Pedir permissao apenas para acoes irreversiveis (delete em massa, drop de tabela, mudanca de credenciais, deploy em producao).
+### tRPC
+- Router principal em `server/routers.ts`, sub-routers em `server/routers/`
+- `publicProcedure` para rotas abertas, `protectedProcedure` para autenticadas
+- Endpoint: `/api/trpc`
+- Validacao com Zod
 
-### 4. Verification Before Done
-- Nunca marcar tarefa completa sem provar que funciona.
-- Build passa? Typecheck limpo? Testes verdes? Zero regressao?
-- Se nao executou a prova, nao esta completo.
+### Database (Drizzle + MySQL)
+- Schema em `drizzle/schema.ts` (12 tabelas)
+- Migrations: `pnpm db:push` (generate + migrate)
+- Connection lazy em `server/db.ts`
+- Valores monetarios em centavos (int)
 
-### 5. Demand Elegance (Equilibrado)
-- Mudancas nao-triviais: pausar e perguntar "existe forma mais elegante?".
-- Fix hacky: "Sabendo tudo que sei agora, implemente a solucao correta".
-- Fixes simples: nao super-engenheirar.
+### Auth
+- Login por email/senha (bcryptjs hash)
+- JWT token no cookie (COOKIE_NAME de @shared/const)
+- Roles: `promotor`, `comercial`, `admin`
+- Context extrai user do JWT em `server/_core/context.ts`
 
-### 6. Self-Improvement Loop
-- Apos correcao do usuario: capturar a licao em `docs/lessons.md` (ou arquivo equivalente do projeto).
-- Escrever a regra que previne o mesmo erro.
-- Revisar licoes no inicio de sessoes futuras.
+### File Upload
+- POST `/api/upload` (multer, 50MB max)
+- Tipos: imagens, PDF, video
+- Storage via Forge API proxy
 
-### 7. Never Hide, Always Fix
-- NUNCA excluir teste falhando do CI. Corrigir causa raiz.
-- NUNCA usar `.skip()` para esconder problema.
-- NUNCA fallback silencioso para mock quando servico real cai em producao.
-- NUNCA catch vazio engolindo erro.
+### Path Aliases
+- `@/` -> `client/src/`
+- `@shared/` -> `shared/`
+- `@assets/` -> `attached_assets/`
 
----
+## Database Tables
 
-## Task Management
+| Table | Descricao |
+|-------|-----------|
+| users | Usuarios (promotor/comercial/admin) |
+| indicacoes | Indicacoes de clientes |
+| notificacoes | Notificacoes in-app |
+| comissaoConfig | Config de comissao por tipo de plano |
+| planos_saude | Planos disponiveis |
+| configuracao_comissoes | Percentuais indicador/vendedor |
+| materiais | Materiais de divulgacao (S3) |
+| materiais_divulgacao | Textos editaveis (argumentos, promo) |
+| materiais_diversos | PDFs, links, videos |
+| materiais_promotores | Materiais personalizados por promotor |
+| materiais_apoio | Banners e videos para download |
+| cards_recursos | Cards gerenciaveis (recursos/landing pages) |
+| qr_codes | QR Codes personalizados |
+| password_reset_tokens | Tokens de recuperacao de senha |
+| configuracoes_gerais | Config global (checkout, WhatsApp, precos) |
 
-1. **Plan First**: escrever plano em `docs/todo.md` (ou equivalente) com itens checkaveis.
-2. **Verify Plan**: revisar antes de comecar.
-3. **Track Progress**: marcar itens conforme avanca.
-4. **Explain Changes**: resumo de alto nivel a cada passo.
-5. **Capture Lessons**: atualizar `docs/lessons.md` apos correcoes.
+## Routes (Frontend)
 
----
+**Publicas**: `/`, `/login`, `/login-indicador`, `/cadastro-indicador`, `/esqueci-senha`, `/recuperar-senha`, `/qr-whatsapp`, `/tabela-comissoes`
 
-## Arquitetura (seguir a do projeto)
+**Promotor**: `/indicar`, `/minhas-indicacoes`, `/painel-promotor`, `/perfil`, `/meu-perfil`, `/comissoes`, `/materiais-divulgacao`, `/materiais-apoio`, `/qr-codes`, `/estatisticas`, `/notificacoes`
 
-Regras gerais independente de padrao adotado:
+**Admin**: `/admin`, `/admin/usuarios`, `/admin/configuracoes`, `/admin/materiais`, `/admin/materiais-apoio`, `/admin/aprovar-comissoes`, `/admin/gerenciar-cards`, `/admin/ranking`, `/admin/relatorios`, `/admin/monitoramento`, `/admin/conferir-vendas`
 
-- **Separacao de camadas**: dominio nao depende de infraestrutura. Infraestrutura depende de dominio.
-- **Novas integracoes externas**: sempre via interface + implementacao, nunca acoplamento direto.
-- **Sem importar framework no nucleo**: Next.js, React, Express, etc. ficam na borda.
-- **Um arquivo, uma responsabilidade**: se esta crescendo demais, quebrar.
-- **Entidades**: comecar anemicas (interface/struct). Migrar para modelo rico apenas quando acumular 3+ regras de negocio duplicadas em arquivos diferentes.
+## Scripts Utilitarios
 
----
-
-## Seguranca (aplicavel a todo projeto com usuario)
-
-- **Rate limiting** deve RETORNAR erro (429 ou throw), nao apenas logar.
-- **Validacao de input** obrigatoria em toda entrada externa (Zod, Valibot, ou equivalente da stack).
-- **PII scrubbing** em logs e observability (emails, cookies, tokens, auth headers).
-- **Senhas** com bcrypt cost >=12 ou argon2id.
-- **Cookies de sessao**: HttpOnly + SameSite=lax + Secure em prod + TTL explicito.
-- **Secrets**: nunca commitar. `.env.example` com placeholders. Prod via secret manager.
-- **Multi-tenant**: toda query filtra por tenant. Toda action valida tenant. Testar isolamento cross-tenant.
-- **Tokens de reset/confirmacao**: atomicos (transacao para criar + invalidar anteriores).
-- **`getById` em repositorio**: sempre exige contexto de tenant/usuario quando aplicavel (defense-in-depth).
-- Auditar como atacante, nao como defensor.
-
----
+- `scripts/criar-admin.mjs` - Criar usuario admin
+- `seed-planos-comissoes.mjs` - Seed de planos e comissoes
+- `create-vendedor.mjs` - Criar vendedor manual
+- `migrate-status.mjs` / `migrate-new-status.mjs` - Migrations manuais
 
 ## Testing
 
-- Teste novo para toda funcao nova ou modificada com logica.
-- Edge cases: null, undefined, string vazia, array vazio, limites numericos, timezone.
-- Mocks para cobertura rapida de branches em adapters.
-- Integracao/E2E testa comportamento (fluxo completo), nao so renderizacao.
-- Cobertura medida no codigo completo, nao cherry-picked.
-- Executar testes existentes antes E depois de qualquer mudanca relevante.
-- Projeto sem testes: criar estrutura basica com testes dos caminhos criticos.
-
----
-
-## Protecao de Dados
-
-- NUNCA executar DROP, DELETE, TRUNCATE sem backup explicito ou confirmacao.
-- Antes de migration destrutiva: gerar script de rollback junto.
-- Ao modificar arquivo critico (.env, configs de prod): copia com sufixo `.bak` primeiro.
-- Em banco: preferir soft delete (`deleted_at`) antes de delete fisico.
-- Refatoracao de alto risco: manter versao anterior em branch separada.
-- Nunca sobrescrever dados de producao com dados de desenvolvimento.
-
----
-
-## Codigo
-
-- **Zero comentarios por padrao**. So adicionar quando o PORQUE nao for obvio pelo codigo.
-- Nao comentar O QUE o codigo faz — nomes bem escolhidos ja dizem.
-- Preferir editar arquivos existentes a criar novos.
-- NUNCA criar `.md` ou README novo sem pedido explicito.
-- Sem error handling para cenarios impossiveis.
-- Sem feature flags ou shims de compat quando pode-se apenas mudar o codigo.
-- Logger estruturado em vez de `console.log` em producao.
-- Sem `any` (TypeScript), sem `Object` generico (Java), sem `interface{}` ocioso (Go) — usar tipos explicitos.
-
----
-
-## Convencoes de Nomenclatura (ajustar ao padrao do projeto)
-
-- Entidades: PascalCase singular.
-- Interfaces/Ports: sufixo `Port` ou prefixo `I` conforme projeto.
-- Implementacoes: prefixo da tecnologia (`PostgresUserRepository`, `RedisCacheAdapter`).
-- Arquivos: kebab-case ou snake_case conforme projeto.
-- Testes: mesmo nome do alvo + sufixo `.test.` / `_test.`.
-- Banco: camelCase no codigo, snake_case nas colunas SQL.
-
----
-
-## Nunca Fazer
-
-- Importar camada de infra dentro do dominio.
-- Query sem filtro de tenant (quando multi-tenant).
-- Action/endpoint sem validacao de auth/sessao.
-- `.skip()` para esconder teste quebrado.
-- Catch silencioso que engole erro.
-- Hardcode de tenant, config ou credencial.
-- Fallback automatico para mock quando servico real falha em producao.
-- Commit sem rodar build + typecheck + testes locais.
-
----
-
-## Documentacao
-
-Ao mexer em algo, atualizar a documentacao correspondente:
-
-| Se mexeu em... | Atualizar... |
-|----------------|-------------|
-| Schema de banco | doc de database |
-| Rotas/endpoints | doc de API |
-| Variaveis de ambiente | `.env.example` com comentario |
-| Feature flags | doc de features |
-| Auth/seguranca | doc de security |
-| Deploy | doc de deploy |
-| Arquitetura | doc de arquitetura + ADR se decisao |
-| Bug importante | `docs/lessons.md` |
-| Feature nova | `CHANGELOG.md` em [Unreleased] |
-
----
-
-## Tom e Estilo de Resposta
-
-- Sem emojis exceto se pedido explicitamente.
-- Respostas curtas e concisas. Acao primeiro, explicacao depois.
-- Referenciar codigo como `path/arquivo:linha`.
-- Fim de turno: 1-2 frases. O que mudou e o que vem em seguida.
-- Listar arquivos criados/modificados ao final da acao.
-- Sinalizar risco quando aplicavel: ALTO / MEDIO / BAIXO.
-- Sem resumo redundante no final.
-- Sem repetir o que o usuario disse.
-- Portugues brasileiro por padrao, a menos que o projeto seja em ingles.
-
----
-
-## Anti-Sycophancy
-
-- Discordar quando o usuario sugerir algo que compromete o projeto.
-- Criticar construtivamente solucao rasa e propor alternativa melhor.
-- Preferivel desagradar no curto prazo a ver o projeto falhar.
-- Lealdade: resultado correto, nao concordancia facil.
+- Vitest (`pnpm test`)
+- Testes em `server/tests/`
+- Config em `vitest.config.ts`
